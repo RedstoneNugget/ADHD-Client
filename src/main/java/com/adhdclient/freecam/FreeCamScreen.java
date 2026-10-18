@@ -31,7 +31,7 @@ public final class FreeCamScreen extends ThemedScreen {
 
         section(L.t("Taste", "Key"), x, y, inner);
         y += 12;
-        keyButton(L.t("An/Aus", "On/Off"), () -> c.key, v -> c.key = v, x, y, inner, ROW - 2, FreeCamClient::onConfigEdited);
+        keyButton(L.t("An/Aus", "On/Off"), () -> c.key, v -> c.key = v, new FreeCamConfig().key, x, y, inner, ROW - 2, FreeCamClient::onConfigEdited);
         y += ROW + 6;
 
         section(L.t("Flug", "Flight"), x, y, inner);

@@ -64,17 +64,31 @@ public abstract class ThemedScreen extends Screen {
 
     private KeyTarget listening;
 
-    /** Knopf "Label: Taste"; Klick, dann neue Taste drücken (Esc = abbrechen, Entf/Rücktaste = keine Taste). */
-    protected ButtonWidget keyButton(String label, java.util.function.IntSupplier get, java.util.function.IntConsumer set,
+    /**
+     * Knopf "Label: Taste" plus kleiner Zurücksetzen-Knopf rechts daneben. Klick, dann neue Taste oder Maustaste
+     * drücken; Esc, Entf oder Rücktaste = keine Taste, Linksklick = abbrechen. {@code defaultCode} ist die
+     * Standard-Taste des Moduls, auf die der Zurücksetzen-Knopf springt.
+     */
+    protected ButtonWidget keyButton(String label, java.util.function.IntSupplier get, java.util.function.IntConsumer set, int defaultCode,
                                      int x, int y, int w, int h, Runnable changed) {
+        int resetW = 18;
         ButtonWidget[] ref = new ButtonWidget[1];
         ButtonWidget b = ButtonWidget.builder(Text.literal(label + ": " + HotKey.name(get.getAsInt())), btn -> {
             listening = new KeyTarget(ref[0], label, set, changed);
             btn.setMessage(Text.literal(label + L.t(": > Taste oder Maus <", ": > key or mouse <")));
-        }).dimensions(x, y, w, h).build();
-        b.setTooltip(Tooltip.of(Text.literal(L.t("Klicken, dann neue Taste oder Maustaste drücken (z. B. Seitentaste). Esc oder Linksklick = abbrechen, Entf = keine Taste.", "Click, then press the new key or mouse button (e.g. a side button). Esc or left click = cancel, Delete = no key."))));
+        }).dimensions(x, y, w - resetW - 2, h).build();
+        b.setTooltip(Tooltip.of(Text.literal(L.t("Klicken, dann neue Taste oder Maustaste drücken (z. B. Seitentaste). Esc oder Entf = keine Taste, Linksklick = abbrechen.",
+                "Click, then press the new key or mouse button (e.g. a side button). Esc or Delete = no key, left click = cancel."))));
         ref[0] = b;
         toggles.put(b, () -> listening != null && listening.button == ref[0]);
+        ResetButton reset = new ResetButton(x + w - resetW, y, resetW, h, btn -> {
+            listening = null;
+            set.accept(defaultCode);
+            if (changed != null) changed.run();
+            ref[0].setMessage(Text.literal(label + ": " + HotKey.name(defaultCode)));
+        });
+        reset.setTooltip(Tooltip.of(Text.literal(L.t("Auf Standard zurücksetzen: ", "Reset to default: ") + HotKey.name(defaultCode))));
+        addDrawableChild(reset);
         return addDrawableChild(b);
     }
 
@@ -82,13 +96,10 @@ public abstract class ThemedScreen extends Screen {
     public boolean keyPressed(net.minecraft.client.input.KeyInput input) {
         if (listening != null) {
             int code = input.key();
-            if (code == org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE) {
-                listening = null;
-                clearAndInit();
-            } else {
-                if (code == org.lwjgl.glfw.GLFW.GLFW_KEY_DELETE || code == org.lwjgl.glfw.GLFW.GLFW_KEY_BACKSPACE) code = HotKey.NONE;
-                assign(code);
-            }
+            // Esc, Entf und Rücktaste heißen "keine Taste" (Esc selbst ist nie eine Modul-Taste)
+            if (code == org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE || code == org.lwjgl.glfw.GLFW.GLFW_KEY_DELETE
+                    || code == org.lwjgl.glfw.GLFW.GLFW_KEY_BACKSPACE) code = HotKey.NONE;
+            assign(code);
             return true;
         }
         return super.keyPressed(input);
@@ -188,7 +199,7 @@ public abstract class ThemedScreen extends Screen {
             if (!(e instanceof ClickableWidget w) || !w.visible) continue;
             if (w instanceof ValueSlider s) Theme.slider(ctx, s);
             else if (w instanceof TextFieldWidget f) Theme.field(ctx, f);
-            else if (w instanceof ButtonWidget) {
+            else if (w instanceof ButtonWidget && !(w instanceof ThemedButton)) {
                 BooleanSupplier on = toggles.get(w);
                 Theme.button(ctx, w, on == null ? Theme.State.NEUTRAL : (on.getAsBoolean() ? Theme.State.ON : Theme.State.OFF));
             }

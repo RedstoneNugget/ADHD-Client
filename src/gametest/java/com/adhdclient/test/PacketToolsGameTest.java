@@ -142,6 +142,40 @@ final class PacketToolsGameTest {
             context.takeScreenshot("38_packettools_chat_sent");
             closeNormally(context);
 
+            // --- Alles anhalten: Laufen und Chat kommen erst beim Loslassen an; Verwerfen schickt nichts ---
+            context.runOnClient(c -> { PacketToolsClient.config().showLog = true; PacketToolsClient.setHoldAll(true); });
+            net.minecraft.util.math.Vec3d before = serverPos(server);
+            LAST_CHAT[0] = "";
+            context.runOnClient(c -> c.getNetworkHandler().sendChatMessage("angehalten"));
+            context.getInput().holdKeyFor(o -> o.backKey, 15);
+            context.waitTicks(5);
+            net.minecraft.util.math.Vec3d posDuring = serverPos(server);
+            int heldNow = context.computeOnClient(c -> PacketToolsClient.heldCount());
+            String chatDuring = LAST_CHAT[0];
+            context.takeScreenshot("39_packettools_hold_log");
+            context.runOnClient(c -> PacketToolsClient.setHoldAll(false));
+            context.waitTicks(10);
+            net.minecraft.util.math.Vec3d posAfter = serverPos(server);
+            log("Alles anhalten: " + heldNow + " Pakete, Server-Pos vorher " + before + " währenddessen " + posDuring + " danach " + posAfter
+                    + ", Chat währenddessen \"" + chatDuring + "\" danach \"" + LAST_CHAT[0] + "\"");
+            check(heldNow > 0 && posDuring.distanceTo(before) < 0.01 && chatDuring.isEmpty(), "Alles anhalten: Server sieht nichts");
+            check(posAfter.distanceTo(before) > 1 && "angehalten".equals(LAST_CHAT[0]), "Loslassen sendet alles");
+            LAST_CHAT[0] = "";
+            context.runOnClient(c -> PacketToolsClient.setHoldAll(true));
+            context.runOnClient(c -> c.getNetworkHandler().sendChatMessage("verworfen"));
+            context.waitTicks(3);
+            context.runOnClient(c -> PacketToolsClient.discardHeld());
+            context.waitTicks(10);
+            check(LAST_CHAT[0].isEmpty() && !context.computeOnClient(c -> PacketToolsClient.holdAll), "Verwerfen schickt nichts");
+            context.runOnClient(c -> PacketToolsClient.config().showLog = false);
+            server.runCommand("tp @a 0.5 -60 0.5 -90 30");
+            context.waitTicks(10);
+            context.setScreen(() -> new PacketToolsScreen(null));
+            context.waitTicks(3);
+            context.takeScreenshot("40_packettools_settings_en");
+            context.setScreen(() -> null);
+            context.waitTicks(3);
+
             // --- Modul aus: keine Leiste, V tut nichts ---
             context.runOnClient(c -> PacketToolsClient.enabled = false);
             openChest(context);
@@ -180,6 +214,10 @@ final class PacketToolsGameTest {
     private static void click(ClientGameTestContext context, int slot, SlotActionType type) {
         context.runOnClient(c -> c.interactionManager.clickSlot(c.player.currentScreenHandler.syncId, slot, 0, type, c.player));
         context.waitTicks(5);
+    }
+
+    private static net.minecraft.util.math.Vec3d serverPos(TestServerContext server) {
+        return server.computeOnServer(s -> s.getPlayerManager().getPlayerList().get(0).getEntityPos());
     }
 
     private static int serverCount(TestServerContext server, int slot) {

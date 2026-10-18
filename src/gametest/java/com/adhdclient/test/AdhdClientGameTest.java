@@ -33,6 +33,7 @@ public class AdhdClientGameTest implements FabricClientGameTest {
             context.runOnClient(c -> BlinkClient.enabled = true);
 
             menus(context);
+            keyReset(context);
             mouseKey(context);
             baseFinderDouble(context);
             blinkSend(context, server);
@@ -109,6 +110,28 @@ public class AdhdClientGameTest implements FabricClientGameTest {
             context.waitTicks(3);
         }
         context.runOnClient(c -> bf.set().accept(false));
+    }
+
+    /** Esc beim Tastenwählen = keine Taste, ↺ = zurück auf den Standard (Free Cam: F6). */
+    private void keyReset(ClientGameTestContext context) {
+        context.setScreen(() -> new com.adhdclient.freecam.FreeCamScreen(null));
+        context.waitTicks(3);
+        context.clickScreenButton("On/Off: F6");
+        context.waitTicks(2);
+        context.getInput().pressKey(GLFW.GLFW_KEY_ESCAPE);
+        context.waitTicks(2);
+        int afterEsc = context.computeOnClient(c -> com.adhdclient.freecam.FreeCamClient.config().key);
+        boolean stillOpen = context.computeOnClient(c -> c.currentScreen instanceof com.adhdclient.freecam.FreeCamScreen);
+        context.takeScreenshot("06b_taste_esc_keine");
+        context.runOnClient(c -> c.currentScreen.children().stream().filter(e -> e instanceof com.adhdclient.gui.ResetButton).findFirst().ifPresent(e -> ((com.adhdclient.gui.ResetButton) e).onPress(null)));
+        context.waitTicks(2);
+        int afterReset = context.computeOnClient(c -> com.adhdclient.freecam.FreeCamClient.config().key);
+        context.takeScreenshot("06c_taste_zurueckgesetzt");
+        log("Taste: nach Esc " + afterEsc + " (Menü offen " + stillOpen + "), nach ↺ " + afterReset + " (F6 = " + GLFW.GLFW_KEY_F6 + ")");
+        check(afterEsc == HotKey.NONE && stillOpen, "Esc beim Tastenwählen = keine Taste, Menü bleibt offen");
+        check(afterReset == GLFW.GLFW_KEY_F6, "↺ setzt auf F6 zurück");
+        context.setScreen(() -> null);
+        context.waitTicks(3);
     }
 
     /** Taste per Maus setzen: Knopf anklicken, dann Seitentaste 4 drücken. */

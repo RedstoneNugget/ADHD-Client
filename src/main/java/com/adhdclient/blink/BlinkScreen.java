@@ -30,9 +30,9 @@ public final class BlinkScreen extends ThemedScreen {
 
         section(L.t("Tasten", "Keys"), x, y, inner);
         y += 12;
-        keyButton(L.t("An/Aus", "On/Off"), () -> c.key, v -> c.key = v, x, y, inner, ROW - 2, BlinkClient::onConfigEdited);
+        keyButton(L.t("An/Aus", "On/Off"), () -> c.key, v -> c.key = v, new BlinkConfig().key, x, y, inner, ROW - 2, BlinkClient::onConfigEdited);
         y += ROW;
-        keyButton(L.t("Abbrechen", "Cancel"), () -> c.cancelKey, v -> c.cancelKey = v, x, y, inner, ROW - 2, BlinkClient::onConfigEdited);
+        keyButton(L.t("Abbrechen", "Cancel"), () -> c.cancelKey, v -> c.cancelKey = v, new BlinkConfig().cancelKey, x, y, inner, ROW - 2, BlinkClient::onConfigEdited);
         y += ROW + 6;
 
         section(L.t("Verhalten", "Behavior"), x, y, inner);

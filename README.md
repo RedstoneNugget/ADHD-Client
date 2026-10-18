@@ -8,14 +8,14 @@ Client-side Fabric mod for **Minecraft 1.21.11**. Instead of installing many sep
 
 ## Installation
 1. Install the [Fabric Loader](https://fabricmc.net/use/) for 1.21.11 and the [Fabric API](https://modrinth.com/mod/fabric-api)
-2. Put `adhd-client-1.2.0.jar` into your `mods` folder
+2. Put `adhd-client-1.3.0.jar` into your `mods` folder
 
 Nothing is needed on the server. Don't install it together with the standalone Base Finder or Head Finder mods – that functionality is already included.
 
 ## Usage
 Press **Right Ctrl** to open the click GUI (changeable under *Options → Controls → Key Binds*). Modules are grouped into category windows (Render, World, Camera, Movement, Misc, Client) that you can drag around and collapse with a right click on the title. **Left click** a module to turn it on or off – a green bar means on. **Right click** opens its settings. All modules start switched off.
 
-If a module has its own key, you set it at the very top of that module's menu: click the key button, then press the new key or a mouse button (Esc or left click cancels, Delete removes the key). Module keys only work while the module is switched on in the ClickGUI.
+If a module has its own key, you set it at the very top of that module's menu: click the key button, then press the new key or a mouse button (Esc or Delete means no key, left click cancels). The small ↺ button next to it puts the key back to the module's default. Module keys only work while the module is switched on in the ClickGUI.
 
 **Design** lets you pick the colors of all menus (presets, RGB sliders or hex), the window opacity and the language: automatic (follows the game language), German or English.
 
@@ -32,7 +32,7 @@ If a module has its own key, you set it at the very top of that module's menu: c
 | **Full Bright** | Everything bright like night vision, adjustable strength, optionally ignores the Darkness effect. | none needed |
 | **Blink** | Holds back your movement packets: the server sees you standing still, and when you turn it off everything is sent at once. Optional copy of you at the start, auto send after a few seconds, cancel key that puts you back at the start. Anticheats often detect it. | none (set in the menu) |
 | **Inspect All** | Shows everything Minecraft knows about the block or entity you look at, or the item in your hand or under the mouse: block state, components, NBT (highlighted, collapsible), readable summaries for bee nests, spawners, signs, chests and more, markers through walls, search, copy as SNBT or /give, JSON export. Lock a target to keep an overlay while you play. | I panel, K lock (changeable) |
-| **Packet Tools** | A bar next to every container menu: close without packet, close only on the server (desync), turn click packets off or delay them and send them all at once, save a menu and reopen it, disconnect while sending, build your own slot/button click packets, copy the title as JSON, sync ID and revision, and a chat field to write messages or commands while the menu stays open. Many servers detect this. | V reopens a saved menu (changeable) |
+| **Packet Tools** | A bar next to every container menu: close without packet, close only on the server (desync), turn click packets off or delay them and send them all at once, save a menu and reopen it, disconnect while sending, build your own slot/button click packets, copy the title as JSON, sync ID and revision, and a chat field to write messages or commands while the menu stays open. Plus "Hold all": no packets go to the server until you release them (or discard them), with its own key, keep-alive passthrough and a live packet log. Many servers detect this. | V reopens a saved menu (changeable) |
 
 All modules only use data your client already has. Nothing extra is sent to the server.
 

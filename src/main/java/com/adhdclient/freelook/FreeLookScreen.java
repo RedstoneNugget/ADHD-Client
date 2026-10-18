@@ -31,7 +31,7 @@ public final class FreeLookScreen extends ThemedScreen {
 
         section(L.t("Taste", "Key"), x, y, inner);
         y += 12;
-        keyButton(L.t("Umschauen", "Look around"), () -> c.key, v -> c.key = v, x, y, inner, ROW - 2, () -> {
+        keyButton(L.t("Umschauen", "Look around"), () -> c.key, v -> c.key = v, new FreeLookConfig().key, x, y, inner, ROW - 2, () -> {
             FreeLookClient.onConfigEdited();
             clearAndInit();
         });

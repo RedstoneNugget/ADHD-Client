@@ -20,8 +20,18 @@ public final class PacketToolsConfig {
 
     /** Taste: gespeichertes Menü wieder öffnen (GLFW-Code oder Maustaste, -1 = keine). */
     public int restoreKey = org.lwjgl.glfw.GLFW.GLFW_KEY_V;
+    /** Taste: alle Pakete anhalten / wieder senden (auch außerhalb von Menüs). */
+    public int holdKey = com.adhdclient.gui.HotKey.NONE;
+    /** Taste: angehaltene Pakete verwerfen statt senden. */
+    public int discardKey = com.adhdclient.gui.HotKey.NONE;
     /** Sync-ID und Revision des offenen Menüs anzeigen. */
     public boolean showSyncInfo = true;
+    /** Beim Anhalten Keep-Alive und Pong trotzdem senden – sonst trennt der Server nach etwa 30 Sekunden. */
+    public boolean passKeepAlive = true;
+    /** Beim Anhalten Sekunden und Paketanzahl über der Hotbar zeigen. */
+    public boolean showHoldInfo = true;
+    /** Oben rechts anzeigen, welche Pakete gerade gesendet werden. */
+    public boolean showLog = false;
 
     private static Path file() {
         return FabricLoader.getInstance().getConfigDir().resolve("adhd_client").resolve("packet_tools.json");

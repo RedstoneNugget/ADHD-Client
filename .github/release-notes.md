@@ -1,6 +1,13 @@
-**ADHD Client 1.2.0** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
+**ADHD Client 1.3.0** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
 
 One client, many modules – each switched on or off in one menu (**Right Ctrl**). All settings, colors and module keys are set inside the client. Menus in English or German.
+
+### New in 1.3.0
+- **Reset keys** – every module key has a small reset button next to it that puts it back to the default
+- **Esc means no key** – pressing Esc while picking a key now removes the key instead of cancelling (left click still cancels)
+- **Packet Tools: Hold all** – no packets go to the server until you release them (then everything is sent at once) or discard them; own keys, also outside menus, keep-alive passthrough so you are not kicked, info above the hotbar
+- **Packet Tools: packet log** – shows top right which packets are being sent
+- Fixed: holding packets in singleplayer no longer touches the built-in server
 
 ### New in 1.2.0
 - **Packet Tools** – a bar next to every container menu: close without packet, server desync, turn click packets off or delay them, save and reopen menus, disconnect while sending, build your own click packets, copy the title, and a chat field to write while the menu stays open (V reopens a saved menu)
@@ -30,12 +37,19 @@ Not affiliated with any server. Check the server rules before using it – Blink
 
 ### Installation
 1. Install the [Fabric Loader](https://fabricmc.net/use/) for 1.21.11 and the [Fabric API](https://modrinth.com/mod/fabric-api)
-2. Put `adhd-client-1.2.0.jar` into your `mods` folder (remove older ADHD Client jars and the standalone Base Finder / InspectAll jars)
+2. Put `adhd-client-1.3.0.jar` into your `mods` folder (remove older ADHD Client jars and the standalone Base Finder / InspectAll jars)
 
 ---
 
 ### Deutsch
 Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg**). Alle Einstellungen, Farben und Modul-Tasten stellst du im Client ein. Menüs auf Deutsch oder Englisch.
+
+**Neu in 1.3.0**
+- **Tasten zurücksetzen** – neben jeder Modul-Taste ein kleiner Knopf, der sie auf den Standard zurücksetzt
+- **Esc = keine Taste** – Esc beim Tastenwählen entfernt jetzt die Taste statt abzubrechen (Linksklick bricht weiter ab)
+- **Packet Tools: Alles anhalten** – keine Pakete gehen an den Server, bis du sie loslässt (dann alles auf einmal) oder verwirfst; eigene Tasten, auch außerhalb von Menüs, Keep-Alive-Durchlass gegen Kicks, Info über der Hotbar
+- **Packet Tools: Paket-Log** – zeigt oben rechts, welche Pakete gesendet werden
+- Behoben: Anhalten im Einzelspieler greift nicht mehr in den eingebauten Server ein
 
 **Neu in 1.2.0**
 - **Packet Tools** – eine Leiste neben jedem Container-Menü: ohne Paket schließen, Server-Desync, Klick-Pakete aus- oder verzögern, Menüs speichern und wieder öffnen, trennen und dabei senden, eigene Klick-Pakete bauen, Titel kopieren und ein Chat-Feld, um bei offenem Menü zu schreiben (V öffnet ein gespeichertes Menü)
@@ -54,4 +68,4 @@ Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg*
 Kein offizielles Projekt eines Servers. Vor der Nutzung die Server-Regeln lesen – Blink, ESP, Packet Tools und ähnliche Module sind oft verboten.
 
 1. [Fabric Loader](https://fabricmc.net/use/) für 1.21.11 und die [Fabric API](https://modrinth.com/mod/fabric-api) installieren
-2. `adhd-client-1.2.0.jar` in den `mods`-Ordner legen (ältere ADHD-Client-Jars und die einzelnen Base-Finder-/InspectAll-Jars entfernen)
+2. `adhd-client-1.3.0.jar` in den `mods`-Ordner legen (ältere ADHD-Client-Jars und die einzelnen Base-Finder-/InspectAll-Jars entfernen)

@@ -60,9 +60,9 @@ public final class InspectSettingsScreen extends ThemedScreen {
         section(L.t("Tasten", "Keys"), x, y, inner);
         y += 12;
         int third = (inner - 8) / 3;
-        keyButton("Panel", () -> c.openKey, v -> c.openKey = v, x, y, third, ROW - 2, InspectConfig::save);
-        keyButton(L.t("Sperren", "Lock"), () -> c.lockKey, v -> c.lockKey = v, x + third + 4, y, third, ROW - 2, InspectConfig::save);
-        keyButton(L.t("Marker weg", "Clear marks"), () -> c.clearKey, v -> c.clearKey = v, x + 2 * (third + 4), y, inner - 2 * (third + 4), ROW - 2, InspectConfig::save);
+        keyButton("Panel", () -> c.openKey, v -> c.openKey = v, new InspectConfig().openKey, x, y, third, ROW - 2, InspectConfig::save);
+        keyButton(L.t("Sperren", "Lock"), () -> c.lockKey, v -> c.lockKey = v, new InspectConfig().lockKey, x + third + 4, y, third, ROW - 2, InspectConfig::save);
+        keyButton(L.t("Löschen", "Clear"), () -> c.clearKey, v -> c.clearKey = v, new InspectConfig().clearKey, x + 2 * (third + 4), y, inner - 2 * (third + 4), ROW - 2, InspectConfig::save);
         y += ROW + 6;
 
         // Reiter

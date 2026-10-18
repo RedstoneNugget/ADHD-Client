@@ -149,9 +149,9 @@ public class ConfigScreen extends ThemedScreen {
         // Tasten ganz oben über dem Inhalt (gelten für alle Tabs)
         ModConfig.General keys = cfg().general;
         int keyW = (contentW - 8) / 3;
-        keyButton(com.adhdclient.gui.L.t("Anzeigen", "Show"), () -> keys.markersKey, v -> keys.markersKey = v,
+        keyButton(com.adhdclient.gui.L.t("Anzeigen", "Show"), () -> keys.markersKey, v -> keys.markersKey = v, new ModConfig.General().markersKey,
                 left, TOP - 2, keyW, 17, BaseFinderClient::onKeysEdited);
-        keyButton(com.adhdclient.gui.L.t("Scannen", "Scan"), () -> keys.rescanKey, v -> keys.rescanKey = v,
+        keyButton(com.adhdclient.gui.L.t("Scannen", "Scan"), () -> keys.rescanKey, v -> keys.rescanKey = v, new ModConfig.General().rescanKey,
                 left + keyW + 4, TOP - 2, keyW, 17, BaseFinderClient::onKeysEdited);
         addDrawableChild(ButtonWidget.builder(Text.literal(tr("Neu scannen")), b -> BaseFinderClient.rescan())
                 .dimensions(left + 2 * (keyW + 4), TOP - 2, contentW - 2 * (keyW + 4), 17)
