@@ -67,7 +67,7 @@ remapJar {
             new java.util.zip.ZipOutputStream(new FileOutputStream(tmp)).withCloseable { zout ->
                 zin.entries().toList().findAll { !(it.name in skip) }.sort { it.name }.each { e ->
                     def out = new java.util.zip.ZipEntry(e.name)
-                    out.timeLocal = java.time.LocalDateTime.of(1980, 1, 1, 0, 0) // keine echte Bauzeit
+                    out.timeLocal = java.time.LocalDateTime.of(1980, 2, 1, 0, 0) // keine echte Bauzeit, ohne Zeitzonen-Feld
                     zout.putNextEntry(out)
                     if (!e.directory) zin.getInputStream(e).withCloseable { zout << it }
                     zout.closeEntry()
