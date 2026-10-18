@@ -13,7 +13,7 @@ Clientseitige Fabric-Mod für **Minecraft 1.21.11**. Statt vieler einzelner Mods
 Auf dem Server ist nichts nötig. Nicht zusammen mit den einzelnen Mods Base Finder oder Head Finder installieren – deren Funktionen stecken schon drin.
 
 ## Bedienung
-**Rechte Strg** öffnet das Menü (änderbar unter *Optionen → Steuerung → Tastenbelegung*). Klick auf ein Modul schaltet es an oder aus – grüne Leiste heißt an. **Menü** daneben öffnet die Einstellungen des Moduls. Alle Module starten ausgeschaltet.
+**Rechte Strg** öffnet das ClickGUI (änderbar unter *Optionen → Steuerung → Tastenbelegung*). Die Module liegen in Kategorie-Fenstern (Render, Welt, Kamera, Sonstiges, Client), die du verschieben und per Rechtsklick auf den Titel einklappen kannst. **Linksklick** auf ein Modul schaltet es an oder aus – grüne Leiste heißt an. **Rechtsklick** öffnet seine Einstellungen. Alle Module starten ausgeschaltet.
 
 Hat ein Modul eine eigene Taste, stellst du sie ganz oben im Menü des Moduls ein: auf den Tasten-Knopf klicken, dann die neue Taste drücken (Esc bricht ab, Entf entfernt die Taste).
 

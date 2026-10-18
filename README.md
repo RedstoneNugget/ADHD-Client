@@ -13,7 +13,7 @@ Client-side Fabric mod for **Minecraft 1.21.11**. Instead of installing many sep
 Nothing is needed on the server. Don't install it together with the standalone Base Finder or Head Finder mods – that functionality is already included.
 
 ## Usage
-Press **Right Ctrl** to open the menu (changeable under *Options → Controls → Key Binds*). Click a module to turn it on or off – a green bar means on. **Menu** next to it opens the module's settings. All modules start switched off.
+Press **Right Ctrl** to open the click GUI (changeable under *Options → Controls → Key Binds*). Modules are grouped into category windows (Render, World, Camera, Misc, Client) that you can drag around and collapse with a right click on the title. **Left click** a module to turn it on or off – a green bar means on. **Right click** opens its settings. All modules start switched off.
 
 If a module has its own key, you set it at the very top of that module's menu: click the key button, then press the new key (Esc cancels, Delete removes the key).
 
