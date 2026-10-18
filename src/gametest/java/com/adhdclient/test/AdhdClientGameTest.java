@@ -39,6 +39,7 @@ public class AdhdClientGameTest implements FabricClientGameTest {
             blinkCancel(context, server);
         }
         InspectGameTest.run(context);
+        PacketToolsGameTest.run(context);
         log("ALLE TESTS BESTANDEN");
     }
 

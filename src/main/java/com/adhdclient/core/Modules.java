@@ -102,7 +102,11 @@ public final class Modules {
                     () -> L.t("Zeigt alle Daten zu Block, Item oder Entity: Blockstate, Komponenten, NBT, Markierungen", "Shows all data of a block, item or entity: block state, components, NBT, markers"),
                     () -> com.adhdclient.inspect.InspectClient.enabled, v -> com.adhdclient.inspect.InspectClient.enabled = v,
                     com.adhdclient.inspect.config.InspectSettingsScreen::new,
-                    () -> com.adhdclient.gui.HotKey.name(com.adhdclient.inspect.config.InspectConfig.get().openKey))
+                    () -> com.adhdclient.gui.HotKey.name(com.adhdclient.inspect.config.InspectConfig.get().openKey)),
+            new Module("Packet Tools", Category.MISC,
+                    () -> L.t("Werkzeuge für Menüs: ohne Paket schließen, Desync, Klicks verzögern, Menü speichern, Pakete bauen", "Tools for menus: close without packet, desync, delay clicks, save menus, build packets"),
+                    () -> com.adhdclient.packettools.PacketToolsClient.enabled, v -> com.adhdclient.packettools.PacketToolsClient.enabled = v,
+                    com.adhdclient.packettools.PacketToolsScreen::new, com.adhdclient.packettools.PacketToolsClient::keyName)
     );
 
     private Modules() {

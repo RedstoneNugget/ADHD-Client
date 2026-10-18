@@ -8,7 +8,7 @@ Client-side Fabric mod for **Minecraft 1.21.11**. Instead of installing many sep
 
 ## Installation
 1. Install the [Fabric Loader](https://fabricmc.net/use/) for 1.21.11 and the [Fabric API](https://modrinth.com/mod/fabric-api)
-2. Put `adhd-client-1.1.0.jar` into your `mods` folder
+2. Put `adhd-client-1.2.0.jar` into your `mods` folder
 
 Nothing is needed on the server. Don't install it together with the standalone Base Finder or Head Finder mods – that functionality is already included.
 
@@ -32,6 +32,7 @@ If a module has its own key, you set it at the very top of that module's menu: c
 | **Full Bright** | Everything bright like night vision, adjustable strength, optionally ignores the Darkness effect. | none needed |
 | **Blink** | Holds back your movement packets: the server sees you standing still, and when you turn it off everything is sent at once. Optional copy of you at the start, auto send after a few seconds, cancel key that puts you back at the start. Anticheats often detect it. | none (set in the menu) |
 | **Inspect All** | Shows everything Minecraft knows about the block or entity you look at, or the item in your hand or under the mouse: block state, components, NBT (highlighted, collapsible), readable summaries for bee nests, spawners, signs, chests and more, markers through walls, search, copy as SNBT or /give, JSON export. Lock a target to keep an overlay while you play. | I panel, K lock (changeable) |
+| **Packet Tools** | A bar next to every container menu: close without packet, close only on the server (desync), turn click packets off or delay them and send them all at once, save a menu and reopen it, disconnect while sending, build your own slot/button click packets, copy the title as JSON, sync ID and revision, and a chat field to write messages or commands while the menu stays open. Many servers detect this. | V reopens a saved menu (changeable) |
 
 All modules only use data your client already has. Nothing extra is sent to the server.
 

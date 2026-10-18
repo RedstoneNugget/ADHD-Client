@@ -6,7 +6,7 @@
   "client": [
     "EspGlowMixin",
     "EspOutlineColorMixin",
-    "BlinkPacketMixin",
+    "PacketSendMixin",
     "FreeCamHandMixin",
     "FreeCamInputMixin",
     "FreeCamInteractMixin",

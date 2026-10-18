@@ -7,6 +7,7 @@ import com.adhdclient.esp.EspClient;
 import com.adhdclient.blink.BlinkClient;
 import com.adhdclient.freecam.FreeCamClient;
 import com.adhdclient.inspect.InspectClient;
+import com.adhdclient.packettools.PacketToolsClient;
 import com.adhdclient.freelook.FreeLookClient;
 import com.adhdclient.rtpq.RtpqInvseeClient;
 import net.fabricmc.api.ClientModInitializer;
@@ -48,6 +49,7 @@ public final class AdhdClientClient implements ClientModInitializer {
         new FreeLookClient().onInitializeClient();
         new BlinkClient().onInitializeClient();
         new InspectClient().onInitializeClient();
+        new PacketToolsClient().onInitializeClient();
 
         ClientTickEvents.END_CLIENT_TICK.register(mc -> {
             while (menuKey.wasPressed()) {

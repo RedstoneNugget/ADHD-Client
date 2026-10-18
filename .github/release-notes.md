@@ -1,6 +1,9 @@
-**ADHD Client 1.1.0** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
+**ADHD Client 1.2.0** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
 
 One client, many modules – each switched on or off in one menu (**Right Ctrl**). All settings, colors and module keys are set inside the client. Menus in English or German.
+
+### New in 1.2.0
+- **Packet Tools** – a bar next to every container menu: close without packet, server desync, turn click packets off or delay them, save and reopen menus, disconnect while sending, build your own click packets, copy the title, and a chat field to write while the menu stays open (V reopens a saved menu)
 
 ### New in 1.1.0
 - **Inspect All** – see everything Minecraft knows about a block, item or entity: block state, components, NBT, readable summaries, markers through walls, search, copy as SNBT or `/give`, JSON export (I panel, K lock)
@@ -21,17 +24,21 @@ One client, many modules – each switched on or off in one menu (**Right Ctrl**
 - **Blink** – hold back your movement, then send it at once
 - **RTPQ Invsee** – auto `/invsee` on your RTPQ opponent with elytra/mace/crystal warnings
 - **Inspect All** – all data of blocks, items and entities
+- **Packet Tools** – tools for container menus and their packets
 
-Not affiliated with any server. Check the server rules before using it – Blink, ESP and similar modules are often not allowed.
+Not affiliated with any server. Check the server rules before using it – Blink, ESP, Packet Tools and similar modules are often not allowed.
 
 ### Installation
 1. Install the [Fabric Loader](https://fabricmc.net/use/) for 1.21.11 and the [Fabric API](https://modrinth.com/mod/fabric-api)
-2. Put `adhd-client-1.1.0.jar` into your `mods` folder (remove older ADHD Client jars and the standalone Base Finder / InspectAll jars)
+2. Put `adhd-client-1.2.0.jar` into your `mods` folder (remove older ADHD Client jars and the standalone Base Finder / InspectAll jars)
 
 ---
 
 ### Deutsch
 Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg**). Alle Einstellungen, Farben und Modul-Tasten stellst du im Client ein. Menüs auf Deutsch oder Englisch.
+
+**Neu in 1.2.0**
+- **Packet Tools** – eine Leiste neben jedem Container-Menü: ohne Paket schließen, Server-Desync, Klick-Pakete aus- oder verzögern, Menüs speichern und wieder öffnen, trennen und dabei senden, eigene Klick-Pakete bauen, Titel kopieren und ein Chat-Feld, um bei offenem Menü zu schreiben (V öffnet ein gespeichertes Menü)
 
 **Neu in 1.1.0**
 - **Inspect All** – alles, was Minecraft über Block, Item oder Entity weiß: Blockstate, Komponenten, NBT, lesbare Zusammenfassungen, Markierungen durch Wände, Suche, Kopieren als SNBT oder `/give`, JSON-Export (I Panel, K sperren)
@@ -42,9 +49,9 @@ Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg*
 - **ESP** – Farben einfacher: drei Modus-Knöpfe und eine Palette zum Anklicken
 - Kurzes Antippen von Tasten geht nicht mehr verloren, die gebaute Jar enthält keine Metadaten
 
-**Alle Module:** Base Finder, Block ESP, ESP, Full Bright, Free Cam, Free Look, Blink, RTPQ Invsee, Inspect All
+**Alle Module:** Base Finder, Block ESP, ESP, Full Bright, Free Cam, Free Look, Blink, RTPQ Invsee, Inspect All, Packet Tools
 
-Kein offizielles Projekt eines Servers. Vor der Nutzung die Server-Regeln lesen – Blink, ESP und ähnliche Module sind oft verboten.
+Kein offizielles Projekt eines Servers. Vor der Nutzung die Server-Regeln lesen – Blink, ESP, Packet Tools und ähnliche Module sind oft verboten.
 
 1. [Fabric Loader](https://fabricmc.net/use/) für 1.21.11 und die [Fabric API](https://modrinth.com/mod/fabric-api) installieren
-2. `adhd-client-1.1.0.jar` in den `mods`-Ordner legen (ältere ADHD-Client-Jars und die einzelnen Base-Finder-/InspectAll-Jars entfernen)
+2. `adhd-client-1.2.0.jar` in den `mods`-Ordner legen (ältere ADHD-Client-Jars und die einzelnen Base-Finder-/InspectAll-Jars entfernen)

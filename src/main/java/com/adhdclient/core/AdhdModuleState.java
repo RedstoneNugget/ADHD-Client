@@ -34,6 +34,7 @@ public final class AdhdModuleState {
         boolean freeCamEnabled = false;
         boolean blinkEnabled = false;
         boolean inspectEnabled = false;
+        boolean packetToolsEnabled = false;
     }
 
     private AdhdModuleState() {
@@ -63,6 +64,7 @@ public final class AdhdModuleState {
         com.adhdclient.freecam.FreeCamClient.enabled = d.freeCamEnabled;
         com.adhdclient.blink.BlinkClient.enabled = d.blinkEnabled;
         com.adhdclient.inspect.InspectClient.enabled = d.inspectEnabled;
+        com.adhdclient.packettools.PacketToolsClient.enabled = d.packetToolsEnabled;
     }
 
     public static void save() {
@@ -76,6 +78,7 @@ public final class AdhdModuleState {
         d.freeCamEnabled = com.adhdclient.freecam.FreeCamClient.enabled;
         d.blinkEnabled = com.adhdclient.blink.BlinkClient.enabled;
         d.inspectEnabled = com.adhdclient.inspect.InspectClient.enabled;
+        d.packetToolsEnabled = com.adhdclient.packettools.PacketToolsClient.enabled;
         try {
             Path f = file();
             Files.createDirectories(f.getParent());
