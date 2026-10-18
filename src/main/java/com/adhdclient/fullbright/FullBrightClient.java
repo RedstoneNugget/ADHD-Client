@@ -15,8 +15,9 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
 /**
- * Full Bright: alles ist hell wie mit Nachtsicht, ohne Trank und ohne Taste – an/aus nur im ADHD-Menü.
- * Es wird nur die Licht-Tabelle des Clients verändert, der Server bekommt davon nichts mit.
+ * Full Bright: alles ist hell wie am Tag – volles Himmelslicht, Nachtsicht und maximale Helligkeit, auf Wunsch
+ * auch Himmel und Nebel wie mittags. Keine Taste, an/aus nur im ADHD-Menü. Es wird nur verändert, was der
+ * Client anzeigt; der Server bekommt davon nichts mit.
  */
 public final class FullBrightClient {
 
@@ -29,6 +30,8 @@ public final class FullBrightClient {
         public int strength = 100;
         /** Dunkelheits-Effekt (Warden, Sculk-Kreischer) ignorieren. */
         public boolean ignoreDarkness = true;
+        /** Himmel, Nebel und Sonne wie mittags anzeigen (nur bei dir, der Server merkt nichts). */
+        public boolean dayTime = true;
     }
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();

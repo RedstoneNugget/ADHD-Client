@@ -22,6 +22,10 @@ public class AdhdClientGameTest implements FabricClientGameTest {
 
     @Override
     public void runTest(ClientGameTestContext context) {
+        if (Boolean.getBoolean("adhd.onlyFullBright")) {
+            FullBrightGameTest.run(context);
+            return;
+        }
         context.runOnClient(c -> c.options.getSoundVolumeOption(net.minecraft.sound.SoundCategory.MASTER).setValue(0.0));
         try (TestSingleplayerContext sp = context.worldBuilder().create()) {
             TestServerContext server = sp.getServer();
@@ -42,6 +46,7 @@ public class AdhdClientGameTest implements FabricClientGameTest {
         InspectGameTest.run(context);
         PacketToolsGameTest.run(context);
         CasinoGameTest.run(context);
+        FullBrightGameTest.run(context);
         log("ALLE TESTS BESTANDEN");
     }
 

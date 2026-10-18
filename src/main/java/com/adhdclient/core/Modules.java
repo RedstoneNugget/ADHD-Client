@@ -59,7 +59,7 @@ public final class Modules {
                     () -> EspClient.enabled, v -> EspClient.enabled = v,
                     com.adhdclient.esp.EspScreen::new, () -> null),
             new Module("Full Bright", Category.RENDER,
-                    () -> L.t("Alles hell wie mit Nachtsicht – keine Taste nötig", "Everything bright like night vision – no key needed"),
+                    () -> L.t("Alles hell wie am Tag, auch nachts und in Höhlen – keine Taste nötig", "Everything bright like daytime, even at night and in caves – no key needed"),
                     () -> FullBrightClient.enabled, v -> FullBrightClient.enabled = v,
                     com.adhdclient.fullbright.FullBrightScreen::new, () -> null),
             new Module("Base Finder", Category.WORLD,

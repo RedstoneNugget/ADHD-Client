@@ -20,7 +20,7 @@ public final class FullBrightScreen extends ThemedScreen {
 
     @Override
     protected void build() {
-        int h = Theme.TITLE_H + 6 + 12 + 2 * ROW + 6 + ROW + 16;
+        int h = Theme.TITLE_H + 6 + 12 + 3 * ROW + 6 + ROW + 16;
         int y = centeredPanel(W, h);
         int x = panelX1 + 8;
         int inner = W - 16;
@@ -33,6 +33,9 @@ public final class FullBrightScreen extends ThemedScreen {
         y += ROW;
         toggle(L.t("Dunkelheit ignorieren", "Ignore darkness"), () -> c.ignoreDarkness, v -> c.ignoreDarkness = v, x, y, inner, ROW - 2,
                 L.t("Der Dunkelheits-Effekt von Warden und Sculk-Kreischer wird nicht angezeigt", "The Darkness effect from the Warden and Sculk Shriekers is not shown"), null);
+        y += ROW;
+        toggle(L.t("Himmel wie am Tag", "Sky like daytime"), () -> c.dayTime, v -> c.dayTime = v, x, y, inner, ROW - 2,
+                L.t("Himmel, Sonne und Nebel wie mittags – nur bei dir, der Server merkt nichts", "Sky, sun and fog like at noon – only for you, the server does not notice"), null);
         y += ROW + 6;
 
         addDrawableChild(ButtonWidget.builder(Text.literal(L.t("Fertig", "Done")), b -> close()).dimensions(x, y, inner, ROW - 2).build());

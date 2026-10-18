@@ -113,3 +113,8 @@ tasks.matching { it.name in ["runClientGameTest", "runClient", "prodClient"] }.c
         opts.write(lines.join('\n') + '\n', 'UTF-8')
     }
 }
+
+// Nur den Full-Bright-Test laufen lassen: gradlew runClientGameTest -PonlyFullBright
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('onlyFullBright')) jvmArgs '-Dadhd.onlyFullBright=true'
+}
