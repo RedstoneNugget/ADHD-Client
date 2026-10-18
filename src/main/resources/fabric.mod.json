@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "adhd_client",
+  "version": "${version}",
+  "name": "ADHD Client",
+  "description": "Eigener Client mit mehreren Modulen (Base Finder, Block Finder, ...), die einzeln über ein Menü an/aus geschaltet werden.",
+  "authors": ["redstone_nugget"],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["com.adhdclient.core.AdhdClientClient"],
+    "modmenu": ["com.adhdclient.compat.ModMenuIntegration"]
+  },
+  "mixins": [
+    "adhd_client_basefinder.mixins.json",
+    "adhd_client_headfinder.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.0",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "modmenu": "*"
+  }
+}

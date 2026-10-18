@@ -1,0 +1,76 @@
+plugins {
+    id 'fabric-loom' version '1.17.21'
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+    archivesName = project.archives_base_name
+}
+
+repositories {
+    // Mod Menu (optional, nur compileOnly)
+    maven {
+        name = 'TerraformersMC'
+        url = 'https://maven.terraformersmc.com/releases/'
+        content { includeGroup 'com.terraformersmc' }
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // Mod Menu ist optional: nur zum Kompilieren.
+    modCompileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
+}
+
+processResources {
+    inputs.property 'version', project.version
+    filesMatching('fabric.mod.json') {
+        expand 'version': project.version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 21
+    it.options.encoding = 'UTF-8'
+    it.options.compilerArgs << '-Xlint:deprecation'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+jar {
+    from('LICENSE') {
+        rename { "${it}_${project.archives_base_name}" }
+    }
+}
+
+// Automatischer In-Game-Test (startet den echten Client): gradlew runClientGameTest
+fabricApi {
+    configureTests {
+        createSourceSet = true
+        modId = 'adhd_client-gametest'
+        enableGameTests = false
+        enableClientGameTests = true
+        eula = true
+    }
+}
+
+// Testclient immer stumm starten (Master-Lautstärke 0)
+tasks.matching { it.name == 'runClientGameTest' || it.name == 'runClient' }.configureEach {
+    doFirst {
+        def runDir = it.name == 'runClientGameTest' ? file('build/run/clientGameTest') : file('run')
+        runDir.mkdirs()
+        def opts = new File(runDir, 'options.txt')
+        def lines = opts.exists() ? opts.readLines('UTF-8').findAll { !it.startsWith('soundCategory_master:') } : []
+        lines << 'soundCategory_master:0.0'
+        opts.write(lines.join('\n') + '\n', 'UTF-8')
+    }
+}
