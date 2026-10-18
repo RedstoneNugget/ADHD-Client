@@ -44,6 +44,7 @@ public final class ThemeConfig {
     static {
         PRESETS.put("Lila", new int[]{0x8B5CF6, 0x14121C, 0xECEAF4, 0x34D399, 0xF43F5E});
         PRESETS.put("Ozean", new int[]{0x38BDF8, 0x0C1622, 0xE6F1FA, 0x2DD4BF, 0xFB7185});
+        PRESETS.put("Rot", new int[]{0xDC2626, 0x1A0C0C, 0xF8E9E9, 0x4ADE80, 0xF59E0B});
         PRESETS.put("Glut", new int[]{0xF97316, 0x1A120E, 0xF5EDE6, 0xA3E635, 0xEF4444});
         PRESETS.put("Mint", new int[]{0x10B981, 0x0F1A16, 0xE7F5EF, 0x22D3EE, 0xF97316});
         PRESETS.put("Rose", new int[]{0xEC4899, 0x1A1018, 0xF9E8F2, 0x4ADE80, 0xF59E0B});

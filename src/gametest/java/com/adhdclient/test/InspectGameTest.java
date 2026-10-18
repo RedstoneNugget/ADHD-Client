@@ -67,7 +67,14 @@ final class InspectGameTest {
             lookAt(context, server, -2, -60, -4, 20, -60, 15);
             context.waitTicks(5);
             context.takeScreenshot("21_inspect_marker");
-            context.runOnClient(c -> WorldMarkers.clear());
+            // Knopf im Panel löscht alle Markierungen
+            lookAt(context, server, 0.5, -60, 0.5, 4.5, -59.5, 0.5);
+            openPanel(context, "Bee nest again");
+            context.clickScreenButton("Clear marks");
+            context.waitTicks(2);
+            check(context.computeOnClient(c -> WorldMarkers.count()) == 0, "Knopf \"Clear marks\" löscht alle Markierungen");
+            context.takeScreenshot("21b_inspect_clear_marks");
+            closePanel(context);
 
             // --- Truhe ---
             lookAt(context, server, 0.5, -60, 4.5, 4.5, -59.5, 4.5);
@@ -173,6 +180,26 @@ final class InspectGameTest {
                 context.waitTicks(3);
                 context.takeScreenshot("29_inspect_settings_" + tab.toLowerCase(java.util.Locale.ROOT));
             }
+            // Markierungsfarbe per Palette: Feld 2 = Rot
+            context.setScreen(() -> new InspectSettingsScreen(null));
+            context.waitTicks(3);
+            context.clickScreenButton("Colors");
+            context.waitTicks(3);
+            double[] sw = context.computeOnClient(c -> {
+                int[] p = ((InspectSettingsScreen) c.currentScreen).markerSwatchCenter(1);
+                double s = c.getWindow().getScaleFactor();
+                return new double[]{p[0] * s, p[1] * s};
+            });
+            context.getInput().setCursorPos(sw[0], sw[1]);
+            context.getInput().pressMouse(GLFW.GLFW_MOUSE_BUTTON_LEFT);
+            context.waitTicks(3);
+            String markerColor = context.computeOnClient(c -> InspectConfig.get().colorMarker);
+            context.takeScreenshot("29b_inspect_marker_palette");
+            log("Markierungsfarbe nach Klick: " + markerColor);
+            check("#FF3B3B".equalsIgnoreCase(markerColor), "Palette setzt die Markierungsfarbe");
+            context.setScreen(() -> null);
+            context.waitTicks(3);
+            context.runOnClient(c -> InspectConfig.get().colorMarker = "#FFC21A");
             context.setScreen(() -> null);
             context.waitTicks(3);
             context.runOnClient(c -> InspectClient.enabled = false);

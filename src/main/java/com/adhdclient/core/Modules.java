@@ -106,7 +106,16 @@ public final class Modules {
             new Module("Packet Tools", Category.MISC,
                     () -> L.t("Werkzeuge für Menüs: ohne Paket schließen, Desync, Klicks verzögern, Menü speichern, Pakete bauen", "Tools for menus: close without packet, desync, delay clicks, save menus, build packets"),
                     () -> com.adhdclient.packettools.PacketToolsClient.enabled, v -> com.adhdclient.packettools.PacketToolsClient.enabled = v,
-                    com.adhdclient.packettools.PacketToolsScreen::new, com.adhdclient.packettools.PacketToolsClient::keyName)
+                    com.adhdclient.packettools.PacketToolsScreen::new, com.adhdclient.packettools.PacketToolsClient::keyName),
+            new Module("Lucky Casino", Category.MISC,
+                    () -> com.adhdclient.casino.client.LuckyCasinoClient.STANDALONE_INSTALLED ? com.adhdclient.casino.client.LuckyCasinoClient.doubleInstalledHint()
+                            : L.t("Casino mit Spielgeld: Slots, Roulette, Blackjack, Crash, Plinko, Minen und mehr", "Casino with play money: slots, roulette, blackjack, crash, Plinko, mines and more"),
+                    () -> com.adhdclient.casino.client.LuckyCasinoClient.enabled, v -> {
+                        if (v && com.adhdclient.casino.client.LuckyCasinoClient.STANDALONE_INSTALLED) return;
+                        com.adhdclient.casino.client.LuckyCasinoClient.enabled = v;
+                    },
+                    com.adhdclient.casino.CasinoModuleScreen::new,
+                    () -> com.adhdclient.gui.HotKey.name(com.adhdclient.casino.client.LuckyCasinoClient.config().adhdOpenKey))
     );
 
     private Modules() {

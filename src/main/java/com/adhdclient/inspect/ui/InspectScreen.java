@@ -163,6 +163,8 @@ public class InspectScreen extends Screen {
                 lockButton = ButtonWidget.builder(lockLabel(), b -> toggleLock()).build(),
                 ButtonWidget.builder(Text.literal(L.t("Auf/Zu", "Fold")), b -> toggleFoldAll()).build(),
                 ButtonWidget.builder(Text.literal(L.t("Neu laden", "Reload")), b -> refresh()).build(),
+                ButtonWidget.builder(Text.literal(L.t("Marker weg", "Clear marks")), b -> clearMarkers())
+                        .tooltip(net.minecraft.client.gui.tooltip.Tooltip.of(Text.literal(L.t("Alle Markierungen in der Welt entfernen", "Remove all markers in the world")))).build(),
                 ButtonWidget.builder(Text.literal(L.t("Optionen", "Options")), b -> {
                     if (client != null) {
                         client.setScreen(new InspectSettingsScreen(this));
@@ -479,6 +481,11 @@ public class InspectScreen extends Screen {
                 }
             }
         }
+    }
+
+    private void clearMarkers() {
+        int n = WorldMarkers.clear();
+        setStatus(n + L.t(" Markierung(en) gelöscht", " marker(s) removed"), Role.ACCENT);
     }
 
     private void refresh() {

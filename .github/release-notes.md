@@ -1,6 +1,12 @@
-**ADHD Client 1.3.0** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
+**ADHD Client 1.4.0** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
 
 One client, many modules – each switched on or off in one menu (**Right Ctrl**). All settings, colors and module keys are set inside the client. Menus in English or German.
+
+### New in 1.4.0
+- **Lucky Casino** – a full casino with play money (slots, roulette, blackjack, crash, Plinko, mines and more) as a module; your LuckyCasino progress carries over (O opens it)
+- **Red design** – new preset "Red" in the Design menu
+- **Inspect All** – "Clear marks" button in the panel and a color palette for markers
+- The Design menu fits on small screens again
 
 ### New in 1.3.0
 - **Reset keys** – every module key has a small reset button next to it that puts it back to the default
@@ -32,17 +38,24 @@ One client, many modules – each switched on or off in one menu (**Right Ctrl**
 - **RTPQ Invsee** – auto `/invsee` on your RTPQ opponent with elytra/mace/crystal warnings
 - **Inspect All** – all data of blocks, items and entities
 - **Packet Tools** – tools for container menus and their packets
+- **Lucky Casino** – casino with play money
 
 Not affiliated with any server. Check the server rules before using it – Blink, ESP, Packet Tools and similar modules are often not allowed.
 
 ### Installation
 1. Install the [Fabric Loader](https://fabricmc.net/use/) for 1.21.11 and the [Fabric API](https://modrinth.com/mod/fabric-api)
-2. Put `adhd-client-1.3.0.jar` into your `mods` folder (remove older ADHD Client jars and the standalone Base Finder / InspectAll jars)
+2. Put `adhd-client-1.4.0.jar` into your `mods` folder (remove older ADHD Client jars and the standalone Base Finder / InspectAll / LuckyCasino jars)
 
 ---
 
 ### Deutsch
 Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg**). Alle Einstellungen, Farben und Modul-Tasten stellst du im Client ein. Menüs auf Deutsch oder Englisch.
+
+**Neu in 1.4.0**
+- **Lucky Casino** – ein komplettes Casino mit Spielgeld (Slots, Roulette, Blackjack, Crash, Plinko, Minen u. v. m.) als Modul; dein LuckyCasino-Spielstand wird übernommen (O öffnet es)
+- **Rotes Design** – neue Vorlage „Rot“ im Design-Menü
+- **Inspect All** – Knopf „Marker weg“ im Panel und eine Farbpalette für Markierungen
+- Das Design-Menü passt wieder auf kleine Bildschirme
 
 **Neu in 1.3.0**
 - **Tasten zurücksetzen** – neben jeder Modul-Taste ein kleiner Knopf, der sie auf den Standard zurücksetzt
@@ -63,9 +76,9 @@ Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg*
 - **ESP** – Farben einfacher: drei Modus-Knöpfe und eine Palette zum Anklicken
 - Kurzes Antippen von Tasten geht nicht mehr verloren, die gebaute Jar enthält keine Metadaten
 
-**Alle Module:** Base Finder, Block ESP, ESP, Full Bright, Free Cam, Free Look, Blink, RTPQ Invsee, Inspect All, Packet Tools
+**Alle Module:** Base Finder, Block ESP, ESP, Full Bright, Free Cam, Free Look, Blink, RTPQ Invsee, Inspect All, Packet Tools, Lucky Casino
 
 Kein offizielles Projekt eines Servers. Vor der Nutzung die Server-Regeln lesen – Blink, ESP, Packet Tools und ähnliche Module sind oft verboten.
 
 1. [Fabric Loader](https://fabricmc.net/use/) für 1.21.11 und die [Fabric API](https://modrinth.com/mod/fabric-api) installieren
-2. `adhd-client-1.3.0.jar` in den `mods`-Ordner legen (ältere ADHD-Client-Jars und die einzelnen Base-Finder-/InspectAll-Jars entfernen)
+2. `adhd-client-1.4.0.jar` in den `mods`-Ordner legen (ältere ADHD-Client-Jars und die einzelnen Base-Finder-/InspectAll-/LuckyCasino-Jars entfernen)

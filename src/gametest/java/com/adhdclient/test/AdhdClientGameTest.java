@@ -41,6 +41,7 @@ public class AdhdClientGameTest implements FabricClientGameTest {
         }
         InspectGameTest.run(context);
         PacketToolsGameTest.run(context);
+        CasinoGameTest.run(context);
         log("ALLE TESTS BESTANDEN");
     }
 
@@ -48,6 +49,15 @@ public class AdhdClientGameTest implements FabricClientGameTest {
         context.setScreen(() -> new ClickGuiScreen(null));
         context.waitTicks(5);
         context.takeScreenshot("01_clickgui");
+        // rotes Design
+        context.runOnClient(c -> com.adhdclient.gui.Theme.config().apply(com.adhdclient.gui.ThemeConfig.PRESETS.get("Rot")));
+        context.setScreen(() -> new ClickGuiScreen(null));
+        context.waitTicks(5);
+        context.takeScreenshot("01b_clickgui_rot");
+        context.setScreen(() -> new com.adhdclient.gui.ThemeScreen(null));
+        context.waitTicks(5);
+        context.takeScreenshot("01c_design_rot");
+        context.runOnClient(c -> com.adhdclient.gui.Theme.config().apply(com.adhdclient.gui.ThemeConfig.PRESETS.get("Lila")));
         context.setScreen(() -> new EspScreen(null));
         context.waitTicks(5);
         context.takeScreenshot("02_esp");

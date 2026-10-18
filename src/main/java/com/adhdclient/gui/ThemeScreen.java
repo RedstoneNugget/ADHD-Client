@@ -21,6 +21,7 @@ public final class ThemeScreen extends ThemedScreen {
     private static final int COLORS = 5;
     private static final int W = 320;
     private static final int ROW = 20;
+    private int row = ROW;
 
     private static int selected;
 
@@ -67,7 +68,11 @@ public final class ThemeScreen extends ThemedScreen {
 
     @Override
     protected void build() {
-        int h = Theme.TITLE_H + 6 + 12 + 2 * ROW + 6 + 12 + COLORS * ROW + 6 + 12 + ROW + 6 + ROW + 18;
+        // Auf kleinen Bildschirmen enger und die letzte Zeile ohne Überschrift, damit Fertig sichtbar bleibt
+        boolean compact = height < 290;
+        row = compact ? 18 : ROW;
+        int h = compact ? Theme.TITLE_H + 6 + 12 + 2 * row + 6 + 12 + COLORS * row + 6 + row + 18
+                : Theme.TITLE_H + 6 + 12 + 2 * row + 6 + 12 + COLORS * row + 6 + 12 + row + 6 + row + 18;
         int y = centeredPanel(W, h);
         int x = panelX1 + 8;
         int inner = W - 16;
@@ -75,19 +80,19 @@ public final class ThemeScreen extends ThemedScreen {
         // Vorlagen
         section(L.t("Vorlagen", "Presets"), x, y, inner);
         y += 12;
-        int pw = (inner - 2 * 4) / 3;
+        int pw = (inner - 3 * 4) / 4;
         int i = 0;
         for (Map.Entry<String, int[]> p : ThemeConfig.PRESETS.entrySet()) {
             int[] colors = p.getValue();
-            int px = x + (i % 3) * (pw + 4);
-            int py = y + (i / 3) * ROW;
+            int px = x + (i % 4) * (pw + 4);
+            int py = y + (i / 4) * row;
             toggle(presetName(p.getKey()), () -> matches(colors), v -> {
                 cfg().apply(colors);
                 clearAndInit();
-            }, px, py, pw, ROW - 2, null, null);
+            }, px, py, pw, row - 2, null, null);
             i++;
         }
-        y += 2 * ROW + 6;
+        y += 2 * row + 6;
 
         // Farben: links Auswahl, rechts Regler
         section(L.t("Farben", "Colors"), x, y, inner);
@@ -99,64 +104,77 @@ public final class ThemeScreen extends ThemedScreen {
             toggle(names()[k], () -> selected == idx, v -> {
                 selected = idx;
                 clearAndInit();
-            }, x, y + k * ROW, leftW - 18, ROW - 2, null, null);
-            swatchY[k] = y + k * ROW + 2;
+            }, x, y + k * row, leftW - 18, row - 2, null, null);
+            swatchY[k] = y + k * row + 2;
         }
         int rx = x + leftW + 8;
         int rw = inner - leftW - 8;
         int rgb = get(selected);
-        red = addDrawableChild(new ValueSlider(rx, y, rw, ROW - 2, L.t("Rot", "Red"), 0, 255, 1, (rgb >> 16) & 0xFF, v -> String.valueOf((int) v), v -> fromSliders()));
-        green = addDrawableChild(new ValueSlider(rx, y + ROW, rw, ROW - 2, L.t("Grün", "Green"), 0, 255, 1, (rgb >> 8) & 0xFF, v -> String.valueOf((int) v), v -> fromSliders()));
-        blue = addDrawableChild(new ValueSlider(rx, y + 2 * ROW, rw, ROW - 2, L.t("Blau", "Blue"), 0, 255, 1, rgb & 0xFF, v -> String.valueOf((int) v), v -> fromSliders()));
-        hex = new TextFieldWidget(textRenderer, rx, y + 3 * ROW, rw - 30, ROW - 2, Text.literal("Hex"));
+        red = addDrawableChild(new ValueSlider(rx, y, rw, row - 2, L.t("Rot", "Red"), 0, 255, 1, (rgb >> 16) & 0xFF, v -> String.valueOf((int) v), v -> fromSliders()));
+        green = addDrawableChild(new ValueSlider(rx, y + row, rw, row - 2, L.t("Grün", "Green"), 0, 255, 1, (rgb >> 8) & 0xFF, v -> String.valueOf((int) v), v -> fromSliders()));
+        blue = addDrawableChild(new ValueSlider(rx, y + 2 * row, rw, row - 2, L.t("Blau", "Blue"), 0, 255, 1, rgb & 0xFF, v -> String.valueOf((int) v), v -> fromSliders()));
+        hex = new TextFieldWidget(textRenderer, rx, y + 3 * row, rw - 30, row - 2, Text.literal("Hex"));
         hex.setMaxLength(7);
         hex.setText(hexOf(rgb));
         hex.setChangedListener(this::fromHex);
         addDrawableChild(hex);
         previewX = rx + rw - 24;
-        previewY = y + 3 * ROW;
-        y += COLORS * ROW + 6;
+        previewY = y + 3 * row;
+        y += COLORS * row + 6;
 
-        // Fenster und Sprache
+        // Fenster und Sprache (kompakt: alles in einer Zeile mit Zurücksetzen/Fertig)
         int half = (inner - 4) / 2;
-        section(L.t("Fenster und Sprache", "Window and language"), x, y, inner);
-        y += 12;
-        addDrawableChild(new ValueSlider(x, y, half, ROW - 2, L.t("Deckkraft", "Opacity"), 40, 100, 1, cfg().opacity,
+        if (!compact) {
+            section(L.t("Fenster und Sprache", "Window and language"), x, y, inner);
+            y += 12;
+        }
+        // kompakt: Deckkraft, Sprache, Zurücksetzen und Fertig nebeneinander; sonst zwei Zeilen
+        int quarter = (inner - 12) / 4;
+        int[] xs = compact ? new int[]{x, x + quarter + 4, x + 2 * (quarter + 4), x + 3 * (quarter + 4)}
+                : new int[]{x, x + half + 4, x, x + half + 4};
+        int[] ws = compact ? new int[]{quarter, quarter, quarter, inner - 3 * (quarter + 4)}
+                : new int[]{half, inner - half - 4, half, inner - half - 4};
+        int secondY = compact ? y : y + row + 6;
+        addDrawableChild(new ValueSlider(xs[0], y, ws[0], row - 2, L.t("Deckkraft", "Opacity"), 40, 100, 1, cfg().opacity,
                 v -> (int) Math.round(v) + " %", v -> cfg().opacity = (int) Math.round(v)));
-        ButtonWidget lang = ButtonWidget.builder(Text.literal(languageText()), b -> {
+        ButtonWidget lang = ButtonWidget.builder(Text.literal(compact ? languageValue() : languageText()), b -> {
             L.Mode[] modes = L.Mode.values();
             cfg().language = modes[(cfg().language.ordinal() + 1) % modes.length];
             clearAndInit();
-        }).dimensions(x + half + 4, y, inner - half - 4, ROW - 2).build();
-        lang.setTooltip(Tooltip.of(Text.literal(L.t("Automatisch = wie die Spielsprache", "Automatic = same as the game language"))));
+        }).dimensions(xs[1], y, ws[1], row - 2).build();
+        lang.setTooltip(Tooltip.of(Text.literal(L.t("Sprache des Clients – Automatisch = wie die Spielsprache",
+                "Client language – Automatic = same as the game language"))));
         addDrawableChild(lang);
-        y += ROW + 6;
 
         addDrawableChild(ButtonWidget.builder(Text.literal(L.t("Zurücksetzen", "Reset")), b -> {
             ThemeConfig fresh = new ThemeConfig();
             cfg().apply(ThemeConfig.PRESETS.get("Lila"));
             cfg().opacity = fresh.opacity;
             clearAndInit();
-        }).dimensions(x, y, half, ROW - 2).build());
+        }).dimensions(xs[2], secondY, ws[2], row - 2).build());
         addDrawableChild(ButtonWidget.builder(Text.literal(L.t("Fertig", "Done")), b -> close())
-                .dimensions(x + half + 4, y, inner - half - 4, ROW - 2).build());
+                .dimensions(xs[3], secondY, ws[3], row - 2).build());
 
         status(L.t("Änderungen gelten sofort für alle Menüs", "Changes apply to all menus right away"));
     }
 
-    private static String languageText() {
-        String value = switch (cfg().language) {
+    private static String languageValue() {
+        return switch (cfg().language) {
             case AUTO -> L.t("Automatisch", "Automatic");
             case DE -> "Deutsch";
             case EN -> "English";
         };
-        return L.t("Sprache: ", "Language: ") + value;
+    }
+
+    private static String languageText() {
+        return L.t("Sprache: ", "Language: ") + languageValue();
     }
 
     private static String presetName(String key) {
         return switch (key) {
             case "Lila" -> L.t("Lila", "Purple");
             case "Ozean" -> L.t("Ozean", "Ocean");
+            case "Rot" -> L.t("Rot", "Red");
             case "Glut" -> L.t("Glut", "Ember");
             case "Grau" -> L.t("Grau", "Gray");
             default -> key;

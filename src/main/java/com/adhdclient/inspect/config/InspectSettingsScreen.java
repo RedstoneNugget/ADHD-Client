@@ -43,6 +43,11 @@ public final class InspectSettingsScreen extends ThemedScreen {
     }
 
     private final List<Swatch> swatches = new ArrayList<>();
+    private static final String[] MARKER_PALETTE = {"#FFC21A", "#FF3B3B", "#FF8C1A", "#7CFF3B", "#3BE8FF", "#3B7BFF", "#A23BFF", "#FFFFFF"};
+    private static final int PAL_SIZE = 16;
+    private static final int PAL_STEP = 19;
+    private int markerPaletteX = -1000;
+    private int markerPaletteY = -1000;
 
     public InspectSettingsScreen(Screen parent) {
         super(Text.literal("Inspect All"), parent);
@@ -51,6 +56,7 @@ public final class InspectSettingsScreen extends ThemedScreen {
     @Override
     protected void build() {
         swatches.clear();
+        markerPaletteX = -1000;
         int h = Theme.TITLE_H + 6 + 12 + ROW + 6 + ROW + 6 + CONTENT_ROWS * ROW + 6 + ROW + 16;
         int y = centeredPanel(W, h);
         int x = panelX1 + 8;
@@ -160,6 +166,9 @@ public final class InspectSettingsScreen extends ThemedScreen {
         color(L.t("Koordinaten", "Coordinates"), () -> c.colorCoord, v -> c.colorCoord = v, x, y + 2 * ROW, half);
         color(L.t("Warnungen", "Warnings"), () -> c.colorWarn, v -> c.colorWarn = v, x + half + 4, y + 2 * ROW, half);
         color(L.t("Markierungen", "Markers"), () -> c.colorMarker, v -> c.colorMarker = v, x, y + 3 * ROW, half);
+        // Palette für die Markierungsfarbe: ein Klick genügt
+        markerPaletteX = x + half + 4;
+        markerPaletteY = y + 3 * ROW + 1;
         line(L.t("Hintergrund, Rahmen und Text: im Design-Menü", "Background, border and text: in the Design menu"), x, y + 4 * ROW + 4, Theme.textDim());
     }
 
@@ -188,6 +197,45 @@ public final class InspectSettingsScreen extends ThemedScreen {
         for (Swatch s : swatches) {
             Theme.swatch(ctx, s.x, s.y, 16, InspectConfig.parse(s.color.get(), 0xFF555555) & 0xFFFFFF);
         }
+        if (markerPaletteX > -1000) {
+            String current = InspectConfig.get().colorMarker;
+            int hovered = paletteAt(mouseX, mouseY);
+            for (int i = 0; i < MARKER_PALETTE.length; i++) {
+                int sx = markerPaletteX + i * PAL_STEP;
+                Theme.swatch(ctx, sx, markerPaletteY, PAL_SIZE, InspectConfig.parse(MARKER_PALETTE[i], 0xFF555555) & 0xFFFFFF);
+                boolean selected = MARKER_PALETTE[i].equalsIgnoreCase(current);
+                if (selected || i == hovered) {
+                    Theme.border(ctx, sx - 1, markerPaletteY - 1, sx + PAL_SIZE + 1, markerPaletteY + PAL_SIZE + 1, selected ? 0xFFFFFFFF : Theme.textDim());
+                }
+            }
+            if (hovered >= 0) {
+                ctx.drawTooltip(textRenderer, Text.literal(L.t("Klicken: Markierungen in dieser Farbe", "Click: markers in this color")), mouseX, mouseY);
+            }
+        }
+    }
+
+    /** Für Tests: Mitte des Farbfelds i der Markierungs-Palette (GUI-Koordinaten), oder null, wenn nicht sichtbar. */
+    public int[] markerSwatchCenter(int i) {
+        return markerPaletteX > -1000 ? new int[]{markerPaletteX + i * PAL_STEP + PAL_SIZE / 2, markerPaletteY + PAL_SIZE / 2} : null;
+    }
+
+    private int paletteAt(double mx, double my) {
+        if (my < markerPaletteY || my >= markerPaletteY + PAL_SIZE || mx < markerPaletteX) return -1;
+        int i = (int) ((mx - markerPaletteX) / PAL_STEP);
+        if (i >= MARKER_PALETTE.length || mx - markerPaletteX - i * PAL_STEP >= PAL_SIZE) return -1;
+        return i;
+    }
+
+    @Override
+    public boolean mouseClicked(net.minecraft.client.gui.Click click, boolean doubled) {
+        int i = click.button() == 0 ? paletteAt(click.x(), click.y()) : -1;
+        if (i >= 0) {
+            InspectConfig.get().colorMarker = MARKER_PALETTE[i];
+            InspectConfig.save();
+            clearAndInit();
+            return true;
+        }
+        return super.mouseClicked(click, doubled);
     }
 
     @Override
