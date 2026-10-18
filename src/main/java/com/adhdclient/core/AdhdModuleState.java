@@ -1,7 +1,11 @@
 package com.adhdclient.core;
 
 import com.adhdclient.basefinder.BaseFinderClient;
-import com.adhdclient.headfinder.HeadFinderClient;
+import com.adhdclient.blockesp.BlockESPClient;
+import com.adhdclient.esp.EspClient;
+import com.adhdclient.freelook.FreeLookClient;
+import com.adhdclient.fullbright.FullBrightClient;
+import com.adhdclient.rtpq.RtpqInvseeClient;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
@@ -15,14 +19,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
-/** Welche Module (Base Finder, Head Finder, …) an sind – config/adhd_client/modules.json. */
+/** Welche Module (Base Finder, Block ESP, ESP, RTPQ Invsee, …) an sind – config/adhd_client/modules.json. */
 public final class AdhdModuleState {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     private static final class Data {
-        boolean baseFinderEnabled = true;
-        boolean headFinderEnabled = true;
+        boolean baseFinderEnabled = false;
+        boolean blockEspEnabled = false;
+        boolean espEnabled = false;
+        boolean rtpqEnabled = false;
+        boolean freeLookEnabled = false;
+        boolean fullBrightEnabled = false;
     }
 
     private AdhdModuleState() {
@@ -44,13 +52,21 @@ public final class AdhdModuleState {
         }
         if (d == null) d = new Data();
         BaseFinderClient.enabled = d.baseFinderEnabled;
-        HeadFinderClient.enabled = d.headFinderEnabled;
+        BlockESPClient.enabled = d.blockEspEnabled;
+        EspClient.enabled = d.espEnabled;
+        RtpqInvseeClient.enabled = d.rtpqEnabled;
+        FreeLookClient.enabled = d.freeLookEnabled;
+        FullBrightClient.enabled = d.fullBrightEnabled;
     }
 
     public static void save() {
         Data d = new Data();
         d.baseFinderEnabled = BaseFinderClient.enabled;
-        d.headFinderEnabled = HeadFinderClient.enabled;
+        d.blockEspEnabled = BlockESPClient.enabled;
+        d.espEnabled = EspClient.enabled;
+        d.rtpqEnabled = RtpqInvseeClient.enabled;
+        d.freeLookEnabled = FreeLookClient.enabled;
+        d.fullBrightEnabled = FullBrightClient.enabled;
         try {
             Path f = file();
             Files.createDirectories(f.getParent());

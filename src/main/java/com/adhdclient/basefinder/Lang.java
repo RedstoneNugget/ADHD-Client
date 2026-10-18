@@ -84,10 +84,7 @@ public final class Lang {
     }
 
     public static boolean german() {
-        MinecraftClient mc = MinecraftClient.getInstance();
-        if (mc == null || mc.getLanguageManager() == null) return false;
-        String code = mc.getLanguageManager().getLanguage();
-        return code != null && code.startsWith("de");
+        return com.adhdclient.gui.L.german();
     }
 
     /** Text in der passenden Sprache. */

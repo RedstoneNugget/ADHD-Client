@@ -1,11 +1,16 @@
 **ADHD Client 1.0.0** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
 
-A client built from several small modules, each switched on or off in one menu (**Right Ctrl**) instead of juggling separate mods. Included so far:
+One client, many modules – each switched on or off in one menu (**Right Ctrl**). All settings, colors and module keys are set inside the client. Menus in English or German.
 
-- **Base Finder** – scans loaded chunks for the best finds: suspicious chunks (artificial light, player blocks), unnatural spawners, unnatural bee nests, amethyst chunks and tall kelp.
-- **Block Finder** – searches for any block you configure (exact ID, `*` wildcard or `#tag`), marks it through walls, keeps a found/not-found list with arrow navigation.
+- **Base Finder** – marks suspicious chunks, unnatural spawners and bee nests, amethyst and tall kelp
+- **Block ESP** – highlight any blocks you pick from a list of every block
+- **ESP** – show selected entities through walls (box, glow, tracers, name tags)
+- **RTPQ Invsee** – auto `/invsee` on your RTPQ opponent with elytra/mace/crystal warnings
+- **Free Cam** – fly the camera freely, your body stays put (F6)
+- **Free Look** – look around in third person, adjustable distance, through blocks or not (Left Alt)
+- **Full Bright** – everything bright, no key needed
 
-Not affiliated with any particular server. Check the server rules before using it.
+Not affiliated with any server. Check the server rules before using it.
 
 ### Installation
 1. Install the [Fabric Loader](https://fabricmc.net/use/) for 1.21.11 and the [Fabric API](https://modrinth.com/mod/fabric-api)
@@ -14,12 +19,17 @@ Not affiliated with any particular server. Check the server rules before using i
 ---
 
 ### Deutsch
-Ein Client aus mehreren kleinen Modulen, die sich einzeln über ein Menü (**Rechte Strg**) an- und ausschalten lassen, statt mehrere einzelne Mods zu verwalten. Bisher enthalten:
+Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg**). Alle Einstellungen, Farben und Modul-Tasten stellst du im Client ein. Menüs auf Deutsch oder Englisch.
 
-- **Base Finder** – scannt geladene Chunks nach den besten Funden: auffällige Chunks (künstliches Licht, Spielerblöcke), unnatürliche Spawner, unnatürliche Bienennester, Amethyst-Chunks und hohen Kelp.
-- **Block Finder** – sucht nach einem beliebigen, selbst eingestellten Block (exakte ID, `*`-Platzhalter oder `#tag`), markiert ihn durch Wände und führt eine Gefunden/Offen-Liste mit Pfeil-Navigation.
+- **Base Finder** – markiert auffällige Chunks, unnatürliche Spawner und Bienennester, Amethyst und hohen Kelp
+- **Block ESP** – beliebige Blöcke aus einer Liste aller Blöcke markieren
+- **ESP** – ausgewählte Entities durch Wände (Box, Glow, Tracer, Namensschilder)
+- **RTPQ Invsee** – automatisch `/invsee` beim RTPQ-Gegner mit Elytra/Mace/Crystal-Warnung
+- **Free Cam** – Kamera frei fliegen, der Körper bleibt stehen (F6)
+- **Free Look** – in der dritten Person umschauen, Abstand einstellbar, durch Blöcke oder nicht (Linke Alt)
+- **Full Bright** – alles hell, keine Taste nötig
 
-Kein offizielles Projekt eines bestimmten Servers. Vor der Nutzung die Server-Regeln lesen.
+Kein offizielles Projekt eines Servers. Vor der Nutzung die Server-Regeln lesen.
 
 1. [Fabric Loader](https://fabricmc.net/use/) für 1.21.11 und die [Fabric API](https://modrinth.com/mod/fabric-api) installieren
 2. `adhd-client-1.0.0.jar` in den `mods`-Ordner legen

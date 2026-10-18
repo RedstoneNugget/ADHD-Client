@@ -2,35 +2,38 @@
 
 [English](README.md) · **Deutsch**
 
-Clientseitige Fabric-Mod für **Minecraft 1.21.11**. Statt mehrerer einzelner Mods bündelt der ADHD Client sie als Module, die sich einzeln über ein Menü an- und ausschalten lassen – ähnlich wie bei einem Client wie NoRisk, der viele Funktionen an einer Stelle vereint.
+Clientseitige Fabric-Mod für **Minecraft 1.21.11**. Statt vieler einzelner Mods bündelt der ADHD Client sie als Module, die du in einem Menü an- und ausschaltest. Alle Einstellungen machst du im Client – nur die Taste zum Öffnen des Menüs steht in den normalen Minecraft-Steuerungsoptionen.
 
-> **Hinweis:** Dies ist ein Fan-Projekt und kein offizielles Projekt eines bestimmten Servers. Viele Server erlauben solche Mods nicht. Vorher die Serverregeln prüfen; Nutzung auf eigenes Risiko.
+> **Hinweis:** Dies ist ein Fan-Projekt und kein offizielles Projekt eines Servers. Viele Server erlauben solche Mods nicht. Vorher die Serverregeln prüfen; Nutzung auf eigenes Risiko.
 
 ## Installation
 1. [Fabric Loader](https://fabricmc.net/use/) für 1.21.11 und die [Fabric API](https://modrinth.com/mod/fabric-api) installieren
 2. `adhd-client-1.0.0.jar` in den `mods`-Ordner legen
 
-Auf dem Server ist nichts nötig. Die Mod liest nur Chunks, die der Client ohnehin geladen hat, und schickt nichts an den Server.
+Auf dem Server ist nichts nötig. Nicht zusammen mit den einzelnen Mods Base Finder oder Head Finder installieren – deren Funktionen stecken schon drin.
 
-## Tasten
-| Taste | Aktion |
-|---|---|
-| **Rechte Strg** | Öffnet das ADHD-Client-Menü |
+## Bedienung
+**Rechte Strg** öffnet das Menü (änderbar unter *Optionen → Steuerung → Tastenbelegung*). Klick auf ein Modul schaltet es an oder aus – grüne Leiste heißt an. **Menü** daneben öffnet die Einstellungen des Moduls. Alle Module starten ausgeschaltet.
 
-Änderbar unter *Optionen → Steuerung → Tastenbelegung*.
+Hat ein Modul eine eigene Taste, stellst du sie ganz oben im Menü des Moduls ein: auf den Tasten-Knopf klicken, dann die neue Taste drücken (Esc bricht ab, Entf entfernt die Taste).
 
-### Menü
-Listet jedes Modul mit einem An/Aus-Schalter und einem Knopf zu dessen eigenen Einstellungen (bzw. Liste). Schaltet man ein Modul aus, stoppt dessen Scan und die Markierungen verschwinden; seine Einstellungen bleiben erhalten.
+Unter **Design** wählst du die Farben aller Menüs (Vorlagen, RGB-Regler oder Hex), die Deckkraft der Fenster und die Sprache: automatisch (wie die Spielsprache), Deutsch oder Englisch.
 
 ## Module
 
-### Base Finder
-Scannt die Chunks, die der Client geladen hat, im Hintergrund und markiert die besten Funde: auffällige Chunks, die nicht frisch generiert aussehen (künstliches Licht, Spielerblöcke), unnatürliche Spawner, unnatürliche Bienennester, Amethyst-Chunks und hohen Kelp. Einstellungen, Schwellenwerte und Farben im eigenen Einstellungs-Bildschirm des Moduls, gespeichert unter `config/adhd_client/base_finder.json`.
+| Modul | Was es macht | Taste |
+|---|---|---|
+| **Base Finder** | Scannt geladene Chunks und markiert die besten Funde: auffällige Chunks (künstliches Licht, Spielerblöcke), unnatürliche Spawner, unnatürliche Bienennester, Amethyst-Chunks und hohen Kelp. | – |
+| **Block ESP** | Markiert beliebige Blöcke, die du aus einer durchsuchbaren Liste aller Blöcke auswählst. Boxen in der Farbe des Blocks; Tracer, Füllung und Reichweite einstellbar. | – |
+| **ESP** | Zeigt ausgewählte Entities (Spieler, Mobs, Items …) durch Wände: Box, leuchtender Umriss, Tracer, Namensschild mit Entfernung und Leben. Farbe nach Entfernung, Team oder fest. | – |
+| **RTPQ Invsee** | Nennt der Chat deinen RTPQ-Gegner, öffnet sich automatisch `/invsee` mit "Kämpfen / Neu anstellen"-Knöpfen und Countdown; Warnung bei Elytra, Mace und vielen Crystals. Du gibst nur normalen Text ein, keine Muster. | – |
+| **Free Cam** | Kamera vom Körper lösen und frei herumfliegen. Dein Körper bleibt stehen und sichtbar, Klicks sind gesperrt. Geschwindigkeit, Sprint-Faktor, sanfte Bewegung. | F6 (änderbar) |
+| **Free Look** | In der dritten Person um den Spieler schauen, ohne dass er sich dreht. Abstand einstellbar (auch per Mausrad), Kamera stoppt vor Blöcken oder geht durch, halten oder umschalten, auf Wunsch auch für die normale F5-Ansicht. | Linke Alt (änderbar) |
+| **Full Bright** | Alles hell wie mit Nachtsicht, Stärke einstellbar, Dunkelheits-Effekt auf Wunsch ausgeblendet. | keine nötig |
 
-### Block Finder
-Durchsucht geladene Chunks nach einem beliebigen, selbst eingestellten Block – exakte ID (`minecraft:diamond_ore`), Platzhalter (`*diamond_ore` trifft auch die Deepslate-Variante) oder Block-Tag (`#minecraft:logs`). Treffer werden durch Wände markiert, in einer Gefunden/Offen-Liste mit Entfernung geführt und mit einem Pfeil zum nächsten Fund versehen; per Klick lassen sie sich abhaken. Einstellungen unter `config/adhd_client/head_finder/config.json`.
+Alle Module arbeiten nur mit Daten, die der Client ohnehin hat. Es wird nichts zusätzlich an den Server geschickt.
 
-Beide Module arbeiten nur mit Daten, die der Client ohnehin hat (geladene Chunks, Blockzustände) – kein zusätzlicher Netzwerkverkehr, nichts wird an den Server geschickt.
+Die Einstellungen liegen unter `config/adhd_client/`.
 
 ## Bauen
 Benötigt Java 21.

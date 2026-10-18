@@ -24,7 +24,7 @@ public final class BaseFinderClient {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_NAME);
 
     /** Haupt-Modulschalter, über das ADHD-Client-Menü umschaltbar. */
-    public static boolean enabled = true;
+    public static boolean enabled = false;
 
     private static ModConfig config;
     private static long saveAt = -1;

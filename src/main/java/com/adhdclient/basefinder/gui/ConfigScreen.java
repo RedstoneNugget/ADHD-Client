@@ -8,6 +8,9 @@ import com.adhdclient.basefinder.scan.Evaluator;
 import com.adhdclient.basefinder.scan.Marker;
 import com.adhdclient.basefinder.scan.Patterns;
 import com.adhdclient.basefinder.scan.ScanManager;
+import com.adhdclient.gui.Theme;
+import com.adhdclient.gui.ThemedScreen;
+import com.adhdclient.gui.ValueSlider;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tooltip.Tooltip;
@@ -33,7 +36,7 @@ import java.util.function.Supplier;
  * Menü "Base Finder", über das ADHD-Client-Menü erreichbar. Tabs oben, darunter ein scrollbarer Bereich.
  * Jede Änderung wirkt sofort (Caches werden bei Bedarf neu aufgebaut) und wird gespeichert.
  */
-public class ConfigScreen extends Screen {
+public class ConfigScreen extends ThemedScreen {
 
     private static String tr(String de) {
         return MenuText.tr(de);
@@ -53,12 +56,14 @@ public class ConfigScreen extends Screen {
         }
     }
 
-    private static final int ROW = 24;
-    private static final int TOP = 24;
-    private static final int SIDE_W = 128;
+    private static final int ROW = 22;
+    private static final int TOP = 28;
+    private static final int SIDE_X = 10;
+    private static final int SIDE_W = 124;
+    /** Markiert Label als Abschnitts-Überschrift. */
+    private static final int SECTION_MARK = 1;
     private static Tab lastTab = Tab.FINDS;
 
-    private final Screen parent;
     private Tab tab = lastTab;
     private double scroll;
     private int contentHeight;
@@ -83,8 +88,7 @@ public class ConfigScreen extends Screen {
     private int col;
 
     public ConfigScreen(Screen parent) {
-        super(Text.literal(BaseFinderClient.MOD_NAME));
-        this.parent = parent;
+        super(Text.literal(BaseFinderClient.MOD_NAME), parent);
     }
 
     private static ModConfig cfg() {
@@ -96,25 +100,31 @@ public class ConfigScreen extends Screen {
     }
 
     @Override
-    protected void init() {
+    protected void build() {
         placed.clear();
         labels.clear();
         swatches.clear();
         swatchColors.clear();
+        panel(4, 4, width - 4, height - 4);
 
         // Seitenleiste: Funde, die Suchmodi (mit Status), dann Allgemein und Gewichte
-        int sy = TOP;
+        section(tr("Ansicht"), SIDE_X, TOP - 2, SIDE_W);
+        int sy = TOP + 10;
         for (Tab t : Tab.values()) {
-            if (t == Tab.GENERAL) sy += 6;
-            ButtonWidget b = ButtonWidget.builder(sideText(t), w -> switchTab(t)).dimensions(8, sy, SIDE_W, 18).build();
-            if (t == tab) selectedSide = new int[]{8, sy, SIDE_W, 18};
+            if (t == Tab.GENERAL) {
+                sy += 4;
+                section(tr("Einstellungen"), SIDE_X, sy, SIDE_W);
+                sy += 12;
+            }
+            ButtonWidget b = ButtonWidget.builder(sideText(t), w -> switchTab(t)).dimensions(SIDE_X, sy, SIDE_W, 17).build();
             addDrawableChild(b);
-            sy += 20;
+            if (t == tab) markToggle(b, () -> true);
+            sy += 19;
         }
 
         // Inhalt rechts neben der Seitenleiste
-        left = SIDE_W + 20;
-        contentW = Math.min(460, width - left - 16);
+        left = SIDE_X + SIDE_W + 14;
+        contentW = Math.min(460, width - left - 18);
         // Bei schmalem Fenster eine Spalte, sonst zwei
         cols = contentW >= 330 ? 2 : 1;
         colW = cols == 2 ? (contentW - 8) / 2 : contentW;
@@ -133,14 +143,15 @@ public class ConfigScreen extends Screen {
         newline();
         contentHeight = cursorY + 6;
 
-        // Fußzeile
-        int by = height - 26;
-        addDrawableChild(ButtonWidget.builder(Text.literal(tr("Jetzt neu scannen")), b -> {
+        // Fußzeile unter der Seitenleiste
+        int by = viewBottom() - 17;
+        int half = (SIDE_W - 4) / 2;
+        addDrawableChild(ButtonWidget.builder(Text.literal(tr("Neu scannen")), b -> {
             int n = ScanManager.INSTANCE.forceFullRescan();
             ScanManager.INSTANCE.notifier.showNow(Text.literal(Lang.t("Vollscan: ", "Full scan: ") + n + Lang.t(" Chunks werden neu gescannt …", " chunks are being rescanned …")).formatted(Formatting.AQUA));
-        }).dimensions(width / 2 - 154, by, 150, 20).build());
+        }).dimensions(SIDE_X, by, half, 17).build());
         addDrawableChild(ButtonWidget.builder(Text.literal(tr("Fertig")), b -> close())
-                .dimensions(width / 2 + 4, by, 150, 20).build());
+                .dimensions(SIDE_X + half + 4, by, SIDE_W - half - 4, 17).build());
 
         clampScroll();
         relayout();
@@ -169,20 +180,14 @@ public class ConfigScreen extends Screen {
     }
 
     @Override
-    public void close() {
+    protected void onClose() {
         BaseFinderClient.saveNow();
-        if (client != null) client.setScreen(parent);
-    }
-
-    @Override
-    public boolean shouldPause() {
-        return false;
     }
 
     // ------------------------------------------------------------------ Scrollen
 
     private int viewBottom() {
-        return height - 46;
+        return height - 4 - 16;
     }
 
     private void clampScroll() {
@@ -214,22 +219,29 @@ public class ConfigScreen extends Screen {
 
     @Override
     public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
+        ScanManager sm = ScanManager.INSTANCE;
+        status(String.format(Locale.ROOT, Lang.t("Cache: %d Chunks · Warteschlange: %d · Radius: %d · letzter Tick: %.2f ms%s", "Cache: %d chunks · queue: %d · radius: %d · last tick: %.2f ms%s"),
+                sm.cachedCount(), sm.pendingCount(), sm.radius(), sm.lastTickMs(),
+                cfg().general.constantScanning ? "" : Lang.t(" · PAUSIERT", " · PAUSED")));
         super.render(ctx, mouseX, mouseY, delta);
-        ctx.drawCenteredTextWithShadow(textRenderer, title, width / 2, 6, 0xFFFFE066);
         int bottom = viewBottom();
         for (Label l : labels) {
             int y = TOP + l.baseY - (int) scroll;
             if (y < TOP || y + 9 > bottom) continue;
-            if (l.centered) ctx.drawCenteredTextWithShadow(textRenderer, l.text, l.x, y, l.color);
-            else ctx.drawTextWithShadow(textRenderer, l.text, l.x, y, l.color);
+            if (l.color == SECTION_MARK) {
+                Theme.section(ctx, left, y, contentW, l.text);
+                continue;
+            }
+            int color = themed(l.color);
+            if (l.centered) ctx.drawCenteredTextWithShadow(textRenderer, l.text, l.x, y, color);
+            else ctx.drawTextWithShadow(textRenderer, l.text, l.x, y, color);
         }
         for (int i = 0; i < swatches.size(); i++) {
             int[] s = swatches.get(i);
             int y = TOP + s[1] - (int) scroll;
             if (y < TOP || y + s[2] > bottom) continue;
             Integer c = ModConfig.parseColor(swatchColors.get(i).get());
-            ctx.fill(s[0] - 1, y - 1, s[0] + s[2] + 1, y + s[2] + 1, 0xFF000000);
-            ctx.fill(s[0], y, s[0] + s[2], y + s[2], c == null ? 0xFF555555 : 0xFF000000 | c);
+            Theme.swatch(ctx, s[0], y, s[2], c == null ? 0x555555 : c);
         }
         // Scrollbalken
         int view = bottom - TOP;
@@ -237,14 +249,19 @@ public class ConfigScreen extends Screen {
             int barH = Math.max(20, view * view / contentHeight);
             int barY = TOP + (int) ((view - barH) * (scroll / (contentHeight - view)));
             int x = left + contentW + 6;
-            ctx.fill(x, TOP, x + 3, bottom, 0x40FFFFFF);
-            ctx.fill(x, barY, x + 3, barY + barH, 0xC0FFFFFF);
+            ctx.fill(x, TOP, x + 2, bottom, Theme.argb(255, Theme.mix(Theme.config().background, Theme.config().text, 0.18f)));
+            ctx.fill(x, barY, x + 2, barY + barH, Theme.accent());
         }
-        ScanManager sm = ScanManager.INSTANCE;
-        String status = String.format(Locale.ROOT, Lang.t("Cache: %d Chunks · Warteschlange: %d · Radius: %d · letzter Tick: %.2f ms%s", "Cache: %d chunks · queue: %d · radius: %d · last tick: %.2f ms%s"),
-                sm.cachedCount(), sm.pendingCount(), sm.radius(), sm.lastTickMs(),
-                cfg().general.constantScanning ? "" : Lang.t(" · PAUSIERT", " · PAUSED"));
-        ctx.drawCenteredTextWithShadow(textRenderer, status, width / 2, height - 40, 0xFF9AA4B8);
+    }
+
+    /** Alte feste Textfarben auf die Farben aus dem Design-Menü umbiegen. */
+    private static int themed(int color) {
+        return switch (color) {
+            case 0xFFE0E0E0, 0xFFFFFFFF -> Theme.text();
+            case 0xFFA8B0C0, 0xFF9AA4B8 -> Theme.textDim();
+            case 0xFFFFE066 -> Theme.accent();
+            default -> color;
+        };
     }
 
     // ------------------------------------------------------------------ Bausteine
@@ -277,8 +294,8 @@ public class ConfigScreen extends Screen {
     private void header(String textDe) {
         String text = tr(textDe);
         newline();
-        if (cursorY > 0) cursorY += 4;
-        labels.add(new Label("— " + text + " —", left + contentW / 2, cursorY + 2, 0xFFFFE066, true));
+        if (cursorY > 0) cursorY += 6;
+        labels.add(new Label(text, left, cursorY + 2, SECTION_MARK, false));
         cursorY += 14;
     }
 
@@ -301,18 +318,14 @@ public class ConfigScreen extends Screen {
         String label = tr(labelDe);
         String tooltip = tr(tooltipDe);
         int y = cursorY;
-        ButtonWidget b = ButtonWidget.builder(toggleText(label, get.getAsBoolean()), w -> {
+        ButtonWidget b = ButtonWidget.builder(Text.literal(label), w -> {
             set.accept(!get.getAsBoolean());
-            w.setMessage(toggleText(label, get.getAsBoolean()));
             changed();
         }).dimensions(cellX(), 0, colW, 20).build();
         if (tooltip != null) b.setTooltip(Tooltip.of(Text.literal(tooltip)));
         place(b, y);
+        markToggle(b, get);
         advance();
-    }
-
-    private static Text toggleText(String label, boolean on) {
-        return Text.literal(label + ": ").append(on ? Text.literal(Lang.t("An", "On")).formatted(Formatting.GREEN) : Text.literal(Lang.t("Aus", "Off")).formatted(Formatting.RED));
     }
 
     private void slider(String labelDe, double min, double max, double step, DoubleSupplier get, DoubleConsumer set,
@@ -413,7 +426,6 @@ public class ConfigScreen extends Screen {
 
     // ------------------------------------------------------------------ Seitenleiste
 
-    private int[] selectedSide;
     private Evaluator.Results shownResults;
     private int refreshTicks;
     private TextFieldWidget searchField;
@@ -459,13 +471,9 @@ public class ConfigScreen extends Screen {
     @Override
     public void renderBackground(DrawContext ctx, int mouseX, int mouseY, float delta) {
         super.renderBackground(ctx, mouseX, mouseY, delta);
-        // Seitenleiste und Inhaltsfläche leicht abgesetzt
-        ctx.fill(4, TOP - 4, SIDE_W + 12, viewBottom() + 2, 0x60000000);
-        ctx.fill(left - 6, TOP - 4, left + contentW + 12, viewBottom() + 2, 0x40000000);
-        if (selectedSide != null) {
-            int[] s = selectedSide;
-            ctx.drawStrokedRectangle(s[0] - 1, s[1] - 1, s[2] + 2, s[3] + 2, 0xFFFFE066);
-        }
+        // Trennlinie zwischen Seitenleiste und Inhalt
+        int x = SIDE_X + SIDE_W + 6;
+        ctx.fill(x, TOP - 2, x + 1, viewBottom(), Theme.argb(255, Theme.mix(Theme.config().background, Theme.config().text, 0.18f)));
     }
 
     @Override
@@ -608,9 +616,9 @@ public class ConfigScreen extends Screen {
         ModConfig.General g = cfg().general;
         header("Scannen");
         toggle("Konstantes Scannen", () -> g.constantScanning, v -> g.constantScanning = v,
-                "Scannt dauerhaft im Hintergrund, sobald du in einer Welt bist (Taste K pausiert).");
+                "Scannt dauerhaft im Hintergrund, sobald du in einer Welt bist.");
         toggle("Markierungen sichtbar", () -> g.markersVisible, v -> g.markersVisible = v,
-                "Alle Markierungen ein-/ausblenden (Taste H). Das Scannen läuft weiter.");
+                "Alle Markierungen ein-/ausblenden. Das Scannen läuft weiter.");
         slider("Scan-Radius", 1, 32, 1, () -> g.scanRadius, v -> g.scanRadius = (int) Math.round(v),
                 v -> intFmt(v) + Lang.t(" Chunks", " chunks"), "Höchstens bis zur eingestellten Render-Distanz.");
         slider("Scan-Budget", 0.2, 10, 0.1, () -> g.scanBudgetMs, v -> g.scanBudgetMs = v,

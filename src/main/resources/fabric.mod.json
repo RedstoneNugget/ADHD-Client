@@ -3,7 +3,7 @@
   "id": "adhd_client",
   "version": "${version}",
   "name": "ADHD Client",
-  "description": "Eigener Client mit mehreren Modulen (Base Finder, Block Finder, ...), die einzeln über ein Menü an/aus geschaltet werden.",
+  "description": "Eigener Client mit mehreren Modulen (Base Finder, Block ESP, ESP, RTPQ Invsee, Free Cam, Free Look, Full Bright, ...), die einzeln über ein Menü an/aus geschaltet werden.",
   "authors": ["redstone_nugget"],
   "license": "MIT",
   "environment": "client",
@@ -13,7 +13,8 @@
   },
   "mixins": [
     "adhd_client_basefinder.mixins.json",
-    "adhd_client_headfinder.mixins.json"
+    "adhd_client_blockesp.mixins.json",
+    "adhd_client.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.19.0",

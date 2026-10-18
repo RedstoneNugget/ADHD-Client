@@ -2,7 +2,11 @@ package com.adhdclient.core;
 
 import com.adhdclient.basefinder.BaseFinderClient;
 import com.adhdclient.gui.AdhdMenuScreen;
-import com.adhdclient.headfinder.HeadFinderClient;
+import com.adhdclient.blockesp.BlockESPClient;
+import com.adhdclient.esp.EspClient;
+import com.adhdclient.freecam.FreeCamClient;
+import com.adhdclient.freelook.FreeLookClient;
+import com.adhdclient.rtpq.RtpqInvseeClient;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -14,7 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Einstiegspunkt des ADHD Client: startet die einzelnen Module (Base Finder, Head Finder, …)
+ * Einstiegspunkt des ADHD Client: startet die einzelnen Module (Base Finder, Block ESP, ESP, RTPQ Invsee, …)
  * und öffnet über eine Taste das zentrale Menü, in dem jedes Modul einzeln an/aus geschaltet wird.
  */
 public final class AdhdClientClient implements ClientModInitializer {
@@ -24,17 +28,22 @@ public final class AdhdClientClient implements ClientModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_NAME);
 
     public static KeyBinding menuKey;
+    public static KeyBinding.Category category;
 
     @Override
     public void onInitializeClient() {
         AdhdModuleState.load();
 
-        KeyBinding.Category category = KeyBinding.Category.create(Identifier.of(MOD_ID, "main"));
+        category = KeyBinding.Category.create(Identifier.of(MOD_ID, "main"));
         menuKey = KeyBindingHelper.registerKeyBinding(
                 new KeyBinding("key.adhd_client.menu", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_RIGHT_CONTROL, category));
 
         new BaseFinderClient().onInitializeClient();
-        new HeadFinderClient().onInitializeClient();
+        new BlockESPClient().onInitializeClient();
+        new EspClient().onInitializeClient();
+        new RtpqInvseeClient().onInitializeClient();
+        new FreeCamClient().onInitializeClient();
+        new FreeLookClient().onInitializeClient();
 
         ClientTickEvents.END_CLIENT_TICK.register(mc -> {
             while (menuKey.wasPressed()) {

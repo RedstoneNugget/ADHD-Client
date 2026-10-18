@@ -1,0 +1,21 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.adhdclient.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "EspGlowMixin",
+    "EspOutlineColorMixin",
+    "FreeCamHandMixin",
+    "FreeCamInputMixin",
+    "FreeCamInteractMixin",
+    "FreeCamLookMixin",
+    "FreeLookCameraMixin",
+    "FreeLookScrollMixin",
+    "FullBrightLightmapMixin",
+    "WorldRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

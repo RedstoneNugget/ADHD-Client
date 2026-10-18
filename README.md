@@ -2,35 +2,38 @@
 
 **English** · [Deutsch](README.de.md)
 
-Client-side Fabric mod for **Minecraft 1.21.11**. Instead of installing several separate mods, ADHD Client bundles them as modules that are switched on or off individually in one menu – similar to how a client like NoRisk packs many features into one place.
+Client-side Fabric mod for **Minecraft 1.21.11**. Instead of installing many separate mods, ADHD Client bundles them as modules that you switch on or off in one menu. Every setting is made inside the client – only the key that opens the menu lives in the normal Minecraft controls.
 
-> **Note:** This is a fan project and is not affiliated with any particular server. Many servers don't allow mods like this. Check the server rules first; use at your own risk.
+> **Note:** This is a fan project and is not affiliated with any server. Many servers don't allow mods like this. Check the server rules first; use at your own risk.
 
 ## Installation
 1. Install the [Fabric Loader](https://fabricmc.net/use/) for 1.21.11 and the [Fabric API](https://modrinth.com/mod/fabric-api)
 2. Put `adhd-client-1.0.0.jar` into your `mods` folder
 
-Nothing is needed on the server. The mod only reads chunks your client has loaded anyway and sends nothing to the server.
+Nothing is needed on the server. Don't install it together with the standalone Base Finder or Head Finder mods – that functionality is already included.
 
-## Controls
-| Key | Action |
-|---|---|
-| **Right Ctrl** | Open the ADHD Client menu |
+## Usage
+Press **Right Ctrl** to open the menu (changeable under *Options → Controls → Key Binds*). Click a module to turn it on or off – a green bar means on. **Menu** next to it opens the module's settings. All modules start switched off.
 
-Can be changed under *Options → Controls → Key Binds*.
+If a module has its own key, you set it at the very top of that module's menu: click the key button, then press the new key (Esc cancels, Delete removes the key).
 
-### Menu
-Lists every module with an on/off switch and a button to its own settings (or list screen). Turning a module off stops its scanning and hides its markers; its settings stay as they are.
+**Design** lets you pick the colors of all menus (presets, RGB sliders or hex), the window opacity and the language: automatic (follows the game language), German or English.
 
 ## Modules
 
-### Base Finder
-Scans the chunks your client has loaded in the background and marks the best finds: anomaly chunks that don't look freshly generated (artificial light, player blocks), unnatural spawners, unnatural bee nests, amethyst chunks and tall kelp. Settings, thresholds and colors are in the module's own settings screen, stored at `config/adhd_client/base_finder.json`.
+| Module | What it does | Key |
+|---|---|---|
+| **Base Finder** | Scans loaded chunks and marks the best finds: suspicious chunks (artificial light, player blocks), unnatural spawners, unnatural bee nests, amethyst chunks and tall kelp. | – |
+| **Block ESP** | Highlights any blocks you pick from a searchable list of every block in the game. Boxes take the block's color; optional tracers, fill and range. | – |
+| **ESP** | Shows selected entities (players, mobs, items …) through walls: box, glow outline, tracers, name tags with distance and health. Color by distance, team or a fixed color. | – |
+| **RTPQ Invsee** | When the chat names your RTPQ opponent, `/invsee` opens automatically with "fight / requeue" buttons and a countdown, and warns about elytra, mace and many crystals. You only enter plain text, no patterns. | – |
+| **Free Cam** | Detach the camera and fly around freely. Your body stays in place and visible; clicks are blocked. Speed, sprint factor, smooth movement. | F6 (changeable) |
+| **Free Look** | Look around your player in third person without turning them. Distance adjustable (also with the scroll wheel), camera stops at blocks or goes through them, hold or toggle, optionally also for the normal F5 view. | Left Alt (changeable) |
+| **Full Bright** | Everything bright like night vision, adjustable strength, optionally ignores the Darkness effect. | none needed |
 
-### Block Finder
-Searches loaded chunks for any block you configure – an exact ID (`minecraft:diamond_ore`), a wildcard (`*diamond_ore` matches the deepslate variant too) or a block tag (`#minecraft:logs`). Matches are marked through walls, kept in a found/not-found list with distance and an arrow to the nearest one, and can be checked off with a click. Settings are stored at `config/adhd_client/head_finder/config.json`.
+All modules only use data your client already has. Nothing extra is sent to the server.
 
-Both modules work purely from data the client already has (loaded chunks, block states) – no extra network traffic, nothing sent to the server.
+Settings are stored in `config/adhd_client/`.
 
 ## Building
 Requires Java 21.

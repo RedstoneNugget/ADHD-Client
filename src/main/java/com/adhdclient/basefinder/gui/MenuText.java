@@ -56,12 +56,15 @@ final class MenuText {
 
         // Allgemein
         e("Scannen", "Scanning");
+        e("Ansicht", "View");
+        e("Einstellungen", "Settings");
+        e("Neu scannen", "Rescan");
         e("Konstantes Scannen", "Constant scanning");
-        e("Scannt dauerhaft im Hintergrund, sobald du in einer Welt bist (Taste K pausiert).",
-                "Scans in the background whenever you're in a world (K pauses).");
+        e("Scannt dauerhaft im Hintergrund, sobald du in einer Welt bist.",
+                "Scans in the background whenever you're in a world.");
         e("Markierungen sichtbar", "Markers visible");
-        e("Alle Markierungen ein-/ausblenden (Taste H). Das Scannen läuft weiter.",
-                "Show/hide all markers (H). Scanning keeps running.");
+        e("Alle Markierungen ein-/ausblenden. Das Scannen läuft weiter.",
+                "Show/hide all markers. Scanning keeps running.");
         e("Scan-Radius", "Scan radius");
         e("Höchstens bis zur eingestellten Render-Distanz.", "At most your render distance.");
         e("Scan-Budget", "Scan budget");
