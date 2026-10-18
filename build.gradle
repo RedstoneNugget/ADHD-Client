@@ -52,6 +52,42 @@ jar {
     }
 }
 
+// Metadaten komplett entfernen: feste Zeitstempel, feste Reihenfolge und kein Manifest mit Build-Infos
+tasks.withType(AbstractArchiveTask).configureEach {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+
+remapJar {
+    doLast {
+        def jarFile = archiveFile.get().asFile
+        def tmp = new File(jarFile.path + '.tmp')
+        def skip = ['META-INF/MANIFEST.MF', 'META-INF/']
+        new java.util.zip.ZipFile(jarFile).withCloseable { zin ->
+            new java.util.zip.ZipOutputStream(new FileOutputStream(tmp)).withCloseable { zout ->
+                zin.entries().toList().findAll { !(it.name in skip) }.sort { it.name }.each { e ->
+                    def out = new java.util.zip.ZipEntry(e.name)
+                    out.timeLocal = java.time.LocalDateTime.of(1980, 1, 1, 0, 0) // keine echte Bauzeit
+                    zout.putNextEntry(out)
+                    if (!e.directory) zin.getInputStream(e).withCloseable { zout << it }
+                    zout.closeEntry()
+                }
+            }
+        }
+        jarFile.delete()
+        tmp.renameTo(jarFile)
+    }
+}
+
+// Test mit der fertigen Jar wie im echten Spiel: gradlew prodClient
+tasks.register('prodClient', net.fabricmc.loom.task.prod.ClientProductionRunTask) {
+    mods.from(remapJar.archiveFile)
+    def fabricApiJar = configurations.detachedConfiguration(dependencies.create("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"))
+    fabricApiJar.transitive = false
+    mods.from(fabricApiJar)
+    runDir = file("build/run/prod")
+}
+
 // Automatischer In-Game-Test (startet den echten Client): gradlew runClientGameTest
 fabricApi {
     configureTests {
@@ -64,13 +100,13 @@ fabricApi {
 }
 
 // Testclient immer stumm starten (Master-Lautstärke 0)
-tasks.matching { it.name == 'runClientGameTest' || it.name == 'runClient' }.configureEach {
+tasks.matching { it.name in ["runClientGameTest", "runClient", "prodClient"] }.configureEach {
     doFirst {
-        def runDir = it.name == 'runClientGameTest' ? file('build/run/clientGameTest') : file('run')
+        def runDir = file([runClientGameTest: "build/run/clientGameTest", prodClient: "build/run/prod"][it.name] ?: "run")
         runDir.mkdirs()
         def opts = new File(runDir, 'options.txt')
-        def lines = opts.exists() ? opts.readLines('UTF-8').findAll { !it.startsWith('soundCategory_master:') } : []
-        lines << 'soundCategory_master:0.0'
+        def lines = opts.exists() ? opts.readLines('UTF-8').findAll { !it.startsWith('soundCategory_master:') && !it.startsWith('onboardAccessibility:') } : []
+        lines << 'soundCategory_master:0.0' << 'onboardAccessibility:false'
         opts.write(lines.join('\n') + '\n', 'UTF-8')
     }
 }
