@@ -4,6 +4,7 @@ import com.adhdclient.gui.L;
 import com.adhdclient.gui.Theme;
 import com.adhdclient.gui.ThemedScreen;
 import com.adhdclient.gui.ValueSlider;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tooltip.Tooltip;
@@ -24,8 +25,13 @@ public final class EspScreen extends ThemedScreen {
     private int colW;
     private int y;
     private int col;
-    private int swatchX;
-    private int swatchY;
+    private static final int SWATCH = 17;
+    private static final int SWATCH_STEP = 20;
+    private static final String[] PALETTE = {"#FF3B3B", "#FF8C1A", "#FFE53B", "#7CFF3B", "#2ECC71",
+            "#3BE8FF", "#3B7BFF", "#A23BFF", "#FF3BC4", "#FFFFFF"};
+
+    private int paletteX;
+    private int paletteY;
 
     public EspScreen(Screen parent) {
         super(Text.literal("ESP"), parent);
@@ -37,11 +43,11 @@ public final class EspScreen extends ThemedScreen {
 
     @Override
     protected void build() {
-        int h = Theme.TITLE_H + 6 + 12 + ROW + 6 + 12 + 4 * ROW + 6 + 12 + 2 * ROW + 6 + ROW + 16;
+        int h = Theme.TITLE_H + 6 + 12 + ROW + 6 + 12 + 3 * ROW + 6 + 12 + 3 * ROW + 16;
         y = centeredPanel(W, h);
         x = panelX1 + 8;
         int inner = W - 16;
-        colW = (inner - 4) / 2;
+        colW = (inner - 8) / 3;
         col = 0;
         EspConfig c = cfg();
 
@@ -61,63 +67,108 @@ public final class EspScreen extends ThemedScreen {
         flag(L.t("Entfernung", "Distance"), () -> c.distance, v -> c.distance = v, L.t("Entfernung im Namensschild", "Distance in the name tag"));
         flag(L.t("Leben", "Health"), () -> c.health, v -> c.health = v, L.t("Herzen im Namensschild (manche Server schicken falsche Werte)", "Hearts in the name tag (some servers send fake values)"));
         flag(L.t("Unsichtbare", "Invisible"), () -> c.showInvisible, v -> c.showInvisible = v, L.t("Auch unsichtbare Entities anzeigen", "Also show invisible entities"));
+        if (col != 0) {
+            col = 0;
+            y += ROW;
+        }
         y += 6;
 
         section(L.t("Farbe und Reichweite", "Color and range"), x, y, inner);
         y += 12;
-        ButtonWidget mode = ButtonWidget.builder(modeText(), b -> {
-            c.colorMode = c.colorMode.next();
-            b.setMessage(modeText());
-            EspClient.onConfigEdited();
-        }).dimensions(x, y, colW, ROW - 2).build();
-        mode.setTooltip(Tooltip.of(Text.literal(L.t("Entfernung: nah rot, weit grün · Team: Teamfarbe vom Server · Feste Farbe: rechts", "Distance: near red, far green · Team: team color from the server · Fixed color: on the right"))));
-        addDrawableChild(mode);
+        int third = (inner - 8) / 3;
+        modeButton(EspConfig.ColorMode.DISTANCE, x, y, third,
+                L.t("Nah = rot, mittel = gelb, weit weg = grün", "Near = red, medium = yellow, far away = green"));
+        modeButton(EspConfig.ColorMode.TEAM, x + third + 4, y, third,
+                L.t("Teamfarbe vom Server (z. B. bei Minigames)", "Team color from the server (e.g. in minigames)"));
+        modeButton(EspConfig.ColorMode.FIXED, x + 2 * (third + 4), y, inner - 2 * (third + 4),
+                L.t("Immer die Farbe, die du unten auswählst", "Always the color you pick below"));
+        y += ROW;
 
-        TextFieldWidget color = new TextFieldWidget(textRenderer, x + colW + 4, y, colW - 22, ROW - 2, Text.literal("Farbe"));
+        // Farbpalette: ein Klick wählt die Farbe (und schaltet auf "Feste Farbe"); rechts eigene Farbe als #RRGGBB
+        paletteX = x;
+        paletteY = y + 1;
+        int fieldX = x + PALETTE.length * SWATCH_STEP;
+        TextFieldWidget color = new TextFieldWidget(textRenderer, fieldX, y, x + inner - fieldX, ROW - 2, Text.literal("#RRGGBB"));
         color.setMaxLength(7);
         color.setText(c.fixedColor);
         color.setChangedListener(s -> {
             boolean ok = EspConfig.isValidColor(s);
             color.setEditableColor(ok ? 0xFFE0E0E0 : 0xFFFF5555);
-            if (ok) {
-                c.fixedColor = s;
+            if (ok && !s.equalsIgnoreCase(c.fixedColor)) {
+                c.fixedColor = s.startsWith("#") ? s.toUpperCase(java.util.Locale.ROOT) : "#" + s.toUpperCase(java.util.Locale.ROOT);
+                c.colorMode = EspConfig.ColorMode.FIXED;
                 EspClient.onConfigEdited();
             }
         });
-        color.setTooltip(Tooltip.of(Text.literal(L.t("Feste Farbe als #RRGGBB", "Fixed color as #RRGGBB"))));
+        color.setTooltip(Tooltip.of(Text.literal(L.t("Eigene Farbe als #RRGGBB, z. B. #FF8800", "Your own color as #RRGGBB, e.g. #FF8800"))));
         addDrawableChild(color);
-        swatchX = x + inner - 16;
-        swatchY = y + 1;
         y += ROW;
 
-        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Reichweite", "Range"), 16, 1024, 16, c.range,
+        int doneW = 70;
+        addDrawableChild(new ValueSlider(x, y, inner - doneW - 4, ROW - 2, L.t("Reichweite", "Range"), 16, 1024, 16, c.range,
                 v -> (int) Math.round(v) + " m", v -> {
             c.range = (int) Math.round(v);
             EspClient.onConfigEdited();
         }));
-        y += ROW + 6;
-
         addDrawableChild(ButtonWidget.builder(Text.literal(L.t("Fertig", "Done")), b -> close())
-                .dimensions(x, y, inner, ROW - 2).build());
+                .dimensions(x + inner - doneW, y, doneW, ROW - 2).build());
         status(c.entities.size() + L.t(" Entity-Typen ausgewählt", " entity types selected"));
     }
 
     private void flag(String label, BooleanSupplier get, Consumer<Boolean> set, String tooltip) {
         toggle(label, get, set, x + col * (colW + 4), y, colW, ROW - 2, tooltip, EspClient::onConfigEdited);
-        if (++col >= 2) {
+        if (++col >= 3) {
             col = 0;
             y += ROW;
         }
     }
 
-    private static Text modeText() {
-        return Text.literal(L.t("Farbe: ", "Color: ") + cfg().colorMode.title());
+    /** Ein Knopf pro Farbmodus; der aktive leuchtet wie ein eingeschalteter Schalter. */
+    private void modeButton(EspConfig.ColorMode mode, int bx, int by, int w, String tooltip) {
+        toggle(mode.title(), () -> cfg().colorMode == mode, v -> cfg().colorMode = mode, bx, by, w, ROW - 2, tooltip,
+                EspClient::onConfigEdited);
+    }
+
+    private int swatchAt(double mx, double my) {
+        if (my < paletteY || my >= paletteY + SWATCH || mx < paletteX) return -1;
+        int i = (int) ((mx - paletteX) / SWATCH_STEP);
+        if (i >= PALETTE.length || mx - paletteX - i * SWATCH_STEP >= SWATCH) return -1;
+        return i;
     }
 
     @Override
     public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
         super.render(ctx, mouseX, mouseY, delta);
-        Theme.swatch(ctx, swatchX, swatchY, 16, EspConfig.rgb(cfg().fixedColor, 0x555555));
+        EspConfig c = cfg();
+        boolean fixed = c.colorMode == EspConfig.ColorMode.FIXED;
+        int hovered = swatchAt(mouseX, mouseY);
+        for (int i = 0; i < PALETTE.length; i++) {
+            int sx = paletteX + i * SWATCH_STEP;
+            int rgb = EspConfig.rgb(PALETTE[i], 0x555555);
+            // ohne "Feste Farbe" etwas abgedunkelt, damit klar ist, dass die Palette gerade nicht benutzt wird
+            Theme.swatch(ctx, sx, paletteY, SWATCH, fixed || i == hovered ? rgb : Theme.mix(rgb, Theme.config().background, 0.55f));
+            boolean selected = fixed && PALETTE[i].equalsIgnoreCase(c.fixedColor);
+            if (selected || i == hovered) {
+                Theme.border(ctx, sx - 1, paletteY - 1, sx + SWATCH + 1, paletteY + SWATCH + 1, selected ? 0xFFFFFFFF : Theme.textDim());
+            }
+        }
+        if (hovered >= 0) {
+            ctx.drawTooltip(textRenderer, Text.literal(L.t("Klicken: diese Farbe benutzen", "Click: use this color")), mouseX, mouseY);
+        }
+    }
+
+    @Override
+    public boolean mouseClicked(Click click, boolean doubled) {
+        int i = click.button() == 0 ? swatchAt(click.x(), click.y()) : -1;
+        if (i >= 0) {
+            EspConfig c = cfg();
+            c.fixedColor = PALETTE[i];
+            c.colorMode = EspConfig.ColorMode.FIXED;
+            EspClient.onConfigEdited();
+            clearAndInit();
+            return true;
+        }
+        return super.mouseClicked(click, doubled);
     }
 
     @Override

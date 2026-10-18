@@ -14,21 +14,21 @@ public abstract class FreeCamInteractMixin {
 
     @Inject(method = "doAttack", at = @At("HEAD"), cancellable = true)
     private void adhd_client$noAttack(CallbackInfoReturnable<Boolean> cir) {
-        if (FreeCamClient.enabled) cir.setReturnValue(false);
+        if (FreeCamClient.active) cir.setReturnValue(false);
     }
 
     @Inject(method = "doItemUse", at = @At("HEAD"), cancellable = true)
     private void adhd_client$noUse(CallbackInfo ci) {
-        if (FreeCamClient.enabled) ci.cancel();
+        if (FreeCamClient.active) ci.cancel();
     }
 
     @Inject(method = "handleBlockBreaking", at = @At("HEAD"), cancellable = true)
     private void adhd_client$noBreaking(boolean breaking, CallbackInfo ci) {
-        if (FreeCamClient.enabled) ci.cancel();
+        if (FreeCamClient.active) ci.cancel();
     }
 
     @Inject(method = "doItemPick", at = @At("HEAD"), cancellable = true)
     private void adhd_client$noPick(CallbackInfo ci) {
-        if (FreeCamClient.enabled) ci.cancel();
+        if (FreeCamClient.active) ci.cancel();
     }
 }

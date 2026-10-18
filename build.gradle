@@ -26,6 +26,9 @@ dependencies {
 
     // Mod Menu ist optional: nur zum Kompilieren.
     modCompileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
+
+    // Zum Testen mit einer weiteren Mod-Jar: gradlew runClientGameTest -PextraMod=pfad/zur.jar
+    if (project.hasProperty("extraMod")) modLocalRuntime files(project.property("extraMod"))
 }
 
 processResources {

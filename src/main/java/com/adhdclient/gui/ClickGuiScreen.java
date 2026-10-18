@@ -67,9 +67,14 @@ public final class ClickGuiScreen extends Screen {
         client.add(new Row(L.t("Alle aus", "All off"), null, Modules::allOff));
         panels.add(new Panel("CLIENT", "Client", client));
 
-        // gespeicherte Positionen, sonst nebeneinander von links (bei Platzmangel in die nächste Reihe)
+        // gespeicherte Positionen, sonst nebeneinander von links (bei Platzmangel in die nächste Reihe);
+        // neue Fenster kommen rechts neben die schon gespeicherten, damit sie nichts überdecken
         int x = 10;
         int y = 22;
+        for (Panel p : panels) {
+            int[] saved = Theme.config().panels.get(p.id);
+            if (saved != null && saved.length >= 3) x = Math.max(x, saved[0] + PANEL_W + 10);
+        }
         int rowBottom = y;
         for (Panel p : panels) {
             int[] saved = Theme.config().panels.get(p.id);
@@ -77,6 +82,7 @@ public final class ClickGuiScreen extends Screen {
                 p.x = saved[0];
                 p.y = saved[1];
                 p.collapsed = saved[2] != 0;
+                rowBottom = Math.max(rowBottom, p.y + p.height());
             } else {
                 if (x + PANEL_W > width - 10) {
                     x = 10;
@@ -158,9 +164,9 @@ public final class ClickGuiScreen extends Screen {
         ctx.drawTextWithShadow(textRenderer, help, width / 2 - hw / 2, height - 13, Theme.textDim());
 
         if (hovered != null && hovered.module() != null && dragging == null) {
-            List<Text> tip = new ArrayList<>();
-            tip.add(Text.literal(hovered.module().description().get()));
-            ctx.drawTooltip(textRenderer, tip, mouseX, mouseY);
+            // umbrechen, damit lange Beschreibungen nicht aus dem Bild ragen
+            int wrap = Math.max(120, Math.min(260, width - 40));
+            ctx.drawOrderedTooltip(textRenderer, textRenderer.wrapLines(Text.literal(hovered.module().description().get()), wrap), mouseX, mouseY);
         }
     }
 

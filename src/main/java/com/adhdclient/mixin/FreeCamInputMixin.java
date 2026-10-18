@@ -16,7 +16,7 @@ public abstract class FreeCamInputMixin extends Input {
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void adhd_client$freezePlayer(CallbackInfo ci) {
-        if (!FreeCamClient.enabled) return;
+        if (!FreeCamClient.active) return;
         this.playerInput = PlayerInput.DEFAULT;
         this.movementVector = Vec2f.ZERO;
     }

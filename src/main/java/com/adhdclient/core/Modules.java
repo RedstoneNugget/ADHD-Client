@@ -1,6 +1,7 @@
 package com.adhdclient.core;
 
 import com.adhdclient.basefinder.BaseFinderClient;
+import com.adhdclient.blink.BlinkClient;
 import com.adhdclient.blockesp.BlockESPClient;
 import com.adhdclient.esp.EspClient;
 import com.adhdclient.freecam.FreeCamClient;
@@ -21,7 +22,7 @@ import java.util.function.Supplier;
 public final class Modules {
 
     public enum Category {
-        RENDER("Render", "Render"), WORLD("Welt", "World"), CAMERA("Kamera", "Camera"), MISC("Sonstiges", "Misc");
+        RENDER("Render", "Render"), WORLD("Welt", "World"), CAMERA("Kamera", "Camera"), MOVEMENT("Bewegung", "Movement"), MISC("Sonstiges", "Misc");
 
         private final String de;
         private final String en;
@@ -62,24 +63,46 @@ public final class Modules {
                     () -> FullBrightClient.enabled, v -> FullBrightClient.enabled = v,
                     com.adhdclient.fullbright.FullBrightScreen::new, () -> null),
             new Module("Base Finder", Category.WORLD,
-                    () -> L.t("Markiert auffällige Chunks, Spawner, Bienennester, Amethyst und Kelp", "Marks suspicious chunks, spawners, bee nests, amethyst and kelp"),
-                    () -> BaseFinderClient.enabled, v -> BaseFinderClient.enabled = v,
+                    () -> BaseFinderClient.STANDALONE_INSTALLED ? BaseFinderClient.doubleInstalledHint()
+                            : L.t("Markiert auffällige Chunks, Spawner, Bienennester, Amethyst und Kelp", "Marks suspicious chunks, spawners, bee nests, amethyst and kelp"),
+                    () -> BaseFinderClient.enabled, v -> {
+                        // Mit der eigenständigen Mod zusätzlich bliebe alles doppelt – dann nur den Hinweis zeigen
+                        if (v && BaseFinderClient.STANDALONE_INSTALLED) {
+                            MinecraftClient mc = MinecraftClient.getInstance();
+                            if (mc.player != null) mc.player.sendMessage(net.minecraft.text.Text.literal("[ADHD Client] " + BaseFinderClient.doubleInstalledHint())
+                                    .formatted(net.minecraft.util.Formatting.YELLOW), false);
+                            return;
+                        }
+                        BaseFinderClient.enabled = v;
+                    },
                     com.adhdclient.basefinder.gui.ConfigScreen::new, () -> null),
             new Module("Free Cam", Category.CAMERA,
                     () -> L.t("Kamera vom Körper lösen und frei herumfliegen", "Detach the camera and fly around freely"),
                     () -> FreeCamClient.enabled, v -> {
-                        FreeCamClient.set(v);
-                        if (v) MinecraftClient.getInstance().setScreen(null);
+                        FreeCamClient.enabled = v;
+                        if (!v) FreeCamClient.set(false);
                     },
                     com.adhdclient.freecam.FreeCamScreen::new, FreeCamClient::keyName),
             new Module("Free Look", Category.CAMERA,
                     () -> L.t("In der dritten Person umschauen, ohne dass sich der Spieler dreht", "Look around in third person without turning your player"),
                     () -> FreeLookClient.enabled, v -> FreeLookClient.enabled = v,
                     com.adhdclient.freelook.FreeLookScreen::new, FreeLookClient::keyName),
+            new Module("Blink", Category.MOVEMENT,
+                    () -> L.t("Hält deine Bewegung zurück und sendet sie beim Ausschalten auf einmal", "Holds back your movement and sends it all at once when turned off"),
+                    () -> BlinkClient.enabled, v -> {
+                        BlinkClient.enabled = v;
+                        if (!v) BlinkClient.set(false);
+                    },
+                    com.adhdclient.blink.BlinkScreen::new, BlinkClient::keyName),
             new Module("RTPQ Invsee", Category.MISC,
                     () -> L.t("Öffnet beim RTPQ-Gegner automatisch /invsee und warnt vor Elytra, Mace und Crystals", "Opens /invsee on your RTPQ opponent and warns about elytra, mace and crystals"),
                     () -> RtpqInvseeClient.enabled, v -> RtpqInvseeClient.enabled = v,
-                    com.adhdclient.rtpq.RtpqScreen::new, () -> null)
+                    com.adhdclient.rtpq.RtpqScreen::new, () -> null),
+            new Module("Inspect All", Category.MISC,
+                    () -> L.t("Zeigt alle Daten zu Block, Item oder Entity: Blockstate, Komponenten, NBT, Markierungen", "Shows all data of a block, item or entity: block state, components, NBT, markers"),
+                    () -> com.adhdclient.inspect.InspectClient.enabled, v -> com.adhdclient.inspect.InspectClient.enabled = v,
+                    com.adhdclient.inspect.config.InspectSettingsScreen::new,
+                    () -> com.adhdclient.gui.HotKey.name(com.adhdclient.inspect.config.InspectConfig.get().openKey))
     );
 
     private Modules() {

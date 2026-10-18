@@ -45,8 +45,12 @@ public final class ModConfig {
     public static final class General {
         /** Hauptschalter "Konstantes Scannen". */
         public boolean constantScanning = true;
-        /** Markierungen sichtbar (Taste H). */
+        /** Markierungen sichtbar (per Anzeigen-Taste umschaltbar). */
         public boolean markersVisible = true;
+        /** Taste: Markierungen ein-/ausblenden (GLFW-Code oder Maustaste, -1 = keine), im Menü einstellbar. */
+        public int markersKey = org.lwjgl.glfw.GLFW.GLFW_KEY_H;
+        /** Taste: alle Chunks neu scannen. */
+        public int rescanKey = org.lwjgl.glfw.GLFW.GLFW_KEY_J;
         /** Scan-Radius in Chunks (wird zusätzlich auf die Render-Distanz begrenzt). */
         public int scanRadius = 8;
         /** Maximale Scan-Arbeit pro Tick in Millisekunden. */

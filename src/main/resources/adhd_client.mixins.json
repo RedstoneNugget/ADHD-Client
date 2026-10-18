@@ -6,6 +6,7 @@
   "client": [
     "EspGlowMixin",
     "EspOutlineColorMixin",
+    "BlinkPacketMixin",
     "FreeCamHandMixin",
     "FreeCamInputMixin",
     "FreeCamInteractMixin",
@@ -13,6 +14,10 @@
     "FreeLookCameraMixin",
     "FreeLookScrollMixin",
     "FullBrightLightmapMixin",
+    "HotKeyKeyboardMixin",
+    "HotKeyMouseMixin",
+    "InspectCreativeScreenAccessor",
+    "InspectHandledScreenAccessor",
     "WorldRendererMixin"
   ],
   "injectors": {

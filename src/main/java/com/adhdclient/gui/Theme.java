@@ -128,7 +128,7 @@ public final class Theme {
         int avail = x2 - textX0;
         int tw = tr.getWidth(msg);
         int tx = tw > avail - 6 ? textX0 + 4 : textX0 + (avail - tw) / 2;
-        int color = state == State.OFF ? textDim() : text();
+        int color = state == State.OFF || !w.active ? textDim() : text();
         ctx.enableScissor(textX0 + 1, y1, x2 - 1, y2);
         ctx.drawTextWithShadow(tr, msg, tx, y1 + (w.getHeight() - 8) / 2, color);
         ctx.disableScissor();

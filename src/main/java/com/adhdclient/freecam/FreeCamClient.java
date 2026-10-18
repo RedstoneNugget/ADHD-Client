@@ -25,8 +25,10 @@ public final class FreeCamClient {
 
     public static final Logger LOGGER = LoggerFactory.getLogger("Free Cam");
 
-    /** Free Cam gerade aktiv (wird nicht gespeichert, startet immer aus). */
+    /** Modul im ADHD-Menü eingeschaltet – nur dann reagiert die Taste. */
     public static boolean enabled = false;
+    /** Kamera gerade losgelöst (wird nicht gespeichert, startet immer aus). */
+    public static boolean active = false;
 
     private static final HotKey KEY = new HotKey();
     private static FreeCamConfig config;
@@ -87,12 +89,12 @@ public final class FreeCamClient {
     }
 
     public static void toggle() {
-        set(!enabled);
+        set(!active);
     }
 
     public static void set(boolean on) {
         MinecraftClient mc = MinecraftClient.getInstance();
-        if (on == enabled) return;
+        if (on == active) return;
         if (on) start(mc);
         else stop(mc);
     }
@@ -106,12 +108,12 @@ public final class FreeCamClient {
         pitch = mc.player.getPitch();
         savedPerspective = mc.options.getPerspective();
         mc.options.setPerspective(Perspective.FIRST_PERSON);
-        enabled = true;
+        active = true;
         mc.player.sendMessage(Text.literal(L.t("Free Cam an – ", "Free Cam on – ") + keyName() + L.t(" zum Zurückkehren", " to return")).formatted(Formatting.AQUA), true);
     }
 
     private static void stop(MinecraftClient mc) {
-        enabled = false;
+        active = false;
         velocity = Vec3d.ZERO;
         if (savedPerspective != null) mc.options.setPerspective(savedPerspective);
         savedPerspective = null;
@@ -120,8 +122,13 @@ public final class FreeCamClient {
 
     private static void tick(MinecraftClient mc) {
         if (saveAt >= 0 && System.currentTimeMillis() >= saveAt) saveNow();
-        if (KEY.pressed(config().key) && mc.player != null) toggle();
-        if (!enabled) return;
+        boolean pressed = KEY.pressed(config().key);
+        if (!enabled) {
+            if (active) set(false);
+            return;
+        }
+        if (pressed && mc.player != null) toggle();
+        if (!active) return;
         if (mc.player == null || mc.world == null || mc.player.isDead()) {
             set(false);
             return;

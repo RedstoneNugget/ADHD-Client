@@ -58,6 +58,8 @@ public class ConfigScreen extends ThemedScreen {
 
     private static final int ROW = 22;
     private static final int TOP = 28;
+    /** Inhalt beginnt unter der Tasten-Zeile. */
+    private static final int CONTENT_TOP = TOP + 22;
     private static final int SIDE_X = 10;
     private static final int SIDE_W = 124;
     /** Markiert Label als Abschnitts-Überschrift. */
@@ -110,6 +112,7 @@ public class ConfigScreen extends ThemedScreen {
         // Seitenleiste: Funde, die Suchmodi (mit Status), dann Allgemein und Gewichte
         section(tr("Ansicht"), SIDE_X, TOP - 2, SIDE_W);
         int sy = TOP + 10;
+        int step = height < 260 ? 18 : 19; // auf kleinen Bildschirmen enger, damit nichts den Fertig-Knopf berührt
         for (Tab t : Tab.values()) {
             if (t == Tab.GENERAL) {
                 sy += 4;
@@ -119,7 +122,7 @@ public class ConfigScreen extends ThemedScreen {
             ButtonWidget b = ButtonWidget.builder(sideText(t), w -> switchTab(t)).dimensions(SIDE_X, sy, SIDE_W, 17).build();
             addDrawableChild(b);
             if (t == tab) markToggle(b, () -> true);
-            sy += 19;
+            sy += step;
         }
 
         // Inhalt rechts neben der Seitenleiste
@@ -143,15 +146,21 @@ public class ConfigScreen extends ThemedScreen {
         newline();
         contentHeight = cursorY + 6;
 
+        // Tasten ganz oben über dem Inhalt (gelten für alle Tabs)
+        ModConfig.General keys = cfg().general;
+        int keyW = (contentW - 8) / 3;
+        keyButton(com.adhdclient.gui.L.t("Anzeigen", "Show"), () -> keys.markersKey, v -> keys.markersKey = v,
+                left, TOP - 2, keyW, 17, BaseFinderClient::onKeysEdited);
+        keyButton(com.adhdclient.gui.L.t("Scannen", "Scan"), () -> keys.rescanKey, v -> keys.rescanKey = v,
+                left + keyW + 4, TOP - 2, keyW, 17, BaseFinderClient::onKeysEdited);
+        addDrawableChild(ButtonWidget.builder(Text.literal(tr("Neu scannen")), b -> BaseFinderClient.rescan())
+                .dimensions(left + 2 * (keyW + 4), TOP - 2, contentW - 2 * (keyW + 4), 17)
+                .tooltip(Tooltip.of(Text.literal(com.adhdclient.gui.L.t("Alle geladenen Chunks jetzt neu scannen", "Rescan all loaded chunks now")))).build());
+
         // Fußzeile unter der Seitenleiste
         int by = viewBottom() - 17;
-        int half = (SIDE_W - 4) / 2;
-        addDrawableChild(ButtonWidget.builder(Text.literal(tr("Neu scannen")), b -> {
-            int n = ScanManager.INSTANCE.forceFullRescan();
-            ScanManager.INSTANCE.notifier.showNow(Text.literal(Lang.t("Vollscan: ", "Full scan: ") + n + Lang.t(" Chunks werden neu gescannt …", " chunks are being rescanned …")).formatted(Formatting.AQUA));
-        }).dimensions(SIDE_X, by, half, 17).build());
         addDrawableChild(ButtonWidget.builder(Text.literal(tr("Fertig")), b -> close())
-                .dimensions(SIDE_X + half + 4, by, SIDE_W - half - 4, 17).build());
+                .dimensions(SIDE_X, by, SIDE_W, 17).build());
 
         clampScroll();
         relayout();
@@ -191,22 +200,22 @@ public class ConfigScreen extends ThemedScreen {
     }
 
     private void clampScroll() {
-        int view = viewBottom() - TOP;
+        int view = viewBottom() - CONTENT_TOP;
         scroll = Math.max(0, Math.min(scroll, Math.max(0, contentHeight - view)));
     }
 
     private void relayout() {
         int bottom = viewBottom();
         for (Placed p : placed) {
-            int y = TOP + p.baseY - (int) scroll;
+            int y = CONTENT_TOP + p.baseY - (int) scroll;
             p.widget.setY(y);
-            p.widget.visible = y >= TOP && y + p.widget.getHeight() <= bottom;
+            p.widget.visible = y >= CONTENT_TOP && y + p.widget.getHeight() <= bottom;
         }
     }
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontal, double vertical) {
-        if (mouseY >= TOP && mouseY <= viewBottom() && contentHeight > viewBottom() - TOP) {
+        if (mouseY >= CONTENT_TOP && mouseY <= viewBottom() && contentHeight > viewBottom() - CONTENT_TOP) {
             scroll -= vertical * 20;
             clampScroll();
             relayout();
@@ -226,8 +235,8 @@ public class ConfigScreen extends ThemedScreen {
         super.render(ctx, mouseX, mouseY, delta);
         int bottom = viewBottom();
         for (Label l : labels) {
-            int y = TOP + l.baseY - (int) scroll;
-            if (y < TOP || y + 9 > bottom) continue;
+            int y = CONTENT_TOP + l.baseY - (int) scroll;
+            if (y < CONTENT_TOP || y + 9 > bottom) continue;
             if (l.color == SECTION_MARK) {
                 Theme.section(ctx, left, y, contentW, l.text);
                 continue;
@@ -238,18 +247,18 @@ public class ConfigScreen extends ThemedScreen {
         }
         for (int i = 0; i < swatches.size(); i++) {
             int[] s = swatches.get(i);
-            int y = TOP + s[1] - (int) scroll;
-            if (y < TOP || y + s[2] > bottom) continue;
+            int y = CONTENT_TOP + s[1] - (int) scroll;
+            if (y < CONTENT_TOP || y + s[2] > bottom) continue;
             Integer c = ModConfig.parseColor(swatchColors.get(i).get());
             Theme.swatch(ctx, s[0], y, s[2], c == null ? 0x555555 : c);
         }
         // Scrollbalken
-        int view = bottom - TOP;
+        int view = bottom - CONTENT_TOP;
         if (contentHeight > view) {
             int barH = Math.max(20, view * view / contentHeight);
-            int barY = TOP + (int) ((view - barH) * (scroll / (contentHeight - view)));
+            int barY = CONTENT_TOP + (int) ((view - barH) * (scroll / (contentHeight - view)));
             int x = left + contentW + 6;
-            ctx.fill(x, TOP, x + 2, bottom, Theme.argb(255, Theme.mix(Theme.config().background, Theme.config().text, 0.18f)));
+            ctx.fill(x, CONTENT_TOP, x + 2, bottom, Theme.argb(255, Theme.mix(Theme.config().background, Theme.config().text, 0.18f)));
             ctx.fill(x, barY, x + 2, barY + barH, Theme.accent());
         }
     }

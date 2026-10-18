@@ -41,7 +41,7 @@ public abstract class FreeLookCameraMixin {
     @Inject(method = "update", at = @At("TAIL"))
     private void adhd_client$freeCamera(World area, Entity focused, boolean thirdPerson, boolean inverseView, float tickProgress, CallbackInfo ci) {
         if (focused == null) return;
-        if (FreeCamClient.enabled) {
+        if (FreeCamClient.active) {
             setRotation(FreeCamClient.yaw(), FreeCamClient.pitch());
             setPos(FreeCamClient.cameraPos(tickProgress));
             this.thirdPerson = true;

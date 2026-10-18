@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "adhd_client-gametest",
+  "version": "1.0.0",
+  "name": "ADHD Client GameTest",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-client-gametest": ["com.adhdclient.test.AdhdClientGameTest"]
+  },
+  "depends": {
+    "adhd_client": "*"
+  }
+}

@@ -17,6 +17,6 @@ public abstract class FreeCamHandMixin {
     @Inject(method = "renderItem(FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/command/OrderedRenderCommandQueue;Lnet/minecraft/client/network/ClientPlayerEntity;I)V",
             at = @At("HEAD"), cancellable = true)
     private void adhd_client$hideHand(float tickProgress, MatrixStack matrices, OrderedRenderCommandQueue queue, ClientPlayerEntity player, int light, CallbackInfo ci) {
-        if (FreeCamClient.enabled) ci.cancel();
+        if (FreeCamClient.active) ci.cancel();
     }
 }

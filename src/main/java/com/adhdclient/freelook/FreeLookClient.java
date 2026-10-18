@@ -81,7 +81,7 @@ public final class FreeLookClient {
         int code = config().key;
         boolean pressed = KEY.pressed(code);
         boolean want;
-        if (!enabled || mc.player == null || FreeCamClient.enabled) want = false;
+        if (!enabled || mc.player == null || FreeCamClient.active) want = false;
         else if (config().hold) want = HotKey.isHeld(code);
         else want = pressed != active;
         if (want != active) setActive(mc, want);

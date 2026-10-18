@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.DoubleFunction;
 
 /**
  * Wertet die gecachten Rohdaten mit der aktuellen Config aus: Schwellen, Kriterien, Gewichte,
@@ -683,32 +682,23 @@ public final class Evaluator {
         return new Box(x0, minY, z0, x0 + 16, maxY + 1, z0 + 16);
     }
 
-    /** Zusammenfassung für die Actionbar nach einem Vollscan. */
+    /** Kurze Zusammenfassung für die Actionbar nach einem Vollscan (muss auch auf kleine Bildschirme passen). */
     public static String summary(Results r, ModConfig cfg) {
         List<String> parts = new ArrayList<>();
-        if (cfg.amethyst.enabled) {
-            parts.add(best(r, Marker.Mode.AMETHYST, v -> Lang.t("Amethyst: bester Chunk ", "Amethyst: best chunk ") + (int) v + Lang.t(" Cluster", " clusters"), Lang.t("Amethyst: nichts", "Amethyst: none")));
-        }
-        if (cfg.bees.enabled) {
-            parts.add(Lang.t("Unnatürliche Nester: ", "Unnatural nests: ") + r.qualifying.get(Marker.Mode.BEES).size());
-        }
-        if (cfg.spawners.enabled) {
-            parts.add(Lang.t("Unnatürliche Spawner: ", "Unnatural spawners: ") + r.qualifying.get(Marker.Mode.SPAWNERS).size());
-        }
-        if (cfg.kelp.enabled) {
-            parts.add(best(r, Marker.Mode.KELP, v -> Lang.t("Kelp: höchster ", "Kelp: tallest ") + (int) v, Lang.t("Kelp: nichts", "Kelp: none")));
-        }
-        if (cfg.anomaly.enabled) {
-            parts.add(best(r, Marker.Mode.ANOMALY, v -> Lang.t("Anomalie: bester Chunk Score ", "Anomaly: best chunk score ") + (int) v, Lang.t("Anomalie: nichts", "Anomaly: none")));
-        }
-        return parts.isEmpty() ? Lang.t("Alle Suchmodi sind aus", "All search modes are off") : String.join(" | ", parts);
+        if (cfg.amethyst.enabled) parts.add("Amethyst " + best(r, Marker.Mode.AMETHYST));
+        if (cfg.bees.enabled) parts.add(Lang.t("Nester ", "Nests ") + r.qualifying.get(Marker.Mode.BEES).size());
+        if (cfg.spawners.enabled) parts.add("Spawner " + r.qualifying.get(Marker.Mode.SPAWNERS).size());
+        if (cfg.kelp.enabled) parts.add("Kelp " + best(r, Marker.Mode.KELP));
+        if (cfg.anomaly.enabled) parts.add(Lang.t("Anomalie ", "Anomaly ") + best(r, Marker.Mode.ANOMALY));
+        return parts.isEmpty() ? Lang.t("Alle Suchmodi sind aus", "All search modes are off") : "Scan: " + String.join(" · ", parts);
     }
 
-    private static String best(Results r, Marker.Mode mode, DoubleFunction<String> fmt, String none) {
+    /** Bester Wert eines Suchmodus (Cluster, Kelp-Höhe, Score) oder "–", wenn nichts gefunden wurde. */
+    private static String best(Results r, Marker.Mode mode) {
         List<Finding> q = r.qualifying.get(mode);
-        if (q.isEmpty()) return none;
+        if (q.isEmpty()) return "–";
         double max = 0;
         for (Finding f : q) max = Math.max(max, f.value());
-        return fmt.apply(max);
+        return String.valueOf((int) max);
     }
 }

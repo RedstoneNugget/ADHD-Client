@@ -70,9 +70,9 @@ public abstract class ThemedScreen extends Screen {
         ButtonWidget[] ref = new ButtonWidget[1];
         ButtonWidget b = ButtonWidget.builder(Text.literal(label + ": " + HotKey.name(get.getAsInt())), btn -> {
             listening = new KeyTarget(ref[0], label, set, changed);
-            btn.setMessage(Text.literal(label + L.t(": > Taste drücken <", ": > press a key <")));
+            btn.setMessage(Text.literal(label + L.t(": > Taste oder Maus <", ": > key or mouse <")));
         }).dimensions(x, y, w, h).build();
-        b.setTooltip(Tooltip.of(Text.literal(L.t("Klicken, dann die neue Taste drücken. Esc = abbrechen, Entf = keine Taste.", "Click, then press the new key. Esc = cancel, Delete = no key."))));
+        b.setTooltip(Tooltip.of(Text.literal(L.t("Klicken, dann neue Taste oder Maustaste drücken (z. B. Seitentaste). Esc oder Linksklick = abbrechen, Entf = keine Taste.", "Click, then press the new key or mouse button (e.g. a side button). Esc or left click = cancel, Delete = no key."))));
         ref[0] = b;
         toggles.put(b, () -> listening != null && listening.button == ref[0]);
         return addDrawableChild(b);
@@ -81,20 +81,40 @@ public abstract class ThemedScreen extends Screen {
     @Override
     public boolean keyPressed(net.minecraft.client.input.KeyInput input) {
         if (listening != null) {
-            KeyTarget t = listening;
-            listening = null;
             int code = input.key();
-            if (code != org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE) {
-                if (code == org.lwjgl.glfw.GLFW.GLFW_KEY_DELETE || code == org.lwjgl.glfw.GLFW.GLFW_KEY_BACKSPACE) code = HotKey.NONE;
-                t.set.accept(code);
-                if (t.changed != null) t.changed.run();
-                t.button.setMessage(Text.literal(t.label + ": " + HotKey.name(code)));
-            } else {
+            if (code == org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE) {
+                listening = null;
                 clearAndInit();
+            } else {
+                if (code == org.lwjgl.glfw.GLFW.GLFW_KEY_DELETE || code == org.lwjgl.glfw.GLFW.GLFW_KEY_BACKSPACE) code = HotKey.NONE;
+                assign(code);
             }
             return true;
         }
         return super.keyPressed(input);
+    }
+
+    /** Beim Warten auf eine Taste: Maustaste übernehmen (Linksklick = abbrechen). */
+    @Override
+    public boolean mouseClicked(net.minecraft.client.gui.Click click, boolean doubled) {
+        if (listening != null) {
+            if (click.button() == org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+                listening = null;
+                clearAndInit();
+            } else {
+                assign(HotKey.mouse(click.button()));
+            }
+            return true;
+        }
+        return super.mouseClicked(click, doubled);
+    }
+
+    private void assign(int code) {
+        KeyTarget t = listening;
+        listening = null;
+        t.set.accept(code);
+        if (t.changed != null) t.changed.run();
+        t.button.setMessage(Text.literal(t.label + ": " + HotKey.name(code)));
     }
 
     /** Panel-Größe festlegen; legt auch das X oben rechts an. */

@@ -59,8 +59,12 @@ public final class FreeCamScreen extends ThemedScreen {
         line(L.t("Dein Körper bleibt stehen, Klicks sind gesperrt", "Your body stays in place, clicks are blocked"), x, y + 22, Theme.textDim());
         y += 3 * 11 + 6;
 
-        addDrawableChild(ButtonWidget.builder(Text.literal(FreeCamClient.enabled ? L.t("Free Cam beenden", "Stop Free Cam") : L.t("Free Cam starten", "Start Free Cam")), b -> {
-            boolean start = !FreeCamClient.enabled;
+        addDrawableChild(ButtonWidget.builder(Text.literal(FreeCamClient.active ? L.t("Free Cam beenden", "Stop Free Cam") : L.t("Free Cam starten", "Start Free Cam")), b -> {
+            boolean start = !FreeCamClient.active;
+            if (start && !FreeCamClient.enabled) {
+                FreeCamClient.enabled = true;
+                com.adhdclient.core.AdhdModuleState.save();
+            }
             onClose();
             if (client != null) client.setScreen(null);
             FreeCamClient.set(start);
@@ -68,7 +72,8 @@ public final class FreeCamScreen extends ThemedScreen {
         addDrawableChild(ButtonWidget.builder(Text.literal(L.t("Fertig", "Done")), b -> close())
                 .dimensions(x + half + 4, y, inner - half - 4, ROW - 2).build());
 
-        status(FreeCamClient.enabled ? L.t("Free Cam ist gerade an", "Free Cam is on") : L.t("Starten mit ", "Start with ") + FreeCamClient.keyName() + L.t(" oder dem Knopf unten", " or the button below"));
+        status(!FreeCamClient.enabled ? L.t("Modul ist aus – im ADHD-Menü einschalten, dann geht die Taste", "Module is off – turn it on in the ADHD menu, then the key works")
+                : FreeCamClient.active ? L.t("Free Cam ist gerade an", "Free Cam is on") : L.t("Starten mit ", "Start with ") + FreeCamClient.keyName() + L.t(" oder dem Knopf unten", " or the button below"));
     }
 
     @Override

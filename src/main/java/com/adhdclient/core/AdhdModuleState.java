@@ -31,6 +31,9 @@ public final class AdhdModuleState {
         boolean rtpqEnabled = false;
         boolean freeLookEnabled = false;
         boolean fullBrightEnabled = false;
+        boolean freeCamEnabled = false;
+        boolean blinkEnabled = false;
+        boolean inspectEnabled = false;
     }
 
     private AdhdModuleState() {
@@ -51,12 +54,15 @@ public final class AdhdModuleState {
             }
         }
         if (d == null) d = new Data();
-        BaseFinderClient.enabled = d.baseFinderEnabled;
+        BaseFinderClient.enabled = d.baseFinderEnabled && !BaseFinderClient.STANDALONE_INSTALLED;
         BlockESPClient.enabled = d.blockEspEnabled;
         EspClient.enabled = d.espEnabled;
         RtpqInvseeClient.enabled = d.rtpqEnabled;
         FreeLookClient.enabled = d.freeLookEnabled;
         FullBrightClient.enabled = d.fullBrightEnabled;
+        com.adhdclient.freecam.FreeCamClient.enabled = d.freeCamEnabled;
+        com.adhdclient.blink.BlinkClient.enabled = d.blinkEnabled;
+        com.adhdclient.inspect.InspectClient.enabled = d.inspectEnabled;
     }
 
     public static void save() {
@@ -67,6 +73,9 @@ public final class AdhdModuleState {
         d.rtpqEnabled = RtpqInvseeClient.enabled;
         d.freeLookEnabled = FreeLookClient.enabled;
         d.fullBrightEnabled = FullBrightClient.enabled;
+        d.freeCamEnabled = com.adhdclient.freecam.FreeCamClient.enabled;
+        d.blinkEnabled = com.adhdclient.blink.BlinkClient.enabled;
+        d.inspectEnabled = com.adhdclient.inspect.InspectClient.enabled;
         try {
             Path f = file();
             Files.createDirectories(f.getParent());
