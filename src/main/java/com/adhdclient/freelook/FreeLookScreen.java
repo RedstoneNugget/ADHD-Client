@@ -36,7 +36,7 @@ public final class FreeLookScreen extends ThemedScreen {
             clearAndInit();
         });
         y += ROW;
-        line(FreeLookClient.keyName() + (c.hold ? L.t(" halten", " hold") : L.t(" drücken", " press")) + L.t(" – umschauen, Maus dreht die Kamera um dich", " – look around, the mouse turns the camera around you"), x, y + 1, Theme.textDim());
+        line(FreeLookClient.keyName() + (c.hold ? L.t(" halten", " hold") : L.t(" drücken", " press")) + L.t(" – umschauen", " – look around"), x, y + 1, Theme.textDim());
         y += 11 + 6;
 
         section(L.t("Kamera", "Camera"), x, y, inner);

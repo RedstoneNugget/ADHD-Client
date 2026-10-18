@@ -605,13 +605,6 @@ public class ConfigScreen extends ThemedScreen {
         }
     }
 
-    private String fit(String s, int maxW) {
-        if (textRenderer.getWidth(s) <= maxW) return s;
-        String t = s;
-        while (t.length() > 1 && textRenderer.getWidth(t + "…") > maxW) t = t.substring(0, t.length() - 1);
-        return t + "…";
-    }
-
     private void buildGeneral() {
         ModConfig.General g = cfg().general;
         header("Scannen");

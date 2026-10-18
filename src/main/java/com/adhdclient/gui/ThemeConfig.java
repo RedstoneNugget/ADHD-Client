@@ -33,6 +33,8 @@ public final class ThemeConfig {
     public int off = 0xF43F5E;
     /** Sprache der Menüs: automatisch (Spielsprache), Deutsch oder Englisch. */
     public L.Mode language = L.Mode.AUTO;
+    /** Positionen der ClickGUI-Fenster: Name → {x, y, eingeklappt (0/1)}. */
+    public Map<String, int[]> panels = new LinkedHashMap<>();
     /** Deckkraft des Hintergrunds in Prozent. */
     public int opacity = 92;
 
@@ -98,5 +100,6 @@ public final class ThemeConfig {
         off &= 0xFFFFFF;
         opacity = Math.max(40, Math.min(100, opacity));
         if (language == null) language = L.Mode.AUTO;
+        if (panels == null) panels = new LinkedHashMap<>();
     }
 }

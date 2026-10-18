@@ -152,11 +152,12 @@ public abstract class ThemedScreen extends Screen {
         super.renderBackground(ctx, mouseX, mouseY, delta);
         if (panelX2 > panelX1) Theme.panel(ctx, panelX1, panelY1, panelX2, panelY2, title);
         for (Section s : sections) Theme.section(ctx, s.x, s.y, s.width, s.text);
-        for (Line l : lines) ctx.drawTextWithShadow(textRenderer, l.text, l.x, l.y, l.color);
+        int right = panelX2 > panelX1 ? panelX2 - 6 : width - 6;
+        for (Line l : lines) ctx.drawTextWithShadow(textRenderer, fit(l.text, right - l.x), l.x, l.y, l.color);
         if (!status.isEmpty() && panelX2 > panelX1) {
             int dim = Theme.argb(255, Theme.mix(Theme.config().background, Theme.config().text, 0.18f));
             ctx.fill(panelX1 + 2, panelY2 - 13, panelX2 - 1, panelY2 - 12, dim);
-            ctx.drawTextWithShadow(textRenderer, status, panelX1 + 7, panelY2 - 10, Theme.textDim());
+            ctx.drawTextWithShadow(textRenderer, fit(status, right - panelX1 - 7), panelX1 + 7, panelY2 - 10, Theme.textDim());
         }
     }
 
@@ -172,6 +173,14 @@ public abstract class ThemedScreen extends Screen {
                 Theme.button(ctx, w, on == null ? Theme.State.NEUTRAL : (on.getAsBoolean() ? Theme.State.ON : Theme.State.OFF));
             }
         }
+    }
+
+    /** Text auf die Breite kürzen (mit …), damit nichts aus dem Fenster ragt. */
+    protected String fit(String s, int maxW) {
+        if (maxW <= 0 || textRenderer.getWidth(s) <= maxW) return s;
+        String t = s;
+        while (t.length() > 1 && textRenderer.getWidth(t + "…") > maxW) t = t.substring(0, t.length() - 1);
+        return t + "…";
     }
 
     @Override

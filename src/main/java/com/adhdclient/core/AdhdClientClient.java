@@ -1,7 +1,7 @@
 package com.adhdclient.core;
 
 import com.adhdclient.basefinder.BaseFinderClient;
-import com.adhdclient.gui.AdhdMenuScreen;
+import com.adhdclient.gui.ClickGuiScreen;
 import com.adhdclient.blockesp.BlockESPClient;
 import com.adhdclient.esp.EspClient;
 import com.adhdclient.freecam.FreeCamClient;
@@ -47,7 +47,7 @@ public final class AdhdClientClient implements ClientModInitializer {
 
         ClientTickEvents.END_CLIENT_TICK.register(mc -> {
             while (menuKey.wasPressed()) {
-                if (mc.currentScreen == null) mc.setScreen(new AdhdMenuScreen(null));
+                if (mc.currentScreen == null) mc.setScreen(new ClickGuiScreen(null));
             }
         });
 

@@ -1,6 +1,6 @@
 package com.adhdclient.compat;
 
-import com.adhdclient.gui.AdhdMenuScreen;
+import com.adhdclient.gui.ClickGuiScreen;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 
@@ -11,6 +11,6 @@ import com.terraformersmc.modmenu.api.ModMenuApi;
 public class ModMenuIntegration implements ModMenuApi {
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return AdhdMenuScreen::new;
+        return ClickGuiScreen::new;
     }
 }
