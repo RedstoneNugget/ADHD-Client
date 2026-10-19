@@ -167,6 +167,21 @@ final class PacketToolsGameTest {
             context.runOnClient(c -> PacketToolsClient.discardHeld());
             context.waitTicks(10);
             check(LAST_CHAT[0].isEmpty() && !context.computeOnClient(c -> PacketToolsClient.holdAll), "Verwerfen schickt nichts");
+            // großes Paket-Log: gesendet und empfangen
+            context.getInput().holdKeyFor(o -> o.forwardKey, 10);
+            context.setScreen(() -> new com.adhdclient.packettools.PacketLogScreen(null));
+            context.waitTicks(20);
+            long outCount = context.computeOnClient(c -> com.adhdclient.packettools.PacketHistory.snapshot().stream().filter(e -> e.outgoing()).count());
+            long inCount = context.computeOnClient(c -> com.adhdclient.packettools.PacketHistory.snapshot().stream().filter(e -> !e.outgoing()).count());
+            log("Paket-Log: gesendet " + outCount + ", empfangen " + inCount);
+            check(outCount > 0 && inCount > 0, "Großes Paket-Log zeigt gesendete und empfangene Pakete");
+            context.takeScreenshot("41_packetlog_liste");
+            context.clickScreenButton("List");
+            context.waitTicks(3);
+            context.takeScreenshot("42_packetlog_zaehlung");
+            context.clickScreenButton("Count");
+            context.setScreen(() -> null);
+            context.waitTicks(3);
             context.runOnClient(c -> PacketToolsClient.config().showLog = false);
             server.runCommand("tp @a 0.5 -60 0.5 -90 30");
             context.waitTicks(10);

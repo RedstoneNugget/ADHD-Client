@@ -32,7 +32,8 @@ public final class PacketToolsScreen extends ThemedScreen {
         keyButton(L.t("Alles anhalten", "Hold all"), () -> c.holdKey, v -> c.holdKey = v, defaults.holdKey, x, y, half, ROW - 2, c::save);
         keyButton(L.t("Verwerfen", "Discard"), () -> c.discardKey, v -> c.discardKey = v, defaults.discardKey, x + half + 4, y, inner - half - 4, ROW - 2, c::save);
         y += ROW;
-        keyButton(L.t("Menü wiederherstellen", "Restore menu"), () -> c.restoreKey, v -> c.restoreKey = v, defaults.restoreKey, x, y, inner, ROW - 2, c::save);
+        keyButton(L.t("Menü zurück", "Restore menu"), () -> c.restoreKey, v -> c.restoreKey = v, defaults.restoreKey, x, y, half, ROW - 2, c::save);
+        keyButton(L.t("Paket-Log", "Packet log"), () -> c.logKey, v -> c.logKey = v, defaults.logKey, x + half + 4, y, inner - half - 4, ROW - 2, c::save);
         y += ROW + 6;
 
         section(L.t("Verhalten und Anzeige", "Behavior and display"), x, y, inner);
@@ -56,7 +57,11 @@ public final class PacketToolsScreen extends ThemedScreen {
         line(L.t("Menü-Leiste: erscheint neben Truhen und Server-Menüs", "Menu bar: shows up next to chests and server menus"), x, y + 22, Theme.textDim());
         y += 3 * 11 + 6;
 
-        addDrawableChild(ButtonWidget.builder(Text.literal(L.t("Fertig", "Done")), b -> close()).dimensions(x, y, inner, ROW - 2).build());
+        addDrawableChild(ButtonWidget.builder(Text.literal(L.t("Großes Paket-Log", "Large packet log")), b -> {
+            onClose();
+            if (client != null) client.setScreen(new PacketLogScreen(this));
+        }).dimensions(x, y, half, ROW - 2).build());
+        addDrawableChild(ButtonWidget.builder(Text.literal(L.t("Fertig", "Done")), b -> close()).dimensions(x + half + 4, y, inner - half - 4, ROW - 2).build());
         status(!PacketToolsClient.enabled ? L.t("Modul ist aus – im ADHD-Menü einschalten", "Module is off – turn it on in the ADHD menu")
                 : PacketToolsClient.holdAll ? L.t("Pakete angehalten: ", "Packets on hold: ") + PacketToolsClient.heldCount()
                 : L.t("Viele Server erkennen das – Regeln beachten", "Many servers detect this – check the rules"));

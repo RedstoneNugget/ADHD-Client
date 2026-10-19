@@ -24,6 +24,8 @@ public final class PacketToolsConfig {
     public int holdKey = com.adhdclient.gui.HotKey.NONE;
     /** Taste: angehaltene Pakete verwerfen statt senden. */
     public int discardKey = com.adhdclient.gui.HotKey.NONE;
+    /** Taste: großes Paket-Log öffnen. */
+    public int logKey = com.adhdclient.gui.HotKey.NONE;
     /** Sync-ID und Revision des offenen Menüs anzeigen. */
     public boolean showSyncInfo = true;
     /** Beim Anhalten Keep-Alive und Pong trotzdem senden – sonst trennt der Server nach etwa 30 Sekunden. */

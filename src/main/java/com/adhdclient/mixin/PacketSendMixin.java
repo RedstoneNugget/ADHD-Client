@@ -1,6 +1,7 @@
 package com.adhdclient.mixin;
 
 import com.adhdclient.blink.BlinkClient;
+import com.adhdclient.packettools.PacketHistory;
 import com.adhdclient.packettools.PacketLog;
 import com.adhdclient.packettools.PacketToolsClient;
 import io.netty.channel.ChannelFutureListener;
@@ -23,6 +24,16 @@ public abstract class PacketSendMixin {
         ClientPlayNetworkHandler own = MinecraftClient.getInstance().getNetworkHandler();
         if (own == null || own.getConnection() != (Object) this) return;
         if (BlinkClient.hold(packet) || PacketToolsClient.intercept(packet)) ci.cancel();
-        else PacketLog.record(packet);
+        else {
+            PacketLog.record(packet);
+            PacketHistory.add(packet, true);
+        }
+    }
+
+    /** Empfangene Pakete der eigenen Verbindung fürs große Paket-Log. */
+    @Inject(method = "channelRead0(Lio/netty/channel/ChannelHandlerContext;Lnet/minecraft/network/packet/Packet;)V", at = @At("HEAD"))
+    private void adhd$logIncoming(io.netty.channel.ChannelHandlerContext context, Packet<?> packet, CallbackInfo ci) {
+        ClientPlayNetworkHandler own = MinecraftClient.getInstance().getNetworkHandler();
+        if (own != null && own.getConnection() == (Object) this) PacketHistory.add(packet, false);
     }
 }

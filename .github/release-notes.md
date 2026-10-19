@@ -1,6 +1,10 @@
-**ADHD Client 1.5.0** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
+**ADHD Client 1.6.0** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
 
 One client, many modules – each switched on or off in one menu (**Right Ctrl**). All settings, colors and module keys are set inside the client. Menus in English or German.
+
+### New in 1.6.0
+- **Packet Tools: large packet log** – a window with every sent (→) and received (←) packet: list or count per type, filter by direction, search by name or content, pause, clear and copy. Opens with "Log" in the menu bar, from the Packet Tools settings or with its own key
+- New mod icon and logo
 
 ### New in 1.5.0
 - **Full Bright like daytime** – full sky light and maximum brightness everywhere, even at night and in caves; new option "Sky like daytime" (on by default) shows a noon sky. Only you see it, the server time stays the same
@@ -47,12 +51,16 @@ Not affiliated with any server. Check the server rules before using it – Blink
 
 ### Installation
 1. Install the [Fabric Loader](https://fabricmc.net/use/) for 1.21.11 and the [Fabric API](https://modrinth.com/mod/fabric-api)
-2. Put `adhd-client-1.5.0.jar` into your `mods` folder (remove older ADHD Client jars and the standalone Base Finder / InspectAll / LuckyCasino jars)
+2. Put `adhd-client-1.6.0.jar` into your `mods` folder (remove older ADHD Client jars and the standalone Base Finder / InspectAll / LuckyCasino jars)
 
 ---
 
 ### Deutsch
 Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg**). Alle Einstellungen, Farben und Modul-Tasten stellst du im Client ein. Menüs auf Deutsch oder Englisch.
+
+**Neu in 1.6.0**
+- **Packet Tools: großes Paket-Log** – ein Fenster mit allen gesendeten (→) und empfangenen (←) Paketen: Liste oder Zählung pro Typ, Filter nach Richtung, Suche nach Name oder Inhalt, Pause, Leeren und Kopieren. Öffnet sich mit „Log“ in der Menü-Leiste, in den Packet-Tools-Einstellungen oder per eigener Taste
+- Neues Mod-Icon und Logo
 
 **Neu in 1.5.0**
 - **Full Bright wie am Tag** – volles Himmelslicht und maximale Helligkeit überall, auch nachts und in Höhlen; neue Option „Himmel wie am Tag“ (standardmäßig an) zeigt einen Mittagshimmel. Nur du siehst das, die Server-Zeit bleibt gleich
@@ -87,4 +95,4 @@ Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg*
 Kein offizielles Projekt eines Servers. Vor der Nutzung die Server-Regeln lesen – Blink, ESP, Packet Tools und ähnliche Module sind oft verboten.
 
 1. [Fabric Loader](https://fabricmc.net/use/) für 1.21.11 und die [Fabric API](https://modrinth.com/mod/fabric-api) installieren
-2. `adhd-client-1.5.0.jar` in den `mods`-Ordner legen (ältere ADHD-Client-Jars und die einzelnen Base-Finder-/InspectAll-/LuckyCasino-Jars entfernen)
+2. `adhd-client-1.6.0.jar` in den `mods`-Ordner legen (ältere ADHD-Client-Jars und die einzelnen Base-Finder-/InspectAll-/LuckyCasino-Jars entfernen)

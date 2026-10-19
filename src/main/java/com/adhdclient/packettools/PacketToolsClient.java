@@ -58,6 +58,7 @@ public final class PacketToolsClient {
     private static final HotKey RESTORE = new HotKey();
     private static final HotKey HOLD = new HotKey();
     private static final HotKey DISCARD = new HotKey();
+    private static final HotKey LOG = new HotKey();
     private static final List<Packet<?>> held = java.util.Collections.synchronizedList(new ArrayList<>());
     private static long holdStart;
     private static final List<Packet<?>> queue = new ArrayList<>();
@@ -255,6 +256,7 @@ public final class PacketToolsClient {
         boolean restore = RESTORE.pressed(cfg.restoreKey);
         boolean hold = HOLD.pressed(cfg.holdKey);
         boolean discard = DISCARD.pressed(cfg.discardKey);
+        boolean openLog = LOG.pressed(cfg.logKey);
         if (!enabled) {
             if (delayPackets || !sendPackets || !queue.isEmpty()) {
                 sendPackets = true;
@@ -264,6 +266,7 @@ public final class PacketToolsClient {
             return;
         }
         if (restore) restoreGui(mc);
+        if (openLog && mc.currentScreen == null) mc.setScreen(new PacketLogScreen(null));
         if (discard && holdAll) discardHeld();
         else if (hold) setHoldAll(!holdAll);
         if (holdAll && cfg.showHoldInfo && mc.player != null) {
@@ -323,10 +326,13 @@ public final class PacketToolsClient {
                 L.t("Eigenes Klick- oder Knopf-Paket zusammenstellen und senden", "Put together and send your own click or button packet"),
                 () -> mc.setScreen(new FabricateScreen(screen)));
         y += ROW;
-        add(buttons, x, y, w, () -> Text.literal(L.t("Titel kopieren", "Copy title")), () -> Theme.State.NEUTRAL,
+        int halfW = (w - 4) / 2;
+        add(buttons, x, y, halfW, () -> Text.literal(L.t("Titel", "Title")), () -> Theme.State.NEUTRAL,
                 L.t("Kopiert den Menü-Titel als JSON (mit Farben und Schrift)", "Copies the menu title as JSON (with colors and font)"),
                 () -> copyTitle(mc, screen));
-
+        add(buttons, x + halfW + 4, y, w - halfW - 4, () -> Text.literal(L.t("Log", "Log")), () -> Theme.State.NEUTRAL,
+                L.t("Großes Paket-Log: alle gesendeten und empfangenen Pakete", "Large packet log: all sent and received packets"),
+                () -> mc.setScreen(new PacketLogScreen(screen)));
 
         // Chat-Feld: schreiben, während das Menü offen bleibt (Enter sendet, "/" am Anfang = Befehl)
         TextFieldWidget chat = new TextFieldWidget(mc.textRenderer, x, chatY, w, ROW - 2, Text.literal("Chat")) {
