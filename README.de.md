@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/logo.png" width="160" alt="ADHD Client Logo">
+</p>
+
 # ADHD Client
 
 [English](README.md) · **Deutsch**

@@ -3,9 +3,10 @@
   "id": "adhd_client",
   "version": "${version}",
   "name": "ADHD Client",
-  "description": "Eigener Client mit mehreren Modulen (Base Finder, Block ESP, ESP, RTPQ Invsee, Free Cam, Free Look, Full Bright, ...), die einzeln über ein Menü an/aus geschaltet werden.",
+  "description": "Eigener Client mit vielen Modulen (Base Finder, Block ESP, ESP, Full Bright, Free Cam, Free Look, Blink, RTPQ Invsee, Inspect All, Packet Tools, Lucky Casino), die einzeln über ein Menü an/aus geschaltet werden.",
   "authors": ["redstone_nugget"],
   "license": "MIT",
+  "icon": "assets/adhd_client/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": ["com.adhdclient.core.AdhdClientClient"],
