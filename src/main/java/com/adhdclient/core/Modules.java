@@ -62,6 +62,10 @@ public final class Modules {
                     () -> L.t("Alles hell wie am Tag, auch nachts und in Höhlen – keine Taste nötig", "Everything bright like daytime, even at night and in caves – no key needed"),
                     () -> FullBrightClient.enabled, v -> FullBrightClient.enabled = v,
                     com.adhdclient.fullbright.FullBrightScreen::new, () -> null),
+            new Module("Butterfly", Category.RENDER,
+                    () -> L.t("Waffen in der Hand werden zum Butterfly-Messer – mit Flips, Inspect und Animationen (nur bei dir)", "Weapons in your hand become a butterfly knife – with flips, inspect and animations (only for you)"),
+                    () -> com.adhdclient.butterfly.ButterflyClient.enabled, v -> com.adhdclient.butterfly.ButterflyClient.enabled = v,
+                    com.adhdclient.butterfly.ButterflyScreen::new, com.adhdclient.butterfly.ButterflyClient::keyName),
             new Module("Base Finder", Category.WORLD,
                     () -> BaseFinderClient.STANDALONE_INSTALLED ? BaseFinderClient.doubleInstalledHint()
                             : L.t("Markiert auffällige Chunks, Spawner, Bienennester, Amethyst und Kelp", "Marks suspicious chunks, spawners, bee nests, amethyst and kelp"),

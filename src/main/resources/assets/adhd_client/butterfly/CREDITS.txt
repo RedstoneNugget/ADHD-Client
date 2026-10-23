@@ -1,0 +1,10 @@
+Butterfly model / Butterfly-Modell
+
+This work is based on "Butterfly Fade"
+(https://sketchfab.com/3d-models/butterfly-fade-2dd640a011434f338abb4dca508e9099)
+by markminerov123 (https://sketchfab.com/markminerov123),
+licensed under CC BY 4.0 (http://creativecommons.org/licenses/by/4.0/).
+
+Changes: converted for Minecraft (knife.bin), handles split into separate
+moving parts, textures resized to 1024x1024.
+Not affiliated with or endorsed by the author.

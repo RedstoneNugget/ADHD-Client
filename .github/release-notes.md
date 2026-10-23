@@ -1,6 +1,10 @@
-**ADHD Client 1.6.0** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
+**ADHD Client 1.7.0** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
 
 One client, many modules – each switched on or off in one menu (**Right Ctrl**). All settings, colors and module keys are set inside the client. Menus in English or German.
+
+### New in 1.7.0
+- **Butterfly** – weapons you pick look like a CS2-style butterfly knife in your hand: it flips open when you pull it out, does a trick inspect (R), slashes left and right when you hit and fidgets while you stand still. Pick which items become it, blade and handle tint and the animation speed. Only you see it
+- 3D model: "Butterfly Fade" by markminerov123 (https://sketchfab.com/3d-models/butterfly-fade-2dd640a011434f338abb4dca508e9099), CC BY 4.0, converted for Minecraft
 
 ### New in 1.6.0
 - **Packet Tools: large packet log** – a window with every sent (→) and received (←) packet: list or count per type, filter by direction, search by name or content, pause, clear and copy. Opens with "Log" in the menu bar, from the Packet Tools settings or with its own key
@@ -39,6 +43,7 @@ One client, many modules – each switched on or off in one menu (**Right Ctrl**
 - **Block ESP** – highlight any blocks you pick from a list of every block
 - **ESP** – show selected entities through walls (box, glow, tracers, name tags)
 - **Full Bright** – everything bright like daytime, no key needed
+- **Butterfly** – CS2-style butterfly knife with animations
 - **Free Cam** – fly the camera freely, your body stays put (F6)
 - **Free Look** – look around in third person, adjustable distance, through blocks or not (Left Alt)
 - **Blink** – hold back your movement, then send it at once
@@ -51,12 +56,16 @@ Not affiliated with any server. Check the server rules before using it – Blink
 
 ### Installation
 1. Install the [Fabric Loader](https://fabricmc.net/use/) for 1.21.11 and the [Fabric API](https://modrinth.com/mod/fabric-api)
-2. Put `adhd-client-1.6.0.jar` into your `mods` folder (remove older ADHD Client jars and the standalone Base Finder / InspectAll / LuckyCasino jars)
+2. Put `adhd-client-1.7.0.jar` into your `mods` folder (remove older ADHD Client jars and the standalone Base Finder / InspectAll / LuckyCasino jars)
 
 ---
 
 ### Deutsch
 Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg**). Alle Einstellungen, Farben und Modul-Tasten stellst du im Client ein. Menüs auf Deutsch oder Englisch.
+
+**Neu in 1.7.0**
+- **Butterfly** – ausgewählte Waffen sehen in der Hand aus wie ein Butterfly-Messer im CS2-Stil: klappt beim Ziehen auf, Inspect-Trick (R), Schnitte abwechselnd links und rechts beim Schlagen und Spielen im Stand. Du wählst die Items, die Tönung von Klinge und Griffen und das Tempo. Nur du siehst das
+- 3D-Modell: „Butterfly Fade“ von markminerov123 (https://sketchfab.com/3d-models/butterfly-fade-2dd640a011434f338abb4dca508e9099), CC BY 4.0, für Minecraft umgewandelt
 
 **Neu in 1.6.0**
 - **Packet Tools: großes Paket-Log** – ein Fenster mit allen gesendeten (→) und empfangenen (←) Paketen: Liste oder Zählung pro Typ, Filter nach Richtung, Suche nach Name oder Inhalt, Pause, Leeren und Kopieren. Öffnet sich mit „Log“ in der Menü-Leiste, in den Packet-Tools-Einstellungen oder per eigener Taste
@@ -90,9 +99,9 @@ Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg*
 - **ESP** – Farben einfacher: drei Modus-Knöpfe und eine Palette zum Anklicken
 - Kurzes Antippen von Tasten geht nicht mehr verloren, die gebaute Jar enthält keine Metadaten
 
-**Alle Module:** Base Finder, Block ESP, ESP, Full Bright, Free Cam, Free Look, Blink, RTPQ Invsee, Inspect All, Packet Tools, Lucky Casino
+**Alle Module:** Base Finder, Block ESP, ESP, Full Bright, Butterfly, Free Cam, Free Look, Blink, RTPQ Invsee, Inspect All, Packet Tools, Lucky Casino
 
 Kein offizielles Projekt eines Servers. Vor der Nutzung die Server-Regeln lesen – Blink, ESP, Packet Tools und ähnliche Module sind oft verboten.
 
 1. [Fabric Loader](https://fabricmc.net/use/) für 1.21.11 und die [Fabric API](https://modrinth.com/mod/fabric-api) installieren
-2. `adhd-client-1.6.0.jar` in den `mods`-Ordner legen (ältere ADHD-Client-Jars und die einzelnen Base-Finder-/InspectAll-/LuckyCasino-Jars entfernen)
+2. `adhd-client-1.7.0.jar` in den `mods`-Ordner legen (ältere ADHD-Client-Jars und die einzelnen Base-Finder-/InspectAll-/LuckyCasino-Jars entfernen)

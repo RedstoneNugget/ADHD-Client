@@ -26,6 +26,10 @@ public class AdhdClientGameTest implements FabricClientGameTest {
             FullBrightGameTest.run(context);
             return;
         }
+        if (Boolean.getBoolean("adhd.onlyButterfly")) {
+            ButterflyGameTest.run(context);
+            return;
+        }
         context.runOnClient(c -> c.options.getSoundVolumeOption(net.minecraft.sound.SoundCategory.MASTER).setValue(0.0));
         try (TestSingleplayerContext sp = context.worldBuilder().create()) {
             TestServerContext server = sp.getServer();
@@ -47,6 +51,7 @@ public class AdhdClientGameTest implements FabricClientGameTest {
         PacketToolsGameTest.run(context);
         CasinoGameTest.run(context);
         FullBrightGameTest.run(context);
+        ButterflyGameTest.run(context);
         log("ALLE TESTS BESTANDEN");
     }
 

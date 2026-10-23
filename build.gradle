@@ -118,3 +118,8 @@ tasks.matching { it.name in ["runClientGameTest", "runClient", "prodClient"] }.c
 tasks.matching { it.name == 'runClientGameTest' }.configureEach {
     if (project.hasProperty('onlyFullBright')) jvmArgs '-Dadhd.onlyFullBright=true'
 }
+
+// Nur den Butterfly-Test laufen lassen: gradlew runClientGameTest -PonlyButterfly
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('onlyButterfly')) jvmArgs '-Dadhd.onlyButterfly=true'
+}

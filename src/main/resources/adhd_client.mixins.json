@@ -4,6 +4,8 @@
   "package": "com.adhdclient.mixin",
   "compatibilityLevel": "JAVA_21",
   "client": [
+    "ButterflyHeldItemMixin",
+    "ButterflyThirdPersonMixin",
     "EspGlowMixin",
     "EspOutlineColorMixin",
     "PacketSendMixin",
