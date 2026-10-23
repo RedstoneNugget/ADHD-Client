@@ -16,6 +16,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
+import org.joml.Matrix4f;
 
 /**
  * Zeichnet das Butterfly-Messer (CS2-Stil) statt des Items – in der ersten Person mit allen Animationen und in der
@@ -52,11 +53,12 @@ public final class ButterflyRenderer {
     public static float baseX = 0.34f, baseY = -0.33f, baseZ = -0.66f;
     /** Griffmitte von Griff B in Modellpixeln: hier hält die Hand das Messer. */
     private static final float GRIP_Y = -6.5f;
-    /** Abstand der Griffe von der Klingenebene in Modellpixeln (Klinge halb ~0,2, Griff halb ~0,65). */
-    private static final float HANDLE_GAP = 1.1f;
+
+    /** Knochen-Namen, wie sie in der Blockbench-Datei heißen. */
+    static final String HAND = "hand", BLADE = "blade", HANDLE_A = "handle_a", HANDLE_B = "handle_b";
 
     /** Haltung des Messers: Gelenkwinkel (Bogenmaß) und Bewegung der ganzen Hand. */
-    private static final class Pose {
+    static final class Pose {
         float blade;
         float handleA;
         float handleB;
@@ -91,7 +93,11 @@ public final class ButterflyRenderer {
             if (swingProgress > 0 && lastSwing == 0) ButterflyClient.onSwingStart();
             lastSwing = swingProgress;
         }
-        Pose p = pose(main);
+        // Eigene Animationen aus Blockbench haben Vorrang vor den eingebauten
+        float t = ButterflyClient.animTime();
+        ButterflyAnimations.Clip clip = main ? ButterflyAnimations.forCurrent() : null;
+        if (clip != null && t > clip.length()) ButterflyClient.finish();
+        Pose p = clip != null ? new Pose() : pose(main);
         if (showcase) {
             // Testbild: Messer groß in der Bildmitte, flache Seite zur Kamera
             matrices.push();
@@ -100,28 +106,56 @@ public final class ButterflyRenderer {
             matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(showcaseTurn));
             matrices.translate(0f, -1.5f / 16f * 0.3f, 0f);
             matrices.scale(0.3f, 0.3f, 0.3f);
-            drawKnife(matrices, queue, light, new Pose());
+            drawKnife(matrices, queue, light, new Pose(), null, 0f);
             matrices.pop();
             return true;
         }
 
         matrices.push();
-        // Haltung wie in CS2: Hand rechts unten, Klinge schräg nach links oben zur Bildmitte, flache Seite sichtbar.
-        // Gedreht wird um die Hand (Griffmitte), nicht ums Gelenk – so bewegt sich das Messer wie aus dem Handgelenk.
-        // Den Schwert-Schwung von Minecraft ersetzt die eigene Schnitt-Animation.
+        view(matrices, s, p, equipProgress, main);
+        if (clip != null) bone(matrices, clip, HAND, grip(), t);
+        drawKnife(matrices, queue, light, p, clip, t);
+        matrices.pop();
+        return true;
+    }
+
+    /**
+     * Haltung wie in CS2: Hand rechts unten, Klinge schräg nach links oben zur Bildmitte, flache Seite sichtbar.
+     * Gedreht wird um die Hand (Griffmitte), nicht ums Gelenk – so bewegt sich das Messer wie aus dem Handgelenk.
+     * Den Schwert-Schwung von Minecraft ersetzt die eigene Schnitt-Animation.
+     */
+    private static void view(MatrixStack matrices, int s, Pose p, float equipProgress, boolean breathe) {
         float now = (System.currentTimeMillis() % 100000L) / 1000f;
-        float breathe = main ? 1f : 0f;                                   // leichtes Atmen, damit es nie starr wirkt
-        matrices.translate(s * (baseX + p.tx), baseY + p.ty + 0.006f * breathe * MathHelper.sin(now * 1.9f) + equipProgress * -0.25f, baseZ + p.tz);
+        float b = breathe ? 1f : 0f;                                      // leichtes Atmen, damit es nie starr wirkt
+        matrices.translate(s * (baseX + p.tx), baseY + p.ty + 0.006f * b * MathHelper.sin(now * 1.9f) + equipProgress * -0.25f, baseZ + p.tz);
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(s * (baseYaw + p.rotY)));
-        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(basePitch + p.rotX + 1.2f * breathe * MathHelper.sin(now * 1.3f)));
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(basePitch + p.rotX + 1.2f * b * MathHelper.sin(now * 1.3f)));
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(s * (baseRoll + p.rotZ)));
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180f + p.twist)); // Schneide nach unten links, Handgelenk
         matrices.scale(SCALE, SCALE, SCALE);
         matrices.translate(0f, -GRIP_Y / 16f, 0f);                        // Griffmitte in die Hand
         matrices.multiply(RotationAxis.POSITIVE_Z.rotation(p.spin));
-        drawKnife(matrices, queue, light, p);
-        matrices.pop();
-        return true;
+    }
+
+    /** Matrix der Hand für eine Haltung (ohne Atmen und Ziehen) – für die Blockbench-Vorlage. */
+    static Matrix4f viewMatrix(Pose p) {
+        MatrixStack m = new MatrixStack();
+        view(m, 1, p, 0f, false);
+        return new Matrix4f(m.peek().getPositionMatrix());
+    }
+
+    /** Ein Knochen aus Blockbench: verschieben, dann um seinen Drehpunkt drehen (Reihenfolge Z, Y, X wie in Blockbench). */
+    private static void bone(MatrixStack m, ButterflyAnimations.Clip clip, String name, float[] pivot, float t) {
+        float[] v = clip.sample(name, t);
+        m.translate((pivot[0] + v[0]) / 16f, (pivot[1] + v[1]) / 16f, (pivot[2] + v[2]) / 16f);
+        m.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(v[5]));
+        m.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(v[4]));
+        m.multiply(RotationAxis.POSITIVE_X.rotationDegrees(v[3]));
+        m.translate(-pivot[0] / 16f, -pivot[1] / 16f, -pivot[2] / 16f);
+    }
+
+    static float[] grip() {
+        return new float[]{0f, GRIP_Y, 0f};
     }
 
     // ------------------------------------------------------------ dritte Person
@@ -147,30 +181,33 @@ public final class ButterflyRenderer {
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(left ? -90f : 90f));
         matrices.scale(0.5f, 0.5f, 0.5f);
         matrices.translate(0f, -GRIP_Y / 16f, 0f); // Griffmitte in die Faust
-        Pose p = arm == state.mainArm ? pose(true) : new Pose();
+        boolean main = arm == state.mainArm;
+        ButterflyAnimations.Clip clip = main ? ButterflyAnimations.forCurrent() : null;
+        Pose p = clip != null || !main ? new Pose() : pose(true);
         p.tx = p.ty = p.tz = 0;
-        drawKnife(matrices, queue, light, p);
+        drawKnife(matrices, queue, light, p, clip, ButterflyClient.animTime());
         matrices.pop();
     }
 
     // ------------------------------------------------------------ Zeichnen
 
-    private static void drawKnife(MatrixStack matrices, OrderedRenderCommandQueue queue, int light, Pose p) {
+    private static void drawKnife(MatrixStack matrices, OrderedRenderCommandQueue queue, int light, Pose p,
+                                  ButterflyAnimations.Clip clip, float t) {
         if (!loadMesh()) return;
-        ButterflyConfig cfg = ButterflyClient.config();
-        int blade = 0xFF000000 | Math.max(0, ButterflyConfig.parse(cfg.bladeColor));
-        int handle = 0xFF000000 | Math.max(0, ButterflyConfig.parse(cfg.handleColor));
         for (int i = 0; i < subVerts.length; i++) {
             int part = subPart[i], mat = subMaterial[i];
-            int tint = mat == 0 ? blade : mat == 1 ? handle : WHITE;
             float[] verts = subVerts[i];
             matrices.push();
             // Wie ein echtes Butterfly: die Hand hält Griff B, die Klinge dreht sich um dessen Bolzen,
             // Griff A hängt an der Klinge (um seinen eigenen Bolzen) und schwingt mit ihr.
-            // Klinge und Griff B sind fest über den Bolzen verbunden. Nur Griff A weicht während eines Flips etwas
-            // nach vorn aus, damit er an Klinge und Griff B vorbeischwingt statt durch sie hindurch.
-            if (part == 1) matrices.translate(0f, 0f, HANDLE_GAP * flipping(p) / 16f);
-            if (part == 2) {
+            if (clip != null) {
+                if (part == 2) {
+                    bone(matrices, clip, HANDLE_B, pinB, t);
+                } else {
+                    bone(matrices, clip, BLADE, pinB, t);
+                    if (part == 1) bone(matrices, clip, HANDLE_A, pinA, t);
+                }
+            } else if (part == 2) {
                 turn(matrices, pinB, p.handleB);
             } else {
                 turn(matrices, pinB, p.blade);
@@ -178,33 +215,27 @@ public final class ButterflyRenderer {
             }
             queue.submitCustom(matrices, RenderLayers.entityCutoutNoCull(TEXTURES[mat]), (e, vc) -> {
                 for (int o = 0; o < verts.length; o += 8) {
-                    vertex(e, vc, verts[o], verts[o + 1], verts[o + 2], verts[o + 3], verts[o + 4], tint, light, verts[o + 5], verts[o + 6], verts[o + 7]);
+                    vertex(e, vc, verts[o], verts[o + 1], verts[o + 2], verts[o + 3], verts[o + 4], WHITE, light, verts[o + 5], verts[o + 6], verts[o + 7]);
                 }
             });
             matrices.pop();
         }
     }
 
-    /** 0 = Messer ruht (offen oder geschlossen), 1 = mitten im Flip. */
-    private static float flipping(Pose p) {
-        return MathHelper.clamp(Math.abs(MathHelper.sin(p.blade)) + Math.abs(MathHelper.sin(p.handleA - p.blade)), 0f, 1f);
-    }
-
     /** 0 = offen, 1 = geschlossen (Klinge um eine halbe Drehung umgeklappt). */
-    private static float closed(float blade) {
+    static float closed(float blade) {
         return (1f - MathHelper.cos(blade)) / 2f;
     }
 
     /**
-     * Beim Schließen wandert der Bolzen von Griff A auf die andere Seite von Griff B. Damit die Griffenden wieder
-     * aufeinandertreffen, muss Griff A um diesen Winkel nachdrehen.
+     * Beim Schließen wandert der Bolzen von Griff A auf die andere Seite von Griff B. Damit Griff A dann parallel
+     * neben Griff B liegt (statt ihn zu kreuzen), dreht er um diesen Winkel nach: auf dieselbe Richtung wie Griff B.
      */
     private static float computeCloseFix() {
         float[] endA = lowest(1), endB = lowest(2);
         if (endA == null || endB == null) return 0f;
-        float ax = 2 * pinB[0] - pinA[0], ay = 2 * pinB[1] - pinA[1];   // Bolzen A nach dem Umklappen
         double before = Math.atan2(endA[1] - pinA[1], endA[0] - pinA[0]);
-        double after = Math.atan2(endB[1] - ay, endB[0] - ax);
+        double after = Math.atan2(endB[1] - pinB[1], endB[0] - pinB[0]);
         double d = after - before;
         while (d > Math.PI) d -= 2 * Math.PI;
         while (d < -Math.PI) d += 2 * Math.PI;
@@ -227,6 +258,48 @@ public final class ButterflyRenderer {
         matrices.translate(c[0] / 16f, c[1] / 16f, c[2] / 16f);
         matrices.multiply(RotationAxis.POSITIVE_Z.rotation(angle));
         matrices.translate(-c[0] / 16f, -c[1] / 16f, -c[2] / 16f);
+    }
+
+    // ------------------------------------------------------------ für die Blockbench-Vorlage
+
+    static boolean ensureMesh() {
+        return loadMesh();
+    }
+
+    static int parts() {
+        return subVerts.length;
+    }
+
+    static int partOf(int i) {
+        return subPart[i];
+    }
+
+    static int materialOf(int i) {
+        return subMaterial[i];
+    }
+
+    static float[] vertsOf(int i) {
+        return subVerts[i];
+    }
+
+    static float[] pinA() {
+        return pinA.clone();
+    }
+
+    static float[] pinB() {
+        return pinB.clone();
+    }
+
+    static float closeFix() {
+        return closeFix;
+    }
+
+    static Identifier texture(int material) {
+        return TEXTURES[material];
+    }
+
+    static int textureCount() {
+        return TEXTURES.length;
     }
 
     /** Modell aus knife.bin laden: Bolzen A und B, dann die Teilnetze. */
@@ -303,15 +376,33 @@ public final class ButterflyRenderer {
         Pose p = new Pose();
         if (!main) return p;
         float t = ButterflyClient.animTime();
-        switch (ButterflyClient.anim()) {
+        ButterflyClient.Anim anim = ButterflyClient.anim();
+        builtIn(anim, p, t, ButterflyClient.slashDirection());
+        if (anim != ButterflyClient.Anim.NONE && t > duration(anim)) ButterflyClient.finish();
+        return p;
+    }
+
+    /** Eingebaute Animation zum Zeitpunkt t in die Haltung schreiben (dir: Schlagrichtung +1/-1). */
+    static void builtIn(ButterflyClient.Anim anim, Pose p, float t, int dir) {
+        switch (anim) {
             case EQUIP -> equip(p, t);
-            case ATTACK -> slash(p, t, ButterflyClient.slashDirection());
+            case ATTACK -> slash(p, t, dir);
             case INSPECT -> inspect(p, t);
             case IDLE -> idle(p, t);
             default -> {
             }
         }
-        return p;
+    }
+
+    /** Länge der eingebauten Animationen in Sekunden. */
+    static float duration(ButterflyClient.Anim anim) {
+        return switch (anim) {
+            case EQUIP -> 1.0f;
+            case ATTACK -> 0.5f;
+            case INSPECT -> ButterflyClient.INSPECT_SECONDS;
+            case IDLE -> 1.2f;
+            default -> 0f;
+        };
     }
 
     /**
@@ -319,14 +410,13 @@ public final class ButterflyRenderer {
      * Klinge klappt auf; die Hand federt aus.
      */
     private static void equip(Pose p, float t) {
-        float d = 1.0f;
         p.ty = keys(t, 0f, -0.32f, 0.28f, 0.03f, 0.45f, -0.01f, 0.6f, 0f);
         p.rotX = keys(t, 0f, -55f, 0.3f, 8f, 0.5f, -2f, 0.65f, 0f);
         p.rotZ = keys(t, 0f, 30f, 0.35f, -8f, 0.6f, 3f, 0.85f, 0f);
         p.twist = keys(t, 0f, 0f, 0.3f, -35f, 0.55f, 20f, 0.8f, 0f);
-        p.blade = keys(t, 0f, PI, 0.18f, PI, 0.62f, 0f);
-        p.handleA = keys(t, 0f, 0f, 0.12f, 0f, 0.7f, -2f * PI);
-        if (t > d) ButterflyClient.finish();
+        // Klinge und Griff A klappen im Gleichtakt zur selben Seite auf – so streift nichts aneinander
+        p.blade = keys(t, 0f, -PI, 0.15f, -PI, 0.65f, 0f);
+        p.handleA = keys(t, 0f, -2f * PI, 0.15f, -2f * PI, 0.65f, 0f);
     }
 
     /**
@@ -334,23 +424,21 @@ public final class ButterflyRenderer {
      * links), das Handgelenk dreht die Schneide nach vorn, Griff A schwingt nach.
      */
     private static void slash(Pose p, float t, int dir) {
-        float d = 0.5f;
         p.tx = keys(t, 0f, 0f, 0.07f, 0.12f * dir, 0.2f, -0.38f * dir, 0.32f, -0.3f * dir, 0.5f, 0f);
         p.ty = keys(t, 0f, 0f, 0.07f, 0.06f, 0.2f, 0f, 0.5f, 0f);
         p.tz = keys(t, 0f, 0f, 0.07f, 0.04f, 0.2f, -0.16f, 0.5f, 0f);
         p.rotZ = keys(t, 0f, 0f, 0.07f, 25f * dir, 0.2f, -55f * dir, 0.35f, -40f * dir, 0.5f, 0f);
         p.rotY = keys(t, 0f, 0f, 0.07f, 12f * dir, 0.2f, -40f * dir, 0.5f, 0f);
         p.twist = keys(t, 0f, 0f, 0.07f, -20f * dir, 0.2f, 35f * dir, 0.5f, 0f);
-        p.handleA = keys(t, 0f, 0f, 0.15f, 0.6f * dir, 0.3f, -0.35f * dir, 0.5f, 0f);
-        if (t > d) ButterflyClient.finish();
+        // Griff A schwingt nach – nur zur freien Seite, nie in Griff B hinein
+        p.handleA = keys(t, 0f, 0f, 0.15f, dir > 0 ? -0.6f : -0.25f, 0.3f, dir > 0 ? -0.2f : -0.6f, 0.5f, 0f);
     }
 
     /**
-     * Inspect wie in CS2: zur Mitte holen, zwei fließende Flips (zu und wieder auf) mit Handgelenk, Helikopter ums
-     * Gelenk, zwei Flips in die Gegenrichtung, hochwerfen mit Überschlag und fangen, zurück.
+     * Inspect: zur Mitte holen, zuklappen und wieder aufklappen (Griff A schwingt dabei ganz herum, die Klinge klappt
+     * nur hin und zurück – wie bei einem echten Butterfly), das Ganze noch einmal mit der Klinge zur anderen Seite, zurück.
      */
     private static void inspect(Pose p, float t) {
-        float d = ButterflyClient.INSPECT_SECONDS;
         float in = phase(t, 0f, 0.35f) * (1f - phase(t, 3.2f, 3.6f));
         p.tx = -0.24f * in;
         p.ty = 0.1f * in;
@@ -358,29 +446,21 @@ public final class ButterflyRenderer {
         p.rotY = 40f * in;
         p.rotX = 8f * in;
         p.rotZ = -12f * in;
-        // Klinge dreht weiter um Griff B, Griff A schwingt jeweils ganz herum – als durchlaufende Kurve
-        p.blade = keys(t, 0f, 0f, 0.45f, 0f, 0.75f, PI, 1.05f, 2f * PI, 1.75f, 2f * PI, 2.0f, 3f * PI, 2.25f, 4f * PI, 3.6f, 4f * PI);
-        p.handleA = keys(t, 0f, 0f, 0.45f, 0f, 0.75f, 2f * PI, 1.05f, 4f * PI, 1.75f, 4f * PI, 2.0f, 2f * PI, 2.25f, 0f, 3.6f, 0f);
-        p.twist = keys(t, 0f, 0f, 0.35f, -20f, 0.75f, 25f, 1.05f, -15f, 1.4f, 0f, 1.75f, 15f, 2.25f, -15f, 2.6f, 0f, 3.6f, 0f);
-        // Helikopter: das offene Messer dreht sich einmal ums Gelenk (1,15–1,65 s)
-        p.spin = 2f * PI * phase(t, 1.15f, 1.65f);
-        // Hochwerfen: das Messer wirbelt in seiner Ebene zweimal ums Gelenk und wird gefangen (2,4–3,0 s)
-        float toss = MathHelper.clamp((t - 2.4f) / 0.6f, 0f, 1f);
-        p.ty += 0.26f * MathHelper.sin(PI * toss);
-        p.tx += 0.04f * MathHelper.sin(PI * toss);
-        p.spin += 4f * PI * ease(toss);
-        p.rotX += 12f * MathHelper.sin(PI * toss);
-        if (t > d) ButterflyClient.finish();
+        // Klinge klappt nur hin und zurück; Griff A schwingt im Gleichtakt einmal ganz herum und wieder zurück.
+        // Beide zur selben Seite – das ist die einzige Richtung, in der nichts aneinander streift (nachgerechnet).
+        p.blade = keys(t, 0f, 0f, 0.5f, 0f, 0.85f, -PI, 1.2f, 0f, 1.7f, 0f, 2.05f, -PI, 2.4f, 0f, 3.6f, 0f);
+        p.handleA = keys(t, 0f, 0f, 0.5f, 0f, 0.85f, -2f * PI, 1.2f, 0f, 1.7f, 0f, 2.05f, -2f * PI, 2.4f, 0f, 3.6f, 0f);
+        p.twist = keys(t, 0f, 0f, 0.4f, -20f, 0.85f, 25f, 1.2f, -10f, 1.5f, 0f, 2.05f, -25f, 2.4f, 10f, 2.8f, 0f, 3.6f, 0f);
+        // zum Schluss die Klinge noch einmal ins Licht drehen (2,6–3,2 s)
+        p.rotY += keys(t, 0f, 0f, 2.6f, 0f, 2.9f, 25f, 3.2f, 0f);
     }
 
     /** Spielen im Stand: Griff A schwingt zum halben Flip auf und schnappt zurück, das Handgelenk dreht mit. */
     private static void idle(Pose p, float t) {
-        float d = 1.2f;
-        p.handleA = keys(t, 0f, 0f, 0.35f, -0.9f * PI, 0.7f, 0.15f, 0.95f, -0.05f, 1.2f, 0f);
+        p.handleA = keys(t, 0f, 0f, 0.35f, -0.9f * PI, 0.7f, -0.1f, 0.95f, -0.03f, 1.2f, 0f);
         p.blade = keys(t, 0f, 0f, 0.35f, 0.12f, 1.2f, 0f);
         p.twist = keys(t, 0f, 0f, 0.35f, -15f, 0.8f, 6f, 1.2f, 0f);
         p.rotZ = keys(t, 0f, 0f, 0.35f, -5f, 0.8f, 2f, 1.2f, 0f);
         p.ty = keys(t, 0f, 0f, 0.35f, 0.015f, 1.2f, 0f);
-        if (t > d) ButterflyClient.finish();
     }
 }

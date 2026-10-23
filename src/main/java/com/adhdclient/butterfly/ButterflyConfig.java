@@ -26,9 +26,6 @@ public final class ButterflyConfig {
     public int inspectKey = org.lwjgl.glfw.GLFW.GLFW_KEY_R;
     /** Welche Items zu welchem Look werden: Look-ID → Item-IDs. */
     public Map<String, List<String>> looks = defaultLooks();
-    /** Farben als #RRGGBB. */
-    public String bladeColor = "#FFFFFF";
-    public String handleColor = "#FFFFFF";
     /** Tempo der Animationen (0,5–2). */
     public double speed = 1.0;
     public boolean equipFlip = true;
@@ -80,8 +77,6 @@ public final class ButterflyConfig {
         if (looks == null) looks = defaultLooks();
         for (ButterflyLook look : ButterflyLook.values()) looks.computeIfAbsent(look.id, k -> new ArrayList<>());
         speed = Math.max(0.5, Math.min(2.0, speed));
-        if (parse(bladeColor) < 0) bladeColor = "#FFFFFF";
-        if (parse(handleColor) < 0) handleColor = "#FFFFFF";
     }
 
     /** Welcher Look gilt für dieses Item (oder null)? */
@@ -93,16 +88,4 @@ public final class ButterflyConfig {
         return null;
     }
 
-    /** "#RRGGBB" → 0xRRGGBB, bei Fehler -1. */
-    public static int parse(String hex) {
-        if (hex == null) return -1;
-        String s = hex.trim();
-        if (s.startsWith("#")) s = s.substring(1);
-        if (s.length() != 6) return -1;
-        try {
-            return Integer.parseInt(s, 16);
-        } catch (NumberFormatException e) {
-            return -1;
-        }
-    }
 }

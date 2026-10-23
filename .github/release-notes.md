@@ -1,9 +1,14 @@
-**ADHD Client 1.7.0** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
+**ADHD Client 1.7.1** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
 
 One client, many modules – each switched on or off in one menu (**Right Ctrl**). All settings, colors and module keys are set inside the client. Menus in English or German.
 
+### New in 1.7.1
+- **Butterfly: better animations** – real balisong mechanics: you hold one handle, the blade turns around its pin and the other handle swings with it. Nothing passes through anything anymore (checked step by step), smooth motion with wrist turns, new CS2-like hold
+- **Butterfly: own animations** – make your own draw, inspect, slash and idle animations in Blockbench; the menu creates a template and the client reloads it when you save ([guide, German](https://github.com/RedstoneNugget/ADHD-Client/blob/main/docs/Butterfly-Blockbench-Anleitung.md))
+- The color option is gone – the model brings its own colors
+
 ### New in 1.7.0
-- **Butterfly** – weapons you pick look like a CS2-style butterfly knife in your hand: it flips open when you pull it out, does a trick inspect (R), slashes left and right when you hit and fidgets while you stand still. Pick which items become it, blade and handle tint and the animation speed. Only you see it
+- **Butterfly** – weapons you pick look like a CS2-style butterfly knife in your hand: it flips open when you pull it out, does a trick inspect (R), slashes left and right when you hit and fidgets while you stand still. Pick which items become it and the animation speed. Only you see it
 - 3D model: "Butterfly Fade" by markminerov123 (https://sketchfab.com/3d-models/butterfly-fade-2dd640a011434f338abb4dca508e9099), CC BY 4.0, converted for Minecraft
 
 ### New in 1.6.0
@@ -56,15 +61,20 @@ Not affiliated with any server. Check the server rules before using it – Blink
 
 ### Installation
 1. Install the [Fabric Loader](https://fabricmc.net/use/) for 1.21.11 and the [Fabric API](https://modrinth.com/mod/fabric-api)
-2. Put `adhd-client-1.7.0.jar` into your `mods` folder (remove older ADHD Client jars and the standalone Base Finder / InspectAll / LuckyCasino jars)
+2. Put `adhd-client-1.7.1.jar` into your `mods` folder (remove older ADHD Client jars and the standalone Base Finder / InspectAll / LuckyCasino jars)
 
 ---
 
 ### Deutsch
 Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg**). Alle Einstellungen, Farben und Modul-Tasten stellst du im Client ein. Menüs auf Deutsch oder Englisch.
 
+**Neu in 1.7.1**
+- **Butterfly: bessere Animationen** – echte Butterfly-Mechanik: du hältst einen Griff, die Klinge dreht sich um dessen Bolzen und der andere Griff schwingt mit. Nichts geht mehr durcheinander (Schritt für Schritt nachgerechnet), flüssige Bewegungen mit Handgelenk, neue Haltung wie in CS2
+- **Butterfly: eigene Animationen** – Ziehen, Inspect, Schlag und Spielen selbst in Blockbench machen; das Menü erstellt eine Vorlage, der Client lädt sie beim Speichern neu ([Anleitung](https://github.com/RedstoneNugget/ADHD-Client/blob/main/docs/Butterfly-Blockbench-Anleitung.md))
+- Die Farbeinstellung ist weg – das Modell bringt seine eigenen Farben mit
+
 **Neu in 1.7.0**
-- **Butterfly** – ausgewählte Waffen sehen in der Hand aus wie ein Butterfly-Messer im CS2-Stil: klappt beim Ziehen auf, Inspect-Trick (R), Schnitte abwechselnd links und rechts beim Schlagen und Spielen im Stand. Du wählst die Items, die Tönung von Klinge und Griffen und das Tempo. Nur du siehst das
+- **Butterfly** – ausgewählte Waffen sehen in der Hand aus wie ein Butterfly-Messer im CS2-Stil: klappt beim Ziehen auf, Inspect-Trick (R), Schnitte abwechselnd links und rechts beim Schlagen und Spielen im Stand. Du wählst die Items und das Tempo. Nur du siehst das
 - 3D-Modell: „Butterfly Fade“ von markminerov123 (https://sketchfab.com/3d-models/butterfly-fade-2dd640a011434f338abb4dca508e9099), CC BY 4.0, für Minecraft umgewandelt
 
 **Neu in 1.6.0**
@@ -104,4 +114,4 @@ Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg*
 Kein offizielles Projekt eines Servers. Vor der Nutzung die Server-Regeln lesen – Blink, ESP, Packet Tools und ähnliche Module sind oft verboten.
 
 1. [Fabric Loader](https://fabricmc.net/use/) für 1.21.11 und die [Fabric API](https://modrinth.com/mod/fabric-api) installieren
-2. `adhd-client-1.7.0.jar` in den `mods`-Ordner legen (ältere ADHD-Client-Jars und die einzelnen Base-Finder-/InspectAll-/LuckyCasino-Jars entfernen)
+2. `adhd-client-1.7.1.jar` in den `mods`-Ordner legen (ältere ADHD-Client-Jars und die einzelnen Base-Finder-/InspectAll-/LuckyCasino-Jars entfernen)

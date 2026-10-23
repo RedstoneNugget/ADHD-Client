@@ -75,21 +75,36 @@ final class ButterflyGameTest {
             context.runOnClient(c -> c.options.setPerspective(net.minecraft.client.option.Perspective.THIRD_PERSON_BACK));
             context.waitTicks(5);
             context.takeScreenshot("76_butterfly_dritte_person_hinten");
-            // Seitenansicht: unsichtbarer Rüstungsständer rechts neben dem Spieler als Kamera
-            server.runCommand("summon armor_stand -2.0 -60 0.5 {Invisible:1b,NoGravity:1b,Rotation:[-90f,0f],Tags:[\"adhd_cam\"]}");
-            context.waitTicks(5);
+            context.runOnClient(c -> c.options.setPerspective(net.minecraft.client.option.Perspective.FIRST_PERSON));
+
+            // Blockbench: Vorlage schreiben, sie wird als eigene Animation geladen und abgespielt
             context.runOnClient(c -> {
-                c.options.setPerspective(net.minecraft.client.option.Perspective.FIRST_PERSON);
-                for (net.minecraft.entity.Entity e : c.world.getEntities()) {
-                    if (e instanceof net.minecraft.entity.decoration.ArmorStandEntity) c.setCameraEntity(e);
+                try {
+                    com.adhdclient.butterfly.ButterflyBlockbench.write();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
             });
-            context.waitTicks(3);
-            context.takeScreenshot("77_butterfly_dritte_person_seite");
-            context.runOnClient(c -> c.setCameraEntity(c.player));
+            String st = context.computeOnClient(c -> com.adhdclient.butterfly.ButterflyAnimations.status());
+            log("Blockbench: " + st);
+            check(st.contains("inspect") && st.contains("draw") && st.contains("attack_1"), "Vorlage wird als eigene Animation geladen");
+            context.waitTicks(10);
+            context.getInput().pressKey(GLFW.GLFW_KEY_R);
+            for (int i = 0; i < 8; i++) {
+                context.waitTicks(6);
+                context.takeScreenshot("78_blockbench_inspect_" + (char) ('a' + i));
+            }
+            context.waitTicks(30);
+            context.runOnClient(c -> c.setScreen(new com.adhdclient.butterfly.ButterflyScreen(null)));
+            context.waitTicks(5);
+            context.takeScreenshot("79_butterfly_menue");
             context.runOnClient(c -> {
-                c.options.setPerspective(net.minecraft.client.option.Perspective.FIRST_PERSON);
+                c.setScreen(null);
                 ButterflyClient.enabled = false;
+                try {
+                    java.nio.file.Files.deleteIfExists(com.adhdclient.butterfly.ButterflyAnimations.file());
+                } catch (Exception ignored) {
+                }
             });
         }
         log("Butterfly: alle Prüfungen bestanden");
