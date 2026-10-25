@@ -111,6 +111,10 @@ public final class Modules {
                     () -> L.t("Werkzeuge für Menüs: ohne Paket schließen, Desync, Klicks verzögern, Menü speichern, Pakete bauen", "Tools for menus: close without packet, desync, delay clicks, save menus, build packets"),
                     () -> com.adhdclient.packettools.PacketToolsClient.enabled, v -> com.adhdclient.packettools.PacketToolsClient.enabled = v,
                     com.adhdclient.packettools.PacketToolsScreen::new, com.adhdclient.packettools.PacketToolsClient::keyName),
+            new Module("Ghost Items", Category.MISC,
+                    () -> L.t("Legt Items nur bei dir ins Inventar (Client-seitig) – der Server weiß davon nichts", "Puts items into your inventory only on your side (client-side) – the server knows nothing"),
+                    () -> com.adhdclient.ghost.GhostItemsClient.enabled, v -> com.adhdclient.ghost.GhostItemsClient.enabled = v,
+                    com.adhdclient.ghost.GhostItemsScreen::new, () -> null),
             new Module("Lucky Casino", Category.MISC,
                     () -> com.adhdclient.casino.client.LuckyCasinoClient.STANDALONE_INSTALLED ? com.adhdclient.casino.client.LuckyCasinoClient.doubleInstalledHint()
                             : L.t("Casino mit Spielgeld: Slots, Roulette, Blackjack, Crash, Plinko, Minen und mehr", "Casino with play money: slots, roulette, blackjack, crash, Plinko, mines and more"),

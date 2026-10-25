@@ -123,3 +123,8 @@ tasks.matching { it.name == 'runClientGameTest' }.configureEach {
 tasks.matching { it.name == 'runClientGameTest' }.configureEach {
     if (project.hasProperty('onlyButterfly')) jvmArgs '-Dadhd.onlyButterfly=true'
 }
+
+// Nur den Ghost-Items-Test laufen lassen: gradlew runClientGameTest -PonlyGhost
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('onlyGhost')) jvmArgs '-Dadhd.onlyGhost=true'
+}

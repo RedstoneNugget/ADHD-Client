@@ -26,6 +26,10 @@ public class AdhdClientGameTest implements FabricClientGameTest {
             FullBrightGameTest.run(context);
             return;
         }
+        if (Boolean.getBoolean("adhd.onlyGhost")) {
+            GhostItemsGameTest.run(context);
+            return;
+        }
         if (Boolean.getBoolean("adhd.onlyButterfly")) {
             ButterflyGameTest.run(context);
             return;
@@ -52,6 +56,7 @@ public class AdhdClientGameTest implements FabricClientGameTest {
         CasinoGameTest.run(context);
         FullBrightGameTest.run(context);
         ButterflyGameTest.run(context);
+        GhostItemsGameTest.run(context);
         log("ALLE TESTS BESTANDEN");
     }
 
