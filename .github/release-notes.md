@@ -1,6 +1,10 @@
-**ADHD Client 1.7.1** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
+**ADHD Client 1.7.2** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
 
 One client, many modules – each switched on or off in one menu (**Right Ctrl**). All settings, colors and module keys are set inside the client. Menus in English or German.
+
+### New in 1.7.2
+- **Butterfly: own models** – put .bbmodel files into the models folder and pick them in the menu; they play their own draw, inspect, slash and idle animations and reload when you save in Blockbench
+- **glTF import** – one click turns a .gltf, .glb or Sketchfab .zip in the models folder into a .bbmodel (aligned and sized like the knife)
 
 ### New in 1.7.1
 - **Butterfly: better animations** – real balisong mechanics: you hold one handle, the blade turns around its pin and the other handle swings with it. Nothing passes through anything anymore (checked step by step), smooth motion with wrist turns, new CS2-like hold
@@ -61,12 +65,16 @@ Not affiliated with any server. Check the server rules before using it – Blink
 
 ### Installation
 1. Install the [Fabric Loader](https://fabricmc.net/use/) for 1.21.11 and the [Fabric API](https://modrinth.com/mod/fabric-api)
-2. Put `adhd-client-1.7.1.jar` into your `mods` folder (remove older ADHD Client jars and the standalone Base Finder / InspectAll / LuckyCasino jars)
+2. Put `adhd-client-1.7.2.jar` into your `mods` folder (remove older ADHD Client jars and the standalone Base Finder / InspectAll / LuckyCasino jars)
 
 ---
 
 ### Deutsch
 Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg**). Alle Einstellungen, Farben und Modul-Tasten stellst du im Client ein. Menüs auf Deutsch oder Englisch.
+
+**Neu in 1.7.2**
+- **Butterfly: eigene Modelle** – .bbmodel-Dateien in den Modelle-Ordner legen und im Menü auswählen; sie spielen ihre eigenen Animationen (Ziehen, Inspect, Schlag, Spielen) und laden beim Speichern in Blockbench neu
+- **glTF-Import** – ein Klick macht aus .gltf, .glb oder einem Sketchfab-.zip im Modelle-Ordner eine .bbmodel (ausgerichtet und auf Messergröße)
 
 **Neu in 1.7.1**
 - **Butterfly: bessere Animationen** – echte Butterfly-Mechanik: du hältst einen Griff, die Klinge dreht sich um dessen Bolzen und der andere Griff schwingt mit. Nichts geht mehr durcheinander (Schritt für Schritt nachgerechnet), flüssige Bewegungen mit Handgelenk, neue Haltung wie in CS2
@@ -114,4 +122,4 @@ Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg*
 Kein offizielles Projekt eines Servers. Vor der Nutzung die Server-Regeln lesen – Blink, ESP, Packet Tools und ähnliche Module sind oft verboten.
 
 1. [Fabric Loader](https://fabricmc.net/use/) für 1.21.11 und die [Fabric API](https://modrinth.com/mod/fabric-api) installieren
-2. `adhd-client-1.7.1.jar` in den `mods`-Ordner legen (ältere ADHD-Client-Jars und die einzelnen Base-Finder-/InspectAll-/LuckyCasino-Jars entfernen)
+2. `adhd-client-1.7.2.jar` in den `mods`-Ordner legen (ältere ADHD-Client-Jars und die einzelnen Base-Finder-/InspectAll-/LuckyCasino-Jars entfernen)

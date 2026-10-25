@@ -32,7 +32,7 @@ public final class ButterflyBlockbench {
     }
 
     /** Vorlage schreiben (überschreibt eine vorhandene Datei). */
-    public static Path write() throws Exception {
+    public static Path write(Path f) throws Exception {
         if (!ButterflyRenderer.ensureMesh()) throw new IllegalStateException("Modell nicht geladen");
         JsonObject root = new JsonObject();
         JsonObject meta = new JsonObject();
@@ -98,7 +98,6 @@ public final class ButterflyBlockbench {
         anims.add(animation("idle", ButterflyClient.Anim.IDLE, 1, handId, bladeId, aId, bId));
         root.add("animations", anims);
 
-        Path f = ButterflyAnimations.file();
         Files.createDirectories(f.getParent());
         Files.writeString(f, new Gson().toJson(root), StandardCharsets.UTF_8);
         return f;

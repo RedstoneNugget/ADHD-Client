@@ -17,6 +17,7 @@ public final class ButterflyScreen extends ThemedScreen {
 
     private static final int W = 300;
     private static final int ROW = 20;
+    private static final String TEMPLATE = "Butterfly-Vorlage";
 
     public ButterflyScreen(Screen parent) {
         super(Text.literal("Butterfly"), parent);
@@ -25,7 +26,7 @@ public final class ButterflyScreen extends ThemedScreen {
     @Override
     protected void build() {
         int looks = ButterflyLook.values().length;
-        int h = Theme.TITLE_H + 6 + 12 + ROW + looks * ROW + 6 + 12 + 2 * ROW + 6 + 12 + ROW + 6 + ROW + 16;
+        int h = Theme.TITLE_H + 6 + 12 + ROW + looks * ROW + 6 + 12 + 2 * ROW + 6 + 12 + 2 * ROW + 6 + ROW + 16;
         int y = centeredPanel(W, h);
         int x = panelX1 + 8;
         int inner = W - 16;
@@ -63,32 +64,58 @@ public final class ButterflyScreen extends ThemedScreen {
         }));
         y += ROW + 6;
 
-        section(L.t("Eigene Animationen (Blockbench)", "Own animations (Blockbench)"), x, y, inner);
+        section(L.t("Eigene Modelle (Blockbench)", "Own models (Blockbench)"), x, y, inner);
         y += 12;
         int half = (inner - 4) / 2;
-        boolean exists = java.nio.file.Files.exists(ButterflyAnimations.file());
-        ButtonWidget make = ButtonWidget.builder(Text.literal(exists ? L.t("Vorlage neu erstellen", "Recreate template") : L.t("Vorlage erstellen", "Create template")), b -> {
+        java.util.List<String> models = ButterflyCustomModel.names();
+        String current = c.model.isEmpty() ? L.t("Butterfly Fade", "Butterfly Fade") : c.model;
+        ButtonWidget model = ButtonWidget.builder(Text.literal(L.t("Modell: ", "Model: ") + current), b -> {
+            // weiterschalten: eingebautes Butterfly → eigene Modelle → wieder eingebaut
+            int i = models.indexOf(c.model);
+            c.model = i + 1 < models.size() ? models.get(i + 1) : "";
+            ButterflyClient.onConfigEdited();
+            clearAndInit();
+        }).dimensions(x, y, half, ROW - 2).build();
+        model.setTooltip(Tooltip.of(Text.literal(c.model.isEmpty()
+                ? L.t("Klicken wechselt zu deinen eigenen Modellen (", "Click to switch to your own models (") + models.size() + ")"
+                : ButterflyCustomModel.status())));
+        addDrawableChild(model);
+        ButtonWidget folder = ButtonWidget.builder(Text.literal(L.t("Modelle-Ordner", "Models folder")), b -> {
             try {
-                ButterflyBlockbench.write();
-                net.minecraft.util.Util.getOperatingSystem().open(ButterflyAnimations.file().getParent());
+                java.nio.file.Files.createDirectories(ButterflyCustomModel.folder());
+            } catch (Exception ignored) {
+            }
+            net.minecraft.util.Util.getOperatingSystem().open(ButterflyCustomModel.folder());
+        }).dimensions(x + half + 4, y, inner - half - 4, ROW - 2).build();
+        folder.setTooltip(Tooltip.of(Text.literal(L.t("Hier .bbmodel-Dateien ablegen (oder .gltf/.glb/.zip zum Umwandeln)",
+                "Put .bbmodel files here (or .gltf/.glb/.zip to convert)"))));
+        addDrawableChild(folder);
+        y += ROW;
+        ButtonWidget make = ButtonWidget.builder(Text.literal(L.t("Vorlage erstellen", "Create template")), b -> {
+            try {
+                ButterflyBlockbench.write(ButterflyCustomModel.folder().resolve(TEMPLATE + ".bbmodel"));
+                c.model = TEMPLATE;
+                ButterflyClient.onConfigEdited();
+                net.minecraft.util.Util.getOperatingSystem().open(ButterflyCustomModel.folder());
             } catch (Exception e) {
                 ButterflyClient.LOGGER.warn("Butterfly: Vorlage konnte nicht geschrieben werden", e);
             }
             clearAndInit();
         }).dimensions(x, y, half, ROW - 2).build();
-        make.setTooltip(Tooltip.of(Text.literal(exists
-                ? L.t("Überschreibt deine Datei mit dem Modell und den eingebauten Animationen", "Overwrites your file with the model and the built-in animations")
-                : L.t("Legt butterfly.bbmodel mit Modell und Animationen zum Bearbeiten in Blockbench an", "Creates butterfly.bbmodel with the model and animations to edit in Blockbench"))));
+        make.setTooltip(Tooltip.of(Text.literal(L.t("Legt das Butterfly mit allen Animationen als " + TEMPLATE + ".bbmodel an – zum Bearbeiten in Blockbench (überschreibt die Vorlage)",
+                "Writes the butterfly with all animations as " + TEMPLATE + ".bbmodel to edit in Blockbench (overwrites the template)"))));
         addDrawableChild(make);
-        ButtonWidget folder = ButtonWidget.builder(Text.literal(L.t("Ordner öffnen", "Open folder")), b -> {
-            try {
-                java.nio.file.Files.createDirectories(ButterflyAnimations.file().getParent());
-            } catch (Exception ignored) {
+        ButtonWidget gltf = ButtonWidget.builder(Text.literal(L.t("glTF umwandeln", "Convert glTF")), b -> {
+            java.util.List<String> made = ButterflyGltfImport.convertAll();
+            if (!made.isEmpty()) {
+                c.model = made.get(0);
+                ButterflyClient.onConfigEdited();
             }
-            net.minecraft.util.Util.getOperatingSystem().open(ButterflyAnimations.file().getParent());
+            clearAndInit();
         }).dimensions(x + half + 4, y, inner - half - 4, ROW - 2).build();
-        folder.setTooltip(Tooltip.of(Text.literal(ButterflyAnimations.status())));
-        addDrawableChild(folder);
+        gltf.setTooltip(Tooltip.of(Text.literal(L.t("Wandelt .gltf/.glb/.zip im Modelle-Ordner in .bbmodel um",
+                "Converts .gltf/.glb/.zip in the models folder into .bbmodel"))));
+        addDrawableChild(gltf);
         y += ROW + 6;
 
         addDrawableChild(ButtonWidget.builder(Text.literal(L.t("Fertig", "Done")), b -> close()).dimensions(x, y, inner, ROW - 2).build());

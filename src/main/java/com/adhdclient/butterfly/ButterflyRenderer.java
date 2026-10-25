@@ -93,6 +93,19 @@ public final class ButterflyRenderer {
             if (swingProgress > 0 && lastSwing == 0) ButterflyClient.onSwingStart();
             lastSwing = swingProgress;
         }
+        // Eigenes Modell aus dem Modelle-Ordner: wird mit seinen eigenen Animationen gezeichnet
+        ButterflyCustomModel.Model custom = ButterflyCustomModel.active();
+        if (custom != null && !showcase) {
+            float ct = ButterflyClient.animTime();
+            ButterflyAnimations.Clip cc = main ? custom.clipFor(ButterflyClient.anim(), ButterflyClient.slashDirection()) : null;
+            if (main && ButterflyClient.anim() != ButterflyClient.Anim.NONE && (cc == null || ct > cc.length())) ButterflyClient.finish();
+            matrices.push();
+            view(matrices, s, new Pose(), equipProgress, main);
+            custom.render(matrices, queue, light, cc, ct);
+            matrices.pop();
+            return true;
+        }
+
         // Eigene Animationen aus Blockbench haben Vorrang vor den eingebauten
         float t = ButterflyClient.animTime();
         ButterflyAnimations.Clip clip = main ? ButterflyAnimations.forCurrent() : null;
@@ -182,6 +195,13 @@ public final class ButterflyRenderer {
         matrices.scale(0.5f, 0.5f, 0.5f);
         matrices.translate(0f, -GRIP_Y / 16f, 0f); // Griffmitte in die Faust
         boolean main = arm == state.mainArm;
+        ButterflyCustomModel.Model custom = ButterflyCustomModel.active();
+        if (custom != null) {
+            ButterflyAnimations.Clip cc = main ? custom.clipFor(ButterflyClient.anim(), ButterflyClient.slashDirection()) : null;
+            custom.render(matrices, queue, light, cc, ButterflyClient.animTime());
+            matrices.pop();
+            return;
+        }
         ButterflyAnimations.Clip clip = main ? ButterflyAnimations.forCurrent() : null;
         Pose p = clip != null || !main ? new Pose() : pose(true);
         p.tx = p.ty = p.tz = 0;

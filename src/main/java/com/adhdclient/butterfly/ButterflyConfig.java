@@ -28,6 +28,8 @@ public final class ButterflyConfig {
     public Map<String, List<String>> looks = defaultLooks();
     /** Tempo der Animationen (0,5–2). */
     public double speed = 1.0;
+    /** Eigenes Modell aus config/adhd_client/butterfly/models (Dateiname ohne Endung), leer = eingebautes Butterfly. */
+    public String model = "";
     public boolean equipFlip = true;
     public boolean attackFlip = true;
     public boolean idleFidget = true;
@@ -77,6 +79,7 @@ public final class ButterflyConfig {
         if (looks == null) looks = defaultLooks();
         for (ButterflyLook look : ButterflyLook.values()) looks.computeIfAbsent(look.id, k -> new ArrayList<>());
         speed = Math.max(0.5, Math.min(2.0, speed));
+        if (model == null) model = "";
     }
 
     /** Welcher Look gilt für dieses Item (oder null)? */

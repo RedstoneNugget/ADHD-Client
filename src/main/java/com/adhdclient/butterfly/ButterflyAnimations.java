@@ -90,7 +90,7 @@ public final class ButterflyAnimations {
         }
     }
 
-    private static Map<String, Clip> parse(JsonObject root) {
+    static Map<String, Clip> parse(JsonObject root) {
         Map<String, Clip> out = new HashMap<>();
         if (!root.has("animations")) return out;
         for (JsonElement ae : root.getAsJsonArray("animations")) {

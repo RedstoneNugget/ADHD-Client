@@ -1,101 +1,98 @@
-# Butterfly-Animationen selbst machen (Blockbench)
+# Eigene Modelle und Animationen (Blockbench)
 
-Mit Blockbench kannst du alle Animationen des Butterfly-Messers selbst bauen: **Ziehen, Inspect, Schlag und Spielen im Stand**.
-Der ADHD Client liest sie direkt aus deiner Datei – Speichern reicht, kein Neustart nötig.
+Du kannst das Butterfly durch **eigene Modelle** ersetzen und ihnen **eigene Animationen** geben:
+**Ziehen, Inspect, Schlag und Spielen im Stand**. Der ADHD Client liest alles direkt aus deinen Dateien –
+Speichern reicht, kein Neustart nötig.
 
 ## 1. Blockbench installieren
 
 1. Auf <https://www.blockbench.net> gehen und **Download** klicken (kostenlos).
 2. Installieren und starten.
 
-## 2. Vorlage erstellen
+## 2. Die Knöpfe im Menü
 
-1. Minecraft mit dem ADHD Client starten und eine Welt betreten.
-2. ADHD-Menü öffnen (**Rechte Strg**) und die Einstellungen von **Butterfly** öffnen.
-3. Unten bei **Eigene Animationen (Blockbench)** auf **Vorlage erstellen** klicken.
-4. Es öffnet sich der Ordner `config/adhd_client/butterfly/` mit der Datei **`butterfly.bbmodel`**.
+ADHD-Menü (**Rechte Strg**) → Einstellungen von **Butterfly** → unten **Eigene Modelle (Blockbench)**:
 
-In der Datei stecken das Messer und alle aktuellen Animationen als Startpunkt.
-Du musst also nicht bei null anfangen, sondern kannst meine Animationen verändern.
+| Knopf | Was er macht |
+|---|---|
+| **Modell: …** | wechselt zwischen dem eingebauten Butterfly und deinen Modellen |
+| **Modelle-Ordner** | öffnet `config/adhd_client/butterfly/models/` |
+| **Vorlage erstellen** | legt das Butterfly mit allen Animationen als `Butterfly-Vorlage.bbmodel` an und wählt es aus |
+| **glTF umwandeln** | macht aus `.gltf`, `.glb` oder einem Sketchfab-`.zip` im Ordner eine `.bbmodel` |
 
-> **Achtung:** Wenn die Datei schon da ist, heißt der Knopf **Vorlage neu erstellen**. Er **überschreibt** deine Datei.
-> Mach vorher eine Kopie, wenn du deine Arbeit behalten willst.
+Jede `.bbmodel` im Modelle-Ordner ist ein eigenes Modell.
 
-## 3. Datei in Blockbench öffnen
+## 3. Modell aus dem Internet (glTF / Sketchfab)
 
-1. `butterfly.bbmodel` auf das Blockbench-Fenster ziehen (oder **Datei → Öffnen**).
-2. Oben rechts auf **Animate** klicken. Jetzt bist du im Animations-Modus.
+1. Das Modell als **glTF** herunterladen (bei Sketchfab: *Download → glTF*, du bekommst ein `.zip`).
+2. Das `.zip` (oder `.gltf` / `.glb`) **in den Modelle-Ordner legen**. Entpacken ist nicht nötig.
+3. Im Butterfly-Menü auf **glTF umwandeln** klicken.
+4. Daneben liegt jetzt eine `.bbmodel` mit gleichem Namen, und sie ist schon ausgewählt.
+   Das Modell wird automatisch aufgerichtet (längste Seite nach oben) und auf Messergröße gebracht.
+5. Die `.bbmodel` in Blockbench öffnen, um es anzupassen und zu animieren.
 
-## 4. Was du siehst
+Jedes Teil des Modells wird ein eigener Knochen, den du animieren kannst.
+**Lizenz beachten:** nur Modelle nehmen, die du benutzen darfst (z. B. CC BY oder CC0) und den Ersteller nennen, wenn verlangt.
 
-**Links oben – die Animationen:**
+## 4. In Blockbench öffnen
+
+1. Die `.bbmodel` auf das Blockbench-Fenster ziehen (oder **Datei → Öffnen**).
+2. Oben rechts auf **Animate** klicken.
+
+**Links oben – die Animationen** (diese Namen benutzt der Client):
 
 | Name | Wann sie läuft |
 |---|---|
 | `draw` | wenn du das Messer in die Hand nimmst |
-| `inspect` | wenn du die Inspect-Taste drückst (R) |
+| `inspect` | Inspect-Taste (R) |
 | `attack_1` | erster Schlag (danach abwechselnd) |
-| `attack_2` | zweiter Schlag |
+| `attack_2` | zweiter Schlag (oder nur eine `attack` für beide) |
 | `idle` | Spielen, wenn du still stehst |
 
-Eine Animation anklicken, um sie zu bearbeiten.
+Bei einem umgewandelten Modell ist die Liste leer: Mit dem **+** neue Animationen anlegen und genau so benennen.
 
-**Links unten – die Teile (Knochen):**
+**Links unten – die Knochen** (in der Butterfly-Vorlage):
 
-| Knochen | Was er bewegt | Drehpunkt |
-|---|---|---|
-| `hand` | das **ganze Messer** in deiner Hand | Griffmitte |
-| `blade` | die **Klinge** (mit Griff A dran) | Bolzen von Griff B |
-| `handle_a` | den **schwingenden Griff** | sein eigener Bolzen |
-| `handle_b` | den **Griff in der Hand** – lieber nicht drehen | Bolzen von Griff B |
-
-**Unten – die Zeitleiste:** jede Raute ist ein **Schlüsselbild** (Keyframe).
-Zwischen zwei Schlüsselbildern rechnet Blockbench die Bewegung von selbst aus.
+| Knochen | Was er bewegt |
+|---|---|
+| `hand` | das ganze Messer in der Hand |
+| `blade` | die Klinge (Griff A hängt dran) |
+| `handle_a` | den schwingenden Griff |
+| `handle_b` | den Griff in der Hand – lieber nicht drehen |
 
 ## 5. Animieren
 
-1. Eine Animation links anklicken, z. B. `inspect`.
-2. Mit der **Leertaste** abspielen, nochmal Leertaste zum Anhalten.
-3. In der Zeitleiste auf die Stelle klicken, wo sich etwas ändern soll.
-4. Links einen Knochen auswählen (z. B. `blade`).
-5. Drehen mit dem **Drehen-Werkzeug (R)** oder rechts bei **Rotation** Zahlen eintippen.
-   Verschieben mit dem **Bewegen-Werkzeug (V)** oder bei **Position**.
-   Blockbench legt dabei automatisch ein Schlüsselbild an.
-6. Schlüsselbilder kannst du anklicken und mit **Entf** löschen oder mit der Maus verschieben (schneller/langsamer).
-7. **Speichern mit Strg+S.**
+1. Eine Animation links anklicken.
+2. **Leertaste** spielt ab und hält an.
+3. In der Zeitleiste unten auf die Stelle klicken, wo sich etwas ändern soll.
+4. Links einen Knochen wählen.
+5. Drehen mit **R** (oder rechts bei *Rotation* Zahlen eintippen), verschieben mit **V** (*Position*).
+   Blockbench legt dabei automatisch ein Schlüsselbild (Raute) an.
+6. Rauten anklicken und mit **Entf** löschen oder mit der Maus verschieben (schneller/langsamer).
+7. **Strg+S** speichern – im Spiel ist die neue Version sofort da.
 
-### Wichtige Werte für Flips
+**Tipps für Flips (Vorlage):** `blade` Rotation Z: `0` = offen, `-180` = zu. `handle_a` Rotation Z `-360` = ein ganzer Schwung.
+Klinge und Griff A in **dieselbe Richtung** drehen, dann geht nichts durcheinander.
 
-- `blade` **Rotation Z**: `0` = offen, `180` (oder `-180`) = zugeklappt.
-- `handle_a` **Rotation Z**: dreht den schwingenden Griff. Ein ganzer Flip ist eine volle Runde (`-360`).
-  Damit er nicht durch den anderen Griff geht, lass ihn zur **freien Seite** schwingen (negative Zahlen).
-- `hand`: kleine Werte reichen. Ein paar Grad Drehung und 1–3 Einheiten Verschiebung wirken schon viel.
+**Länge:** Rechtsklick auf die Animation → *Properties* → *Length* (Sekunden).
+Danach geht das Messer zurück in die normale Haltung.
 
-### Länge einer Animation ändern
+## 6. Eigenes Modell bauen
 
-Rechtsklick auf die Animation links → **Properties** (Eigenschaften) → **Length** (Länge in Sekunden).
-Wenn die Animation zu Ende ist, geht das Messer zurück in die normale Haltung.
+- Die Hand hält das Modell bei **X 0, Y −6,5, Z 0**, die Spitze zeigt nach **oben (+Y)**.
+  Das Butterfly ist etwa 27 Einheiten lang (Y −14 bis +13).
+- Gruppen (Ordner links) sind Knochen. Ihr **Drehpunkt** (Pivot) ist der Punkt, um den sie sich drehen.
+- Fehlt eine Animation, steht das Modell in dem Moment einfach still.
 
-### Weich oder hart
+## 7. Zurück zum eingebauten Butterfly
 
-Ein Schlüsselbild anklicken → rechts **Interpolation**:
-**Smooth** (weich, Standard in der Vorlage), **Linear** (gleichmäßig) oder **Step** (springt sofort).
+Im Menü auf **Modell: …** klicken, bis **Butterfly Fade** dasteht.
 
-## 6. Im Spiel testen
+> **Achtung:** **Vorlage erstellen** überschreibt `Butterfly-Vorlage.bbmodel`. Willst du deine Arbeit behalten,
+> in Blockbench mit *Datei → Speichern unter* einen anderen Namen im Modelle-Ordner wählen.
 
-1. In Blockbench **Strg+S** drücken.
-2. In Minecraft die Animation auslösen (z. B. **R** für Inspect). Die neue Version ist sofort da.
-3. Im Butterfly-Menü zeigt der Knopf **Ordner öffnen** beim Drüberfahren, welche eigenen Animationen geladen sind.
+## Wenn etwas nicht klappt
 
-## 7. Zurück zu den eingebauten Animationen
-
-- **Eine** Animation zurück: sie in Blockbench löschen (Rechtsklick → Delete) und speichern.
-  Dann nimmt der Client für sie wieder die eingebaute.
-- **Alle** zurück: `butterfly.bbmodel` löschen oder umbenennen.
-
-## Wenn etwas komisch aussieht
-
-- Dreht sich etwas im Spiel **andersherum** als in Blockbench: Sag mir Bescheid, welcher Knochen und welche Achse.
-- Wenn die Datei kaputt ist, nutzt der Client automatisch die eingebauten Animationen.
-  Der Tooltip von **Ordner öffnen** zeigt dann „Blockbench-Datei fehlerhaft“.
-- Formeln (Molang) in den Feldern werden nicht ausgewertet – bitte nur Zahlen eintragen.
+- Fährst du mit der Maus über **Modell: …**, siehst du, ob es geladen ist und welche Animationen es hat.
+- „Modell fehlerhaft“: Datei in Blockbench öffnen und neu speichern, oder zurück auf **Butterfly Fade** schalten.
+- Formeln (Molang) in den Feldern werden nicht ausgewertet – bitte nur Zahlen.
