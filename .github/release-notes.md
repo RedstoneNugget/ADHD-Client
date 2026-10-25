@@ -1,6 +1,12 @@
-**ADHD Client 1.8.0** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
+**ADHD Client 1.8.1** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
 
 One client, many modules – each switched on or off in one menu (**Right Ctrl**). All settings, colors and module keys are set inside the client. Menus in English or German.
+
+### New in 1.8.1
+- **Air Jump** (Movement) – jump again in mid-air, number and strength adjustable
+- **Auto Totem** – missing offhand totem: the hotbar selection visibly scrolls to a totem, swaps it into the offhand and scrolls back
+- **Anti Crystal Death** – end crystal nearby: opens the inventory and puts totems in main hand and offhand
+- The butterfly model is now a readable JSON file (no packed data in the jar), fewer false alarms in virus scans
 
 ### New in 1.8.0
 - **Stronghold Finder** (World) – throw two eyes of ender from different spots, top left shows the stronghold and Nether coordinates, distance and which way to turn
@@ -82,12 +88,18 @@ Not affiliated with any server. Check the server rules before using it – Blink
 
 ### Installation
 1. Install the [Fabric Loader](https://fabricmc.net/use/) for 1.21.11 and the [Fabric API](https://modrinth.com/mod/fabric-api)
-2. Put `adhd-client-1.8.0.jar` into your `mods` folder (remove older ADHD Client jars and the standalone Base Finder / InspectAll / LuckyCasino jars)
+2. Put `adhd-client-1.8.1.jar` into your `mods` folder (remove older ADHD Client jars and the standalone Base Finder / InspectAll / LuckyCasino jars)
 
 ---
 
 ### Deutsch
 Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg**). Alle Einstellungen, Farben und Modul-Tasten stellst du im Client ein. Menüs auf Deutsch oder Englisch.
+
+**Neu in 1.8.1**
+- **Air Jump** (Bewegung) – in der Luft nochmal springen, Anzahl und Kraft einstellbar
+- **Auto Totem** – fehlt das Offhand-Totem, läuft die Hotbar-Auswahl sichtbar zum Totem, tauscht es in die Offhand und läuft zurück
+- **Anti Crystal Death** – End-Kristall in der Nähe: öffnet das Inventar und legt Totems in Main- und Offhand
+- Das Butterfly-Modell ist jetzt eine lesbare JSON-Datei (keine gepackten Daten mehr in der Jar), weniger Fehlalarme bei Virus-Scans
 
 **Neu in 1.8.0**
 - **Stronghold Finder** (Welt) – zwei Ender-Augen von verschiedenen Orten werfen, oben links stehen Stronghold- und Nether-Koordinaten, Entfernung und Drehrichtung
@@ -149,9 +161,9 @@ Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg*
 - **ESP** – Farben einfacher: drei Modus-Knöpfe und eine Palette zum Anklicken
 - Kurzes Antippen von Tasten geht nicht mehr verloren, die gebaute Jar enthält keine Metadaten
 
-**Alle Module:** Base Finder, Block ESP, ESP, Full Bright, Butterfly, Free Cam, Free Look, Blink, RTPQ Invsee, Inspect All, Packet Tools, Stronghold Finder, Calculator, Lunge Macro, Auto Reconnect, Macros, Aim Lock, Ghost Items, Lucky Casino
+**Alle Module:** Base Finder, Block ESP, ESP, Full Bright, Butterfly, Free Cam, Free Look, Blink, RTPQ Invsee, Inspect All, Packet Tools, Stronghold Finder, Calculator, Lunge Macro, Air Jump, Auto Totem, Anti Crystal Death, Auto Reconnect, Macros, Aim Lock, Ghost Items, Lucky Casino
 
 Kein offizielles Projekt eines Servers. Vor der Nutzung die Server-Regeln lesen – Blink, ESP, Packet Tools und ähnliche Module sind oft verboten.
 
 1. [Fabric Loader](https://fabricmc.net/use/) für 1.21.11 und die [Fabric API](https://modrinth.com/mod/fabric-api) installieren
-2. `adhd-client-1.8.0.jar` in den `mods`-Ordner legen (ältere ADHD-Client-Jars und die einzelnen Base-Finder-/InspectAll-/LuckyCasino-Jars entfernen)
+2. `adhd-client-1.8.1.jar` in den `mods`-Ordner legen (ältere ADHD-Client-Jars und die einzelnen Base-Finder-/InspectAll-/LuckyCasino-Jars entfernen)

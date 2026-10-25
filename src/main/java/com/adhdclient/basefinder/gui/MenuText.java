@@ -7,7 +7,7 @@ import java.util.Map;
 
 /**
  * Englische Übersetzungen der Menütexte. Im Code stehen die deutschen Texte; ist die Spielsprache
- * nicht Deutsch, liefert {@link #tr(String)} die englische Fassung (fehlt sie, bleibt es Deutsch).
+ * nicht Deutsch, liefert {@link #translated(String)} die englische Fassung (fehlt sie, bleibt es Deutsch).
  */
 final class MenuText {
 
@@ -16,7 +16,7 @@ final class MenuText {
     private MenuText() {
     }
 
-    static String tr(String de) {
+    static String translated(String de) {
         if (de == null || Lang.german()) return de;
         return EN.getOrDefault(de, de);
     }

@@ -158,3 +158,8 @@ tasks.matching { it.name == 'runClientGameTest' }.configureEach {
 tasks.matching { it.name == 'runClientGameTest' }.configureEach {
     if (project.hasProperty('onlyLunge')) jvmArgs '-Dadhd.onlyLunge=true'
 }
+
+// Nur den Totem/Air-Jump-Test laufen lassen: gradlew runClientGameTest -PonlyTotem
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('onlyTotem')) jvmArgs '-Dadhd.onlyTotem=true'
+}

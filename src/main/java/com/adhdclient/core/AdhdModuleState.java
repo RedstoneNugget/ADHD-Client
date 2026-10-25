@@ -48,6 +48,14 @@ public final class AdhdModuleState {
         int lungeKey = org.lwjgl.glfw.GLFW.GLFW_KEY_V;
         boolean lungeRepeat = true;
         int lungeDelay = 10;
+        boolean airJumpEnabled = false;
+        int airJumps = 1;
+        double airJumpStrength = 0.42;
+        boolean autoTotemEnabled = false;
+        boolean autoTotemInventory = false;
+        int autoTotemDelay = 2;
+        boolean antiCrystalEnabled = false;
+        double antiCrystalRadius = 6;
     }
 
     private AdhdModuleState() {
@@ -91,6 +99,14 @@ public final class AdhdModuleState {
         com.adhdclient.lunge.LungeMacroClient.key = d.lungeKey;
         com.adhdclient.lunge.LungeMacroClient.repeat = d.lungeRepeat;
         com.adhdclient.lunge.LungeMacroClient.delay = d.lungeDelay;
+        com.adhdclient.airjump.AirJumpClient.enabled = d.airJumpEnabled;
+        com.adhdclient.airjump.AirJumpClient.maxJumps = d.airJumps;
+        com.adhdclient.airjump.AirJumpClient.strength = d.airJumpStrength;
+        com.adhdclient.autototem.AutoTotemClient.enabled = d.autoTotemEnabled;
+        com.adhdclient.autototem.AutoTotemClient.wholeInventory = d.autoTotemInventory;
+        com.adhdclient.autototem.AutoTotemClient.delay = d.autoTotemDelay;
+        com.adhdclient.anticrystal.AntiCrystalClient.enabled = d.antiCrystalEnabled;
+        com.adhdclient.anticrystal.AntiCrystalClient.radius = d.antiCrystalRadius;
     }
 
     public static void save() {
@@ -118,6 +134,14 @@ public final class AdhdModuleState {
         d.lungeKey = com.adhdclient.lunge.LungeMacroClient.key;
         d.lungeRepeat = com.adhdclient.lunge.LungeMacroClient.repeat;
         d.lungeDelay = com.adhdclient.lunge.LungeMacroClient.delay;
+        d.airJumpEnabled = com.adhdclient.airjump.AirJumpClient.enabled;
+        d.airJumps = com.adhdclient.airjump.AirJumpClient.maxJumps;
+        d.airJumpStrength = com.adhdclient.airjump.AirJumpClient.strength;
+        d.autoTotemEnabled = com.adhdclient.autototem.AutoTotemClient.enabled;
+        d.autoTotemInventory = com.adhdclient.autototem.AutoTotemClient.wholeInventory;
+        d.autoTotemDelay = com.adhdclient.autototem.AutoTotemClient.delay;
+        d.antiCrystalEnabled = com.adhdclient.anticrystal.AntiCrystalClient.enabled;
+        d.antiCrystalRadius = com.adhdclient.anticrystal.AntiCrystalClient.radius;
         try {
             Path f = file();
             Files.createDirectories(f.getParent());

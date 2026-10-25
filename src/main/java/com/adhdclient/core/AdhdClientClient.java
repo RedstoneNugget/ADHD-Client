@@ -59,6 +59,9 @@ public final class AdhdClientClient implements ClientModInitializer {
         com.adhdclient.stronghold.StrongholdClient.init();
         com.adhdclient.calc.CalcClient.init();
         com.adhdclient.lunge.LungeMacroClient.init();
+        com.adhdclient.airjump.AirJumpClient.init();
+        com.adhdclient.autototem.AutoTotemClient.init();
+        com.adhdclient.anticrystal.AntiCrystalClient.init();
 
         ClientTickEvents.END_CLIENT_TICK.register(mc -> {
             while (menuKey.wasPressed()) {

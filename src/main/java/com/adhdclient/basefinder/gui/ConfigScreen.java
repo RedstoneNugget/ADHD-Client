@@ -38,8 +38,8 @@ import java.util.function.Supplier;
  */
 public class ConfigScreen extends ThemedScreen {
 
-    private static String tr(String de) {
-        return MenuText.tr(de);
+    private static String translated(String de) {
+        return MenuText.translated(de);
     }
 
     private enum Tab {
@@ -110,13 +110,13 @@ public class ConfigScreen extends ThemedScreen {
         panel(4, 4, width - 4, height - 4);
 
         // Seitenleiste: Funde, die Suchmodi (mit Status), dann Allgemein und Gewichte
-        section(tr("Ansicht"), SIDE_X, TOP - 2, SIDE_W);
+        section(translated("Ansicht"), SIDE_X, TOP - 2, SIDE_W);
         int sy = TOP + 10;
         int step = height < 260 ? 18 : 19; // auf kleinen Bildschirmen enger, damit nichts den Fertig-Knopf berührt
         for (Tab t : Tab.values()) {
             if (t == Tab.GENERAL) {
                 sy += 4;
-                section(tr("Einstellungen"), SIDE_X, sy, SIDE_W);
+                section(translated("Einstellungen"), SIDE_X, sy, SIDE_W);
                 sy += 12;
             }
             ButtonWidget b = ButtonWidget.builder(sideText(t), w -> switchTab(t)).dimensions(SIDE_X, sy, SIDE_W, 17).build();
@@ -153,13 +153,13 @@ public class ConfigScreen extends ThemedScreen {
                 left, TOP - 2, keyW, 17, BaseFinderClient::onKeysEdited);
         keyButton(com.adhdclient.gui.L.t("Scannen", "Scan"), () -> keys.rescanKey, v -> keys.rescanKey = v, new ModConfig.General().rescanKey,
                 left + keyW + 4, TOP - 2, keyW, 17, BaseFinderClient::onKeysEdited);
-        addDrawableChild(ButtonWidget.builder(Text.literal(tr("Neu scannen")), b -> BaseFinderClient.rescan())
+        addDrawableChild(ButtonWidget.builder(Text.literal(translated("Neu scannen")), b -> BaseFinderClient.rescan())
                 .dimensions(left + 2 * (keyW + 4), TOP - 2, contentW - 2 * (keyW + 4), 17)
                 .tooltip(Tooltip.of(Text.literal(com.adhdclient.gui.L.t("Alle geladenen Chunks jetzt neu scannen", "Rescan all loaded chunks now")))).build());
 
         // Fußzeile unter der Seitenleiste
         int by = viewBottom() - 17;
-        addDrawableChild(ButtonWidget.builder(Text.literal(tr("Fertig")), b -> close())
+        addDrawableChild(ButtonWidget.builder(Text.literal(translated("Fertig")), b -> close())
                 .dimensions(SIDE_X, by, SIDE_W, 17).build());
 
         clampScroll();
@@ -301,7 +301,7 @@ public class ConfigScreen extends ThemedScreen {
     }
 
     private void header(String textDe) {
-        String text = tr(textDe);
+        String text = translated(textDe);
         newline();
         if (cursorY > 0) cursorY += 6;
         labels.add(new Label(text, left, cursorY + 2, SECTION_MARK, false));
@@ -309,7 +309,7 @@ public class ConfigScreen extends ThemedScreen {
     }
 
     private void note(String textDe) {
-        String text = tr(textDe);
+        String text = translated(textDe);
         newline();
         for (var line : textRenderer.wrapLines(Text.literal(text), contentW)) {
             StringBuilder sb = new StringBuilder();
@@ -324,8 +324,8 @@ public class ConfigScreen extends ThemedScreen {
     }
 
     private void toggle(String labelDe, BooleanSupplier get, Consumer<Boolean> set, String tooltipDe) {
-        String label = tr(labelDe);
-        String tooltip = tr(tooltipDe);
+        String label = translated(labelDe);
+        String tooltip = translated(tooltipDe);
         int y = cursorY;
         ButtonWidget b = ButtonWidget.builder(Text.literal(label), w -> {
             set.accept(!get.getAsBoolean());
@@ -339,8 +339,8 @@ public class ConfigScreen extends ThemedScreen {
 
     private void slider(String labelDe, double min, double max, double step, DoubleSupplier get, DoubleConsumer set,
                         Function<Double, String> fmt, String tooltipDe) {
-        String label = tr(labelDe);
-        String tooltip = tr(tooltipDe);
+        String label = translated(labelDe);
+        String tooltip = translated(tooltipDe);
         int y = cursorY;
         ValueSlider s = new ValueSlider(cellX(), 0, colW, 20, label, min, max, step, get.getAsDouble(), fmt::apply, v -> {
             set.accept(v);
@@ -357,8 +357,8 @@ public class ConfigScreen extends ThemedScreen {
 
     /** Beschriftetes Textfeld über die volle Breite (Label links). */
     private TextFieldWidget field(String labelDe, int labelW, String value, int maxLen, Consumer<String> onChange, String tooltipDe) {
-        String label = tr(labelDe);
-        String tooltip = tr(tooltipDe);
+        String label = translated(labelDe);
+        String tooltip = translated(tooltipDe);
         newline();
         int y = cursorY;
         labels.add(new Label(label, left, y + 6, 0xFFE0E0E0, false));
@@ -374,7 +374,7 @@ public class ConfigScreen extends ThemedScreen {
     }
 
     private void colorField(String labelDe, Supplier<String> get, Consumer<String> set) {
-        String label = tr(labelDe);
+        String label = translated(labelDe);
         int y = cursorY;
         int x = cellX();
         labels.add(new Label(label, x, y + 6, 0xFFE0E0E0, false));
@@ -391,7 +391,7 @@ public class ConfigScreen extends ThemedScreen {
                 changed();
             }
         });
-        tf.setTooltip(Tooltip.of(Text.literal(tr("Farbe als #RRGGBB, z. B. #B061FF"))));
+        tf.setTooltip(Tooltip.of(Text.literal(translated("Farbe als #RRGGBB, z. B. #B061FF"))));
         place(tf, y);
         swatches.add(new int[]{fieldX + fieldW + 6, y + 3, 14});
         swatchColors.add(get);
@@ -399,7 +399,7 @@ public class ConfigScreen extends ThemedScreen {
     }
 
     private TextFieldWidget numberField(int x, int w, int y, double value, Consumer<Double> set, String tooltipDe) {
-        String tooltip = tr(tooltipDe);
+        String tooltip = translated(tooltipDe);
         TextFieldWidget tf = new TextFieldWidget(textRenderer, x, 0, w, 20, Text.literal("Gewicht"));
         tf.setMaxLength(10);
         tf.setText(trim(value));
@@ -451,7 +451,7 @@ public class ConfigScreen extends ThemedScreen {
                 case GENERAL -> "⚙ ";
                 default -> "≡ ";
             };
-            Text base = Text.literal(icon + tr(t.title));
+            Text base = Text.literal(icon + translated(t.title));
             if (t == Tab.FINDS) {
                 int n = 0;
                 for (Marker.Mode m : Marker.Mode.values()) n += ScanManager.INSTANCE.results().all.get(m).size();
@@ -462,8 +462,8 @@ public class ConfigScreen extends ThemedScreen {
         boolean on = modeEnabled(t.mode);
         int count = ScanManager.INSTANCE.results().all.get(t.mode).size();
         return Text.literal("■ ").styled(s -> s.withColor(MarkerRenderer.colorOf(t.mode, cfg())))
-                .append(Text.literal(tr(t.title) + "  ").formatted(on ? Formatting.WHITE : Formatting.GRAY))
-                .append(on ? Text.literal(Integer.toString(count)).formatted(Formatting.GREEN) : Text.literal(tr("aus")).formatted(Formatting.DARK_GRAY));
+                .append(Text.literal(translated(t.title) + "  ").formatted(on ? Formatting.WHITE : Formatting.GRAY))
+                .append(on ? Text.literal(Integer.toString(count)).formatted(Formatting.GREEN) : Text.literal(translated("aus")).formatted(Formatting.DARK_GRAY));
     }
 
     private static boolean modeEnabled(Marker.Mode m) {
@@ -512,14 +512,14 @@ public class ConfigScreen extends ThemedScreen {
             scroll = 0;
             rebuildKeepScroll();
         }).dimensions(left, 0, bw, 20).build(), y);
-        place(ButtonWidget.builder(Text.literal(tr(sortByDistance ? "↕ Entfernung" : "↕ Rang")), b -> {
+        place(ButtonWidget.builder(Text.literal(translated(sortByDistance ? "↕ Entfernung" : "↕ Rang")), b -> {
             sortByDistance = !sortByDistance;
             rebuildKeepScroll();
-        }).dimensions(left + bw + 4, 0, bw, 20).tooltip(Tooltip.of(Text.literal(tr("Sortierung umschalten")))).build(), y);
+        }).dimensions(left + bw + 4, 0, bw, 20).tooltip(Tooltip.of(Text.literal(translated("Sortierung umschalten")))).build(), y);
         TextFieldWidget tf = new TextFieldWidget(textRenderer, left + 2 * bw + 8, 0, contentW - 2 * bw - 8, 20, Text.literal("Suche"));
         tf.setMaxLength(60);
         tf.setText(search);
-        tf.setPlaceholder(Text.literal(tr("Suchen …")).formatted(Formatting.DARK_GRAY));
+        tf.setPlaceholder(Text.literal(translated("Suchen …")).formatted(Formatting.DARK_GRAY));
         tf.setChangedListener(s -> {
             search = s;
             scroll = 0;
@@ -536,7 +536,7 @@ public class ConfigScreen extends ThemedScreen {
         if (sm.focusKey() != null || sm.hiddenCount() > 0) {
             int x = left;
             if (sm.focusKey() != null) {
-                place(ButtonWidget.builder(Text.literal(tr("◎ Fokus aufheben")).formatted(Formatting.YELLOW), b -> {
+                place(ButtonWidget.builder(Text.literal(translated("◎ Fokus aufheben")).formatted(Formatting.YELLOW), b -> {
                     sm.setFocus(null);
                     rebuildKeepScroll();
                 }).dimensions(x, 0, 130, 20).build(), cursorY);
@@ -600,16 +600,16 @@ public class ConfigScreen extends ThemedScreen {
                 sm.setFocus(focused ? null : m.key);
                 rebuildKeepScroll();
             }).dimensions(bx, 0, 22, 20).tooltip(Tooltip.of(Text.literal(focused ? "Fokus aufheben" : "Nur diesen Fund in der Welt zeigen"))).build(), ry);
-            place(ButtonWidget.builder(Text.literal(tr("XYZ")), b -> {
+            place(ButtonWidget.builder(Text.literal(translated("XYZ")), b -> {
                 Vec3d t = m.target;
                 String c = (int) Math.floor(t.x) + " " + (int) Math.floor(t.y) + " " + (int) Math.floor(t.z);
                 if (client != null) client.keyboard.setClipboard(c);
                 ScanManager.INSTANCE.notifier.showNow(Text.literal(Lang.t("Koordinaten kopiert: ", "Coordinates copied: ") + c).formatted(Formatting.GREEN));
-            }).dimensions(bx + 24, 0, 32, 20).tooltip(Tooltip.of(Text.literal(tr("Koordinaten kopieren (z. B. für /tp)")))).build(), ry);
-            place(ButtonWidget.builder(Text.literal(tr("✕")), b -> {
+            }).dimensions(bx + 24, 0, 32, 20).tooltip(Tooltip.of(Text.literal(translated("Koordinaten kopieren (z. B. für /tp)")))).build(), ry);
+            place(ButtonWidget.builder(Text.literal(translated("✕")), b -> {
                 sm.hide(m.key);
                 rebuildKeepScroll();
-            }).dimensions(bx + 58, 0, 22, 20).tooltip(Tooltip.of(Text.literal(tr("Fund ausblenden (bis zum Verlassen der Welt)")))).build(), ry);
+            }).dimensions(bx + 58, 0, 22, 20).tooltip(Tooltip.of(Text.literal(translated("Fund ausblenden (bis zum Verlassen der Welt)")))).build(), ry);
             cursorY += ROW;
         }
     }
@@ -652,13 +652,13 @@ public class ConfigScreen extends ThemedScreen {
                 () -> c.kelp.color, v -> c.kelp.color = v);
         modeDisplay("Anomalien", () -> c.anomaly.notify, v -> c.anomaly.notify = v,
                 () -> c.anomaly.color, v -> c.anomaly.color = v);
-        note(tr("Config-Datei: config/") + ModConfig.FILE_NAME + tr(" – alle Werte, Gewichte und Listen lassen sich dort auch ohne Menü ändern."));
+        note(translated("Config-Datei: config/") + ModConfig.FILE_NAME + translated(" – alle Werte, Gewichte und Listen lassen sich dort auch ohne Menü ändern."));
     }
 
     private void modeDisplay(String name, BooleanSupplier notify, Consumer<Boolean> setNotify,
                              Supplier<String> color, Consumer<String> setColor) {
         newline();
-        labels.add(new Label(tr(name), left, cursorY + 2, 0xFFFFFFFF, false));
+        labels.add(new Label(translated(name), left, cursorY + 2, 0xFFFFFFFF, false));
         cursorY += 13;
         toggle("Meldung", notify, setNotify, "Actionbar-Meldung bei neuen Funden in diesem Modus.");
         colorField("Farbe", color, setColor);
@@ -819,15 +819,15 @@ public class ConfigScreen extends ThemedScreen {
             place(id, y);
             numberField(left + idW + 4, 62, y, cb.weight, v -> cb.weight = v, "Gewicht pro Block");
             final int index = i;
-            place(ButtonWidget.builder(Text.literal(tr("✕")), b -> {
+            place(ButtonWidget.builder(Text.literal(translated("✕")), b -> {
                 a.customBlocks.remove(index);
                 changed();
                 rebuildKeepScroll();
-            }).dimensions(left + contentW - 20, 0, 20, 20).tooltip(Tooltip.of(Text.literal(tr("Entfernen")))).build(), y);
+            }).dimensions(left + contentW - 20, 0, 20, 20).tooltip(Tooltip.of(Text.literal(translated("Entfernen")))).build(), y);
             cursorY += ROW;
         }
         newline();
-        place(ButtonWidget.builder(Text.literal(tr("+ Eigenen Block hinzufügen")), b -> {
+        place(ButtonWidget.builder(Text.literal(translated("+ Eigenen Block hinzufügen")), b -> {
             a.customBlocks.add(new ModConfig.CustomBlock("minecraft:tnt", 3.0));
             changed();
             rebuildKeepScroll();
@@ -857,7 +857,7 @@ public class ConfigScreen extends ThemedScreen {
             advance();
         }
         newline();
-        place(ButtonWidget.builder(Text.literal(tr("Gewichte auf Standard zurücksetzen")), b -> {
+        place(ButtonWidget.builder(Text.literal(translated("Gewichte auf Standard zurücksetzen")), b -> {
             a.lightGroups = ModConfig.defaultLightGroups();
             a.otherGroups = ModConfig.defaultOtherGroups();
             a.structureTypicalScore = ModConfig.defaultTypicalScores();

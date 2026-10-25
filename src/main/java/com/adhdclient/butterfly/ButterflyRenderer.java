@@ -20,7 +20,7 @@ import org.joml.Matrix4f;
 
 /**
  * Zeichnet das Butterfly-Messer (CS2-Stil) statt des Items – in der ersten Person mit allen Animationen und in der
- * dritten Person in der Hand. Die Teile sind echte 3D-Netze (knife.bin): Klinge mit
+ * dritten Person in der Hand. Die Teile sind echte 3D-Netze (knife.json): Klinge mit
  * Keilschliff zur Schneide, Griffe mit gerundeten Kanten, Löchern und vertiefter Einlage. Gelenk-
  * Drehungen werden in die Matrix gerechnet, damit die Teile auch beim verzögerten Zeichnen richtig stehen.
  */
@@ -29,7 +29,7 @@ public final class ButterflyRenderer {
     private static final float PI = (float) Math.PI;
     private static final int WHITE = 0xFFFFFFFF;
     private static final float SCALE = 0.5f;
-    static final Identifier MESH = Identifier.of("adhd_client", "butterfly/knife.bin");
+    static final Identifier MESH = Identifier.of("adhd_client", "butterfly/knife.json");
     /** Texturen je Material: Klinge, Griff, Bolzen, Einlage, Kunststoff. */
     private static final Identifier[] TEXTURES = {tex("blade"), tex("handle"), tex("pin"), tex("inlay"), tex("plastic")};
     /** Teilnetze: Teil (0 Klinge, 1 Griff A, 2 Griff B), Material, Ecken (x, y, z, u, v, nx, ny, nz). */
@@ -322,23 +322,31 @@ public final class ButterflyRenderer {
         return TEXTURES.length;
     }
 
-    /** Modell aus knife.bin laden: Bolzen A und B, dann die Teilnetze. */
+    /** Modell aus knife.json laden (lesbar): Bolzen A und B, dann die Teilnetze als Dreiecke. */
     private static boolean loadMesh() {
         if (loaded) return true;
         if (loadFailed) return false;
-        try (java.io.DataInputStream in = new java.io.DataInputStream(new java.util.zip.GZIPInputStream(
-                MinecraftClient.getInstance().getResourceManager().getResourceOrThrow(MESH).getInputStream()))) {
-            pinA = new float[]{in.readFloat(), in.readFloat(), in.readFloat()};
-            pinB = new float[]{in.readFloat(), in.readFloat(), in.readFloat()};
-            int n = in.readInt();
+        try (java.io.Reader r = new java.io.InputStreamReader(
+                MinecraftClient.getInstance().getResourceManager().getResourceOrThrow(MESH).getInputStream(), java.nio.charset.StandardCharsets.UTF_8)) {
+            com.google.gson.JsonObject root = com.google.gson.JsonParser.parseReader(r).getAsJsonObject();
+            pinA = floats(root.getAsJsonArray("pinA"));
+            pinB = floats(root.getAsJsonArray("pinB"));
+            com.google.gson.JsonArray parts = root.getAsJsonArray("parts");
+            int n = parts.size();
             subPart = new int[n];
             subMaterial = new int[n];
             subVerts = new float[n][];
             for (int i = 0; i < n; i++) {
-                subPart[i] = in.readByte();
-                subMaterial[i] = in.readByte();
-                float[] v = new float[in.readInt() * 8];
-                for (int k = 0; k < v.length; k++) v[k] = in.readFloat();
+                com.google.gson.JsonObject p = parts.get(i).getAsJsonObject();
+                subPart[i] = p.get("part").getAsInt();
+                subMaterial[i] = p.get("material").getAsInt();
+                float[] tri = floats(p.getAsJsonArray("vertices"));
+                // Dreiecke als Vierecke zeichnen: die dritte Ecke doppelt
+                float[] v = new float[tri.length / 24 * 32];
+                for (int t = 0; t < tri.length / 24; t++) {
+                    System.arraycopy(tri, t * 24, v, t * 32, 24);
+                    System.arraycopy(tri, t * 24 + 16, v, t * 32 + 24, 8);
+                }
                 subVerts[i] = v;
             }
             closeFix = computeCloseFix();
@@ -348,6 +356,12 @@ public final class ButterflyRenderer {
             loadFailed = true;
         }
         return loaded;
+    }
+
+    private static float[] floats(com.google.gson.JsonArray a) {
+        float[] out = new float[a.size()];
+        for (int i = 0; i < out.length; i++) out[i] = a.get(i).getAsFloat();
+        return out;
     }
 
     private static void vertex(MatrixStack.Entry e, VertexConsumer vc, float x, float y, float z, float u, float v, int color, int light,
