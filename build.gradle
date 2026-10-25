@@ -168,3 +168,8 @@ tasks.matching { it.name == 'runClientGameTest' }.configureEach {
 tasks.matching { it.name == 'runClientGameTest' }.configureEach {
     if (project.hasProperty('onlyReset')) jvmArgs '-Dadhd.onlyReset=true'
 }
+
+// Nur den Intro/Emoji/Totem-Test laufen lassen: gradlew runClientGameTest -PonlyFun
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('onlyFun')) jvmArgs '-Dadhd.onlyFun=true'
+}

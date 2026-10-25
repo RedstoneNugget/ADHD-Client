@@ -13,7 +13,7 @@ public final class AirJumpClient {
 
     public static boolean enabled = false;
     /** Luftsprünge bis zur nächsten Landung (0 = unbegrenzt). */
-    public static int maxJumps = 1;
+    public static int maxJumps = 0;
     /** Sprungkraft (0,42 = normaler Sprung). */
     public static double strength = 0.42;
 

@@ -37,7 +37,7 @@ final class ResetGameTest {
             context.waitTicks(2);
             context.clickScreenButton("Sure?");
             context.waitTicks(2);
-            boolean aj = context.computeOnClient(c -> AirJumpClient.maxJumps == 1 && Math.abs(AirJumpClient.strength - 0.42) < 1e-6);
+            boolean aj = context.computeOnClient(c -> AirJumpClient.maxJumps == 0 && Math.abs(AirJumpClient.strength - 0.42) < 1e-6);
             log("Zurückgesetzt – Full Bright " + fb + ", Air Jump " + aj);
             check(fb && aj, "Zurücksetzen stellt die Standardwerte wieder her");
             context.runOnClient(c -> c.setScreen(null));

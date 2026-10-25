@@ -22,6 +22,11 @@
     "InspectCreativeScreenAccessor",
     "InspectHandledScreenAccessor",
     "LungeAttackInvoker",
+    "ChatEmojiMixin",
+    "ChatEmojiSendMixin",
+    "TotemViewMixin",
+    "TotemPopMixin",
+    "IntroTitleMixin",
     "WorldRendererMixin"
   ],
   "injectors": {

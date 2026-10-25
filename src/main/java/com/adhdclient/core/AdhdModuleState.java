@@ -49,7 +49,7 @@ public final class AdhdModuleState {
         boolean lungeRepeat = true;
         int lungeDelay = 10;
         boolean airJumpEnabled = false;
-        int airJumps = 1;
+        int airJumps = 0;
         double airJumpStrength = 0.42;
         boolean autoTotemEnabled = false;
         boolean autoTotemInventory = false;
@@ -59,6 +59,11 @@ public final class AdhdModuleState {
         int autoTotemKey = -1;
         int antiCrystalKey = -1;
         int antiCrystalDelay = 1;
+        boolean emojiEnabled = false;
+        boolean emojiOnSend = false;
+        boolean totemViewEnabled = false;
+        boolean totemViewPops = true;
+        boolean introEnabled = true;
     }
 
     private AdhdModuleState() {
@@ -113,6 +118,11 @@ public final class AdhdModuleState {
         com.adhdclient.autototem.AutoTotemClient.toggleKey = d.autoTotemKey;
         com.adhdclient.anticrystal.AntiCrystalClient.toggleKey = d.antiCrystalKey;
         com.adhdclient.anticrystal.AntiCrystalClient.delay = d.antiCrystalDelay;
+        com.adhdclient.emoji.ChatEmojiClient.enabled = d.emojiEnabled;
+        com.adhdclient.emoji.ChatEmojiClient.onSend = d.emojiOnSend;
+        com.adhdclient.totemview.TotemViewClient.enabled = d.totemViewEnabled;
+        com.adhdclient.totemview.TotemViewClient.showPops = d.totemViewPops;
+        com.adhdclient.intro.IntroClient.enabled = d.introEnabled;
     }
 
     public static void save() {
@@ -151,6 +161,11 @@ public final class AdhdModuleState {
         d.autoTotemKey = com.adhdclient.autototem.AutoTotemClient.toggleKey;
         d.antiCrystalKey = com.adhdclient.anticrystal.AntiCrystalClient.toggleKey;
         d.antiCrystalDelay = com.adhdclient.anticrystal.AntiCrystalClient.delay;
+        d.emojiEnabled = com.adhdclient.emoji.ChatEmojiClient.enabled;
+        d.emojiOnSend = com.adhdclient.emoji.ChatEmojiClient.onSend;
+        d.totemViewEnabled = com.adhdclient.totemview.TotemViewClient.enabled;
+        d.totemViewPops = com.adhdclient.totemview.TotemViewClient.showPops;
+        d.introEnabled = com.adhdclient.intro.IntroClient.enabled;
         try {
             Path f = file();
             Files.createDirectories(f.getParent());

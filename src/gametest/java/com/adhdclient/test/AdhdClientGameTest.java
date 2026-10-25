@@ -26,6 +26,10 @@ public class AdhdClientGameTest implements FabricClientGameTest {
             FullBrightGameTest.run(context);
             return;
         }
+        if (Boolean.getBoolean("adhd.onlyFun")) {
+            FunGameTest.run(context);
+            return;
+        }
         if (Boolean.getBoolean("adhd.onlyReset")) {
             ResetGameTest.run(context);
             return;
@@ -97,6 +101,7 @@ public class AdhdClientGameTest implements FabricClientGameTest {
         LungeGameTest.run(context);
         TotemJumpGameTest.run(context);
         ResetGameTest.run(context);
+        FunGameTest.run(context);
         log("ALLE TESTS BESTANDEN");
     }
 

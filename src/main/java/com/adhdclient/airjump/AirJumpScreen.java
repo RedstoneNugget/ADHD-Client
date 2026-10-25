@@ -48,7 +48,7 @@ public final class AirJumpScreen extends ThemedScreen {
     @Override
     protected Runnable resetAction() {
         return () -> {
-            AirJumpClient.maxJumps = 1;
+            AirJumpClient.maxJumps = 0;
             AirJumpClient.strength = 0.42;
             com.adhdclient.core.AdhdModuleState.save();
         };
