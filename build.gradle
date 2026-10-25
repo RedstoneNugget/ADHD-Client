@@ -128,3 +128,8 @@ tasks.matching { it.name == 'runClientGameTest' }.configureEach {
 tasks.matching { it.name == 'runClientGameTest' }.configureEach {
     if (project.hasProperty('onlyGhost')) jvmArgs '-Dadhd.onlyGhost=true'
 }
+
+// Nur den Aim-Lock-Test laufen lassen: gradlew runClientGameTest -PonlyAim
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('onlyAim')) jvmArgs '-Dadhd.onlyAim=true'
+}

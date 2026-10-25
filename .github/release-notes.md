@@ -1,6 +1,9 @@
-**ADHD Client 1.7.4** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
+**ADHD Client 1.7.6** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
 
 One client, many modules – each switched on or off in one menu (**Right Ctrl**). All settings, colors and module keys are set inside the client. Menus in English or German.
+
+### New in 1.7.6
+- **Aim Lock** (new module, Misc) – press G (changeable) to lock onto the entity in your crosshair. While your crosshair is anywhere on its hitbox nothing moves; when it slips off, it is pulled smoothly back to the nearest height of the hitbox, with a little random deviation. Releases at a set number of blocks. Speed, deviation and players-only settings. Usually not allowed on servers
 
 ### New in 1.7.4
 - **Ghost Items** (new module, Misc) – put any item into your inventory only on your side: pick from every item, choose the count, remove them with one button. Option **Infinite**: the stack never runs out, e.g. when placing. The server knows nothing about them
@@ -63,6 +66,7 @@ One client, many modules – each switched on or off in one menu (**Right Ctrl**
 - **RTPQ Invsee** – auto `/invsee` on your RTPQ opponent with elytra/mace/crystal warnings
 - **Inspect All** – all data of blocks, items and entities
 - **Packet Tools** – tools for container menus and their packets
+- **Aim Lock** – stick to a target's hitbox
 - **Ghost Items** – client-side items and fake enchantments
 - **Lucky Casino** – casino with play money
 
@@ -70,12 +74,15 @@ Not affiliated with any server. Check the server rules before using it – Blink
 
 ### Installation
 1. Install the [Fabric Loader](https://fabricmc.net/use/) for 1.21.11 and the [Fabric API](https://modrinth.com/mod/fabric-api)
-2. Put `adhd-client-1.7.4.jar` into your `mods` folder (remove older ADHD Client jars and the standalone Base Finder / InspectAll / LuckyCasino jars)
+2. Put `adhd-client-1.7.6.jar` into your `mods` folder (remove older ADHD Client jars and the standalone Base Finder / InspectAll / LuckyCasino jars)
 
 ---
 
 ### Deutsch
 Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg**). Alle Einstellungen, Farben und Modul-Tasten stellst du im Client ein. Menüs auf Deutsch oder Englisch.
+
+**Neu in 1.7.6**
+- **Aim Lock** (neues Modul, Sonstiges) – G (änderbar) lockt die Entity im Fadenkreuz. Solange das Fadenkreuz irgendwo auf der Hitbox ist, bewegt sich nichts; rutscht es runter, wird es weich zur nächsten Höhe der Hitbox zurückgezogen, mit etwas zufälliger Abweichung. Löst sich ab der eingestellten Blockzahl. Tempo, Abweichung und „Nur Spieler“ einstellbar. Auf Servern meist verboten
 
 **Neu in 1.7.4**
 - **Ghost Items** (neues Modul, Sonstiges) – beliebige Items nur bei dir ins Inventar legen: aus allen Items wählen, Anzahl einstellen, mit einem Knopf wieder entfernen. Option **Unendlich**: der Stapel wird nie weniger, z. B. beim Platzieren. Der Server weiß nichts davon
@@ -126,9 +133,9 @@ Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg*
 - **ESP** – Farben einfacher: drei Modus-Knöpfe und eine Palette zum Anklicken
 - Kurzes Antippen von Tasten geht nicht mehr verloren, die gebaute Jar enthält keine Metadaten
 
-**Alle Module:** Base Finder, Block ESP, ESP, Full Bright, Butterfly, Free Cam, Free Look, Blink, RTPQ Invsee, Inspect All, Packet Tools, Ghost Items, Lucky Casino
+**Alle Module:** Base Finder, Block ESP, ESP, Full Bright, Butterfly, Free Cam, Free Look, Blink, RTPQ Invsee, Inspect All, Packet Tools, Aim Lock, Ghost Items, Lucky Casino
 
 Kein offizielles Projekt eines Servers. Vor der Nutzung die Server-Regeln lesen – Blink, ESP, Packet Tools und ähnliche Module sind oft verboten.
 
 1. [Fabric Loader](https://fabricmc.net/use/) für 1.21.11 und die [Fabric API](https://modrinth.com/mod/fabric-api) installieren
-2. `adhd-client-1.7.4.jar` in den `mods`-Ordner legen (ältere ADHD-Client-Jars und die einzelnen Base-Finder-/InspectAll-/LuckyCasino-Jars entfernen)
+2. `adhd-client-1.7.6.jar` in den `mods`-Ordner legen (ältere ADHD-Client-Jars und die einzelnen Base-Finder-/InspectAll-/LuckyCasino-Jars entfernen)

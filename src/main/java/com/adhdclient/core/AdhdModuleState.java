@@ -38,6 +38,7 @@ public final class AdhdModuleState {
         boolean casinoEnabled = false;
         boolean butterflyEnabled = false;
         boolean ghostItemsEnabled = false;
+        boolean aimLockEnabled = false;
     }
 
     private AdhdModuleState() {
@@ -71,6 +72,7 @@ public final class AdhdModuleState {
         com.adhdclient.casino.client.LuckyCasinoClient.enabled = d.casinoEnabled && !com.adhdclient.casino.client.LuckyCasinoClient.STANDALONE_INSTALLED;
         com.adhdclient.butterfly.ButterflyClient.enabled = d.butterflyEnabled;
         com.adhdclient.ghost.GhostItemsClient.enabled = d.ghostItemsEnabled;
+        com.adhdclient.aimlock.AimLockClient.enabled = d.aimLockEnabled;
     }
 
     public static void save() {
@@ -88,6 +90,7 @@ public final class AdhdModuleState {
         d.casinoEnabled = com.adhdclient.casino.client.LuckyCasinoClient.enabled;
         d.butterflyEnabled = com.adhdclient.butterfly.ButterflyClient.enabled;
         d.ghostItemsEnabled = com.adhdclient.ghost.GhostItemsClient.enabled;
+        d.aimLockEnabled = com.adhdclient.aimlock.AimLockClient.enabled;
         try {
             Path f = file();
             Files.createDirectories(f.getParent());

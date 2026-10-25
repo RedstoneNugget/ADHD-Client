@@ -53,6 +53,7 @@ public final class AdhdClientClient implements ClientModInitializer {
         new com.adhdclient.casino.client.LuckyCasinoClient().onInitializeClient();
         new com.adhdclient.butterfly.ButterflyClient().onInitializeClient();
         com.adhdclient.ghost.GhostItemsClient.init();
+        com.adhdclient.aimlock.AimLockClient.init();
 
         ClientTickEvents.END_CLIENT_TICK.register(mc -> {
             while (menuKey.wasPressed()) {

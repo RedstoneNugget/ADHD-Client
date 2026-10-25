@@ -91,6 +91,10 @@ public final class Modules {
                     () -> L.t("In der dritten Person umschauen, ohne dass sich der Spieler dreht", "Look around in third person without turning your player"),
                     () -> FreeLookClient.enabled, v -> FreeLookClient.enabled = v,
                     com.adhdclient.freelook.FreeLookScreen::new, FreeLookClient::keyName),
+            new Module("Aim Lock", Category.MISC,
+                    () -> L.t("Taste drücken: der Blick bleibt an der Hitbox des Ziels, bis es zu weit weg ist (auf Servern meist verboten)", "Press the key: your view sticks to the target's hitbox until it is too far away (usually not allowed on servers)"),
+                    () -> com.adhdclient.aimlock.AimLockClient.enabled, v -> com.adhdclient.aimlock.AimLockClient.enabled = v,
+                    com.adhdclient.aimlock.AimLockScreen::new, com.adhdclient.aimlock.AimLockClient::keyName),
             new Module("Blink", Category.MOVEMENT,
                     () -> L.t("Hält deine Bewegung zurück und sendet sie beim Ausschalten auf einmal", "Holds back your movement and sends it all at once when turned off"),
                     () -> BlinkClient.enabled, v -> {

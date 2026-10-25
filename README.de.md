@@ -12,7 +12,7 @@ Clientseitige Fabric-Mod für **Minecraft 1.21.11**. Statt vieler einzelner Mods
 
 ## Installation
 1. [Fabric Loader](https://fabricmc.net/use/) für 1.21.11 und die [Fabric API](https://modrinth.com/mod/fabric-api) installieren
-2. `adhd-client-1.7.4.jar` in den `mods`-Ordner legen
+2. `adhd-client-1.7.6.jar` in den `mods`-Ordner legen
 
 Auf dem Server ist nichts nötig. Nicht zusammen mit den einzelnen Mods Base Finder oder Head Finder installieren – deren Funktionen stecken schon drin.
 
@@ -38,6 +38,7 @@ Unter **Design** wählst du die Farben aller Menüs (Vorlagen wie Lila, Ozean od
 | **Blink** | Hält deine Bewegungspakete zurück: Der Server sieht dich stehen, beim Ausschalten wird alles auf einmal gesendet. Auf Wunsch eine Kopie von dir am Start, automatisch senden nach ein paar Sekunden, Abbrechen-Taste setzt dich zurück an den Start. Anticheats erkennen das oft. | keine (im Menü einstellbar) |
 | **Inspect All** | Zeigt alles, was Minecraft über den angesehenen Block, die Entity oder das Item in der Hand bzw. unter der Maus weiß: Blockstate, Komponenten, NBT (hervorgehoben, einklappbar), lesbare Zusammenfassungen für Bienennester, Spawner, Schilder, Truhen u. v. m., Markierungen durch Wände, Suche, Kopieren als SNBT oder /give, JSON-Export, ein Knopf zum Löschen aller Markierungen und eine Farbpalette dafür. Ziel sperren = Overlay bleibt beim Spielen sichtbar. | I Panel, K sperren (änderbar) |
 | **Packet Tools** | Eine Leiste neben jedem Container-Menü: ohne Paket schließen, nur auf dem Server schließen (Desync), Klick-Pakete aus- oder verzögern und auf einmal senden, Menü speichern und wieder öffnen, trennen und dabei senden, eigene Slot-/Knopf-Pakete bauen, Titel als JSON kopieren, Sync-ID und Revision, dazu ein Chat-Feld für Nachrichten oder Befehle, während das Menü offen bleibt. Außerdem „Alles anhalten“: keine Pakete gehen an den Server, bis du sie loslässt (oder verwirfst), mit eigener Taste, Keep-Alive-Durchlass und Live-Paket-Log – dazu ein großes Paket-Log-Fenster mit allen gesendeten und empfangenen Paketen, Filter, Suche, Pause, Kopieren und Zählung pro Typ. Viele Server erkennen das. | V öffnet ein gespeichertes Menü (änderbar) |
+| **Aim Lock** | Taste drücken (G, änderbar) lockt die Entity im Fadenkreuz: Solange das Fadenkreuz irgendwo auf ihrer Hitbox ist, bewegt sich nichts; rutscht es runter, wird es zum nächsten Rand zurückgezogen. Löst sich, wenn das Ziel weiter weg ist als die eingestellten Blöcke. Tempo und „Nur Spieler“ einstellbar. Auf Servern meist verboten. | G (änderbar) |
 | **Ghost Items** | Legt beliebige Items nur bei dir ins Inventar (Client-seitig): aus einer Liste aller Items wählen, Anzahl einstellen, mit einem Knopf wieder entfernen. Extra-Fenster für Fake-Verzauberungen (jede Verzauberung, Stufe 1–255) auf dem Item in der Hand. Der Server weiß nichts davon – benutzen, werfen oder setzen geht nicht, und sie verschwinden, sobald der Server das Feld neu schickt. | – |
 | **Lucky Casino** | Ein komplettes Casino mit Spielgeld: Slot-Maschine, Roulette, Münzwurf, Blackjack, Crash, Rubbellose, Plinko, Minenfeld, tägliches Glücksrad, Lootboxen, Missionen und Erfolge. Chips sind virtuell und lokal gespeichert; dein LuckyCasino-Spielstand wird übernommen. Auch `/casino open`. | O öffnet das Casino (änderbar) |
 
