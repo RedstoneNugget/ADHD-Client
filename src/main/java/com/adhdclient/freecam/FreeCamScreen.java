@@ -83,4 +83,12 @@ public final class FreeCamScreen extends ThemedScreen {
     protected void onClose() {
         FreeCamClient.saveNow();
     }
+
+    @Override
+    protected Runnable resetAction() {
+        return () -> {
+            com.adhdclient.gui.Defaults.reset(FreeCamClient.config());
+            FreeCamClient.saveNow();
+        };
+    }
 }

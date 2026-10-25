@@ -56,6 +56,9 @@ public final class AdhdModuleState {
         int autoTotemDelay = 2;
         boolean antiCrystalEnabled = false;
         double antiCrystalRadius = 6;
+        int autoTotemKey = -1;
+        int antiCrystalKey = -1;
+        int antiCrystalDelay = 1;
     }
 
     private AdhdModuleState() {
@@ -107,6 +110,9 @@ public final class AdhdModuleState {
         com.adhdclient.autototem.AutoTotemClient.delay = d.autoTotemDelay;
         com.adhdclient.anticrystal.AntiCrystalClient.enabled = d.antiCrystalEnabled;
         com.adhdclient.anticrystal.AntiCrystalClient.radius = d.antiCrystalRadius;
+        com.adhdclient.autototem.AutoTotemClient.toggleKey = d.autoTotemKey;
+        com.adhdclient.anticrystal.AntiCrystalClient.toggleKey = d.antiCrystalKey;
+        com.adhdclient.anticrystal.AntiCrystalClient.delay = d.antiCrystalDelay;
     }
 
     public static void save() {
@@ -142,6 +148,9 @@ public final class AdhdModuleState {
         d.autoTotemDelay = com.adhdclient.autototem.AutoTotemClient.delay;
         d.antiCrystalEnabled = com.adhdclient.anticrystal.AntiCrystalClient.enabled;
         d.antiCrystalRadius = com.adhdclient.anticrystal.AntiCrystalClient.radius;
+        d.autoTotemKey = com.adhdclient.autototem.AutoTotemClient.toggleKey;
+        d.antiCrystalKey = com.adhdclient.anticrystal.AntiCrystalClient.toggleKey;
+        d.antiCrystalDelay = com.adhdclient.anticrystal.AntiCrystalClient.delay;
         try {
             Path f = file();
             Files.createDirectories(f.getParent());

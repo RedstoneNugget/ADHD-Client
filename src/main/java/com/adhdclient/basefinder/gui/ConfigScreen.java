@@ -893,4 +893,12 @@ public class ConfigScreen extends ThemedScreen {
         return g.enabled ? Text.literal("✔ " + Lang.name(g.name)).formatted(Formatting.WHITE)
                 : Text.literal("✘ " + Lang.name(g.name)).formatted(Formatting.DARK_GRAY, Formatting.STRIKETHROUGH);
     }
+
+    @Override
+    protected Runnable resetAction() {
+        return () -> {
+            com.adhdclient.gui.Defaults.reset(com.adhdclient.basefinder.BaseFinderClient.config());
+            com.adhdclient.basefinder.BaseFinderClient.saveNow();
+        };
+    }
 }

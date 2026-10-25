@@ -163,3 +163,8 @@ tasks.matching { it.name == 'runClientGameTest' }.configureEach {
 tasks.matching { it.name == 'runClientGameTest' }.configureEach {
     if (project.hasProperty('onlyTotem')) jvmArgs '-Dadhd.onlyTotem=true'
 }
+
+// Nur den Zurücksetzen-Test laufen lassen: gradlew runClientGameTest -PonlyReset
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('onlyReset')) jvmArgs '-Dadhd.onlyReset=true'
+}

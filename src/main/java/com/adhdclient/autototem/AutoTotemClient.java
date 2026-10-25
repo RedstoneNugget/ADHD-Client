@@ -33,11 +33,25 @@ public final class AutoTotemClient {
     private AutoTotemClient() {
     }
 
+    /** Taste zum An-/Ausschalten (−1 = keine). */
+    public static int toggleKey = com.adhdclient.gui.HotKey.NONE;
+    private static final com.adhdclient.gui.HotKey TOGGLE = new com.adhdclient.gui.HotKey();
+
+    public static String keyName() {
+        return com.adhdclient.gui.HotKey.name(toggleKey);
+    }
+
     public static void init() {
         ClientTickEvents.END_CLIENT_TICK.register(AutoTotemClient::tick);
     }
 
     private static void tick(MinecraftClient mc) {
+        if (TOGGLE.pressed(toggleKey) && mc.player != null) {
+            enabled = !enabled;
+            com.adhdclient.core.AdhdModuleState.save();
+            mc.player.sendMessage(net.minecraft.text.Text.literal("Auto Totem " + (enabled ? com.adhdclient.gui.L.t("an", "on") : com.adhdclient.gui.L.t("aus", "off")))
+                    .formatted(enabled ? net.minecraft.util.Formatting.GREEN : net.minecraft.util.Formatting.GRAY), true);
+        }
         ClientPlayerEntity p = mc.player;
         if (!enabled || p == null || mc.interactionManager == null || p.isSpectator()) {
             phase = Phase.IDLE;
@@ -47,6 +61,15 @@ public final class AutoTotemClient {
             cooldown--;
             return;
         }
+        // Tempo 0 = alles in diesem einen Tick (Weg hin, Tausch, Weg zurück)
+        int steps = delay <= 0 ? 24 : 1;
+        for (int i = 0; i < steps; i++) {
+            step(mc, p);
+            if (phase == Phase.IDLE || cooldown > 0) break;
+        }
+    }
+
+    private static void step(MinecraftClient mc, ClientPlayerEntity p) {
         var inv = p.getInventory();
         switch (phase) {
             case IDLE -> {
@@ -62,7 +85,7 @@ public final class AutoTotemClient {
                     if (inner >= 0) {
                         mc.interactionManager.clickSlot(p.playerScreenHandler.syncId, inner, 40, SlotActionType.SWAP, p);
                         swaps++;
-                        cooldown = Math.max(1, delay);
+                        cooldown = Math.max(0, delay);
                     }
                 }
             }
@@ -72,18 +95,20 @@ public final class AutoTotemClient {
                     inv.setSelectedSlot(cur + Integer.signum(target - cur));   // ein Feld weiter, sichtbar
                 } else {
                     if (inv.getStack(target).isOf(Items.TOTEM_OF_UNDYING)) {
+                        // dem Server sicher das gewählte Feld melden, dann tauschen (auch wenn alles im selben Tick passiert)
+                        mc.getNetworkHandler().sendPacket(new net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket(target));
                         mc.getNetworkHandler().sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.SWAP_ITEM_WITH_OFFHAND, BlockPos.ORIGIN, Direction.DOWN));
                         swaps++;
                     }
                     phase = Phase.BACK;
                 }
-                cooldown = Math.max(1, delay);
+                cooldown = Math.max(0, delay);
             }
             case BACK -> {
                 int cur = inv.getSelectedSlot();
                 if (cur != home) inv.setSelectedSlot(cur + Integer.signum(home - cur));
                 else phase = Phase.IDLE;
-                cooldown = Math.max(1, delay);
+                cooldown = Math.max(0, delay);
             }
         }
     }

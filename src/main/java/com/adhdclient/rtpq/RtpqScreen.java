@@ -124,4 +124,12 @@ public final class RtpqScreen extends ThemedScreen {
     protected void onClose() {
         RtpqInvseeClient.saveNow();
     }
+
+    @Override
+    protected Runnable resetAction() {
+        return () -> {
+            com.adhdclient.gui.Defaults.reset(RtpqInvseeClient.config());
+            RtpqInvseeClient.saveNow();
+        };
+    }
 }

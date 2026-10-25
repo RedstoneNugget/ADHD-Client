@@ -12,7 +12,7 @@ Client-side Fabric mod for **Minecraft 1.21.11**. Instead of installing many sep
 
 ## Installation
 1. Install the [Fabric Loader](https://fabricmc.net/use/) for 1.21.11 and the [Fabric API](https://modrinth.com/mod/fabric-api)
-2. Put `adhd-client-1.8.1.jar` into your `mods` folder
+2. Put `adhd-client-1.8.2.jar` into your `mods` folder
 
 Nothing is needed on the server. Don't install it together with the standalone Base Finder or Head Finder mods – that functionality is already included.
 
@@ -20,6 +20,8 @@ Nothing is needed on the server. Don't install it together with the standalone B
 Press **Right Ctrl** to open the click GUI (changeable under *Options → Controls → Key Binds*). Modules are grouped into category windows (Render, World, Camera, Movement, Misc, Client) that you can drag around and collapse with a right click on the title. **Left click** a module to turn it on or off – a green bar means on. **Right click** opens its settings. All modules start switched off.
 
 If a module has its own key, you set it at the very top of that module's menu: click the key button, then press the new key or a mouse button (Esc or Delete means no key, left click cancels). The small ↺ button next to it puts the key back to the module's default. Module keys only work while the module is switched on in the ClickGUI.
+
+Every module window has a **Reset** button at the bottom right (click twice) that puts all its settings back to default.
 
 **Design** lets you pick the colors of all menus (presets like Purple, Ocean or Red, RGB sliders or hex), the window opacity and the language: automatic (follows the game language), German or English.
 
@@ -43,8 +45,8 @@ If a module has its own key, you set it at the very top of that module's menu: c
 | **Calculator** | Quick calculator on a key (N): math with Minecraft units (st = 64, sh = shulker, dk = double chest, k = 1000), items split into shulkers and stacks, overworld ↔ nether coordinates with a "here" button. Results appear as you type. | N (changeable) |
 | **Auto Reconnect** | After a disconnect from a server, the disconnect screen counts down and reconnects you to the same server; a button cancels it. Wait time and number of attempts adjustable. | – |
 | **Macros** | Up to 6 keys, each sends a command (starting with /) or a chat message; several separated with ;; are sent one after another. Keys only work with no menu open. | your keys |
-| **Auto Totem** | If there is no totem in your offhand, the hotbar selection visibly scrolls to a totem, swaps it into the offhand (like F) and scrolls back to your slot. Optional: also from the inventory. | – |
-| **Anti Crystal Death** | When an end crystal appears nearby, your inventory opens, a totem goes into your offhand and main hand, and the inventory closes again. Range adjustable. | – |
+| **Auto Totem** | If there is no totem in your offhand, the hotbar selection visibly scrolls to a totem, swaps it into the offhand (like F) and scrolls back to your slot. Optional: also from the inventory. Own on/off key. | your key |
+| **Anti Crystal Death** | When an end crystal appears nearby, your inventory opens, a totem goes into your offhand and main hand, and the inventory closes again. Range adjustable, own on/off key. | your key |
 | **Lunge Macro** | Press V (changeable): takes the lunge spear from your hotbar, jabs (lunge dash) and switches back to your item in the same tick. Hold to repeat with an adjustable interval. Often not allowed on servers. | V (changeable) |
 | **Aim Lock** | Press the key (G, changeable) to lock onto the entity in your crosshair: as long as your crosshair is anywhere on its hitbox nothing moves; when it slips off, it is pulled back to the nearest edge. Releases when the target is farther than the set number of blocks. Speed and players-only option. Usually not allowed on servers. | G (changeable) |
 | **Ghost Items** | Puts any item into your inventory only on your side (client-side): pick it from a list of every item, choose the count, remove them again with one button. Extra window for fake enchantments (any enchantment, level 1–255) on the item in your hand. The server knows nothing – you cannot use, drop or place them, and they vanish as soon as the server updates the slot. | – |

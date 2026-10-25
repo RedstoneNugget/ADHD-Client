@@ -69,4 +69,12 @@ public final class BlinkScreen extends ThemedScreen {
     protected void onClose() {
         BlinkClient.saveNow();
     }
+
+    @Override
+    protected Runnable resetAction() {
+        return () -> {
+            com.adhdclient.gui.Defaults.reset(BlinkClient.config());
+            BlinkClient.saveNow();
+        };
+    }
 }

@@ -242,4 +242,12 @@ public final class InspectSettingsScreen extends ThemedScreen {
     protected void onClose() {
         InspectConfig.save();
     }
+
+    @Override
+    protected Runnable resetAction() {
+        return () -> {
+            com.adhdclient.gui.Defaults.reset(InspectConfig.get());
+            InspectConfig.save();
+        };
+    }
 }

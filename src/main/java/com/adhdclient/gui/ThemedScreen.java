@@ -54,7 +54,38 @@ public abstract class ThemedScreen extends Screen {
         lines.clear();
         status = "";
         listening = null;
+        resetArmed = false;
         build();
+        Runnable reset = resetAction();
+        if (reset != null && panelX2 > panelX1) {
+            int w = 72;
+            resetButton = ButtonWidget.builder(Text.literal(L.t("Zurücksetzen", "Reset")), b -> {
+                if (!resetArmed) {
+                    resetArmed = true;
+                    b.setMessage(Text.literal(L.t("Sicher?", "Sure?")));
+                    return;
+                }
+                reset.run();
+                clearAndInit();
+                status(L.t("Auf Standard zurückgesetzt", "Reset to defaults"));
+            }).dimensions(panelX2 - w - 3, panelY2 - 12, w, 11).build();
+            resetButton.setTooltip(Tooltip.of(Text.literal(L.t("Alle Einstellungen dieses Moduls auf Standard (zweimal klicken)",
+                    "All settings of this module back to default (click twice)"))));
+            addDrawableChild(resetButton);
+        } else {
+            resetButton = null;
+        }
+    }
+
+    private ButtonWidget resetButton;
+    private boolean resetArmed;
+
+    /**
+     * Setzt alle Einstellungen des Moduls auf Standard und speichert. Ist es nicht null, steht unten rechts ein
+     * Zurücksetzen-Knopf (mit Nachfrage).
+     */
+    protected Runnable resetAction() {
+        return null;
     }
 
     // ---------------------------------------------------------------- Tasten einstellen
@@ -188,7 +219,8 @@ public abstract class ThemedScreen extends Screen {
         if (!status.isEmpty() && panelX2 > panelX1) {
             int dim = Theme.argb(255, Theme.mix(Theme.config().background, Theme.config().text, 0.18f));
             ctx.fill(panelX1 + 2, panelY2 - 13, panelX2 - 1, panelY2 - 12, dim);
-            ctx.drawTextWithShadow(textRenderer, fit(status, right - panelX1 - 7), panelX1 + 7, panelY2 - 10, Theme.textDim());
+            int room = resetButton != null ? resetButton.getX() - 4 : right;
+            ctx.drawTextWithShadow(textRenderer, fit(status, room - panelX1 - 7), panelX1 + 7, panelY2 - 10, Theme.textDim());
         }
     }
 

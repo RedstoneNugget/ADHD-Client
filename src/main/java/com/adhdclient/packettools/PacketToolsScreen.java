@@ -71,4 +71,12 @@ public final class PacketToolsScreen extends ThemedScreen {
     protected void onClose() {
         PacketToolsClient.config().save();
     }
+
+    @Override
+    protected Runnable resetAction() {
+        return () -> {
+            com.adhdclient.gui.Defaults.reset(PacketToolsClient.config());
+            PacketToolsClient.config().save();
+        };
+    }
 }

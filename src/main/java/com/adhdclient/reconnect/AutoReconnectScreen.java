@@ -44,4 +44,12 @@ public final class AutoReconnectScreen extends ThemedScreen {
     protected void onClose() {
         AutoReconnectClient.save();
     }
+
+    @Override
+    protected Runnable resetAction() {
+        return () -> {
+            com.adhdclient.gui.Defaults.reset(AutoReconnectClient.config());
+            AutoReconnectClient.save();
+        };
+    }
 }

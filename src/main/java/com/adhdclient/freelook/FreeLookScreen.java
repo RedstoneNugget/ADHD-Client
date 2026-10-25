@@ -69,4 +69,12 @@ public final class FreeLookScreen extends ThemedScreen {
     protected void onClose() {
         FreeLookClient.saveNow();
     }
+
+    @Override
+    protected Runnable resetAction() {
+        return () -> {
+            com.adhdclient.gui.Defaults.reset(FreeLookClient.config());
+            FreeLookClient.saveNow();
+        };
+    }
 }

@@ -78,4 +78,12 @@ public final class MacrosScreen extends ThemedScreen {
     protected void onClose() {
         MacrosClient.save();
     }
+
+    @Override
+    protected Runnable resetAction() {
+        return () -> {
+            MacrosClient.config().macros.clear();
+            MacrosClient.save();
+        };
+    }
 }

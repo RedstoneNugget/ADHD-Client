@@ -69,4 +69,12 @@ public class BlockPickerScreen extends PickerScreen {
     protected void onClose() {
         BlockESPClient.saveNow();
     }
+
+    @Override
+    protected Runnable resetAction() {
+        return () -> {
+            com.adhdclient.gui.Defaults.reset(com.adhdclient.blockesp.BlockESPClient.config());
+            com.adhdclient.blockesp.BlockESPClient.saveNow();
+        };
+    }
 }

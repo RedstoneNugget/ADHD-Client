@@ -83,4 +83,12 @@ public final class GhostItemsScreen extends PickerScreen {
     protected String noun() {
         return L.t("Items", "Items");
     }
+
+    @Override
+    protected Runnable resetAction() {
+        return () -> {
+            GhostItemsClient.count = 64;
+            GhostItemsClient.infinite = true;
+        };
+    }
 }

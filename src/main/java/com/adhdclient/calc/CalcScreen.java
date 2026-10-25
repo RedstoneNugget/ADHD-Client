@@ -141,4 +141,12 @@ public final class CalcScreen extends ThemedScreen {
             return "§7…";
         }
     }
+
+    @Override
+    protected Runnable resetAction() {
+        return () -> {
+            CalcClient.key = org.lwjgl.glfw.GLFW.GLFW_KEY_N;
+            com.adhdclient.core.AdhdModuleState.save();
+        };
+    }
 }

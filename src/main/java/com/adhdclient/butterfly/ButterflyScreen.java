@@ -127,4 +127,12 @@ public final class ButterflyScreen extends ThemedScreen {
     protected void onClose() {
         ButterflyClient.saveNow();
     }
+
+    @Override
+    protected Runnable resetAction() {
+        return () -> {
+            com.adhdclient.gui.Defaults.reset(ButterflyClient.config());
+            ButterflyClient.saveNow();
+        };
+    }
 }

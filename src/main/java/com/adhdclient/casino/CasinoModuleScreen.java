@@ -66,4 +66,12 @@ public final class CasinoModuleScreen extends ThemedScreen {
     protected void onClose() {
         LuckyCasinoClient.saveNow();
     }
+
+    @Override
+    protected Runnable resetAction() {
+        return () -> {
+            com.adhdclient.gui.Defaults.reset(com.adhdclient.casino.client.LuckyCasinoClient.config());
+            com.adhdclient.casino.client.LuckyCasinoClient.saveNow();
+        };
+    }
 }

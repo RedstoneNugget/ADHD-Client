@@ -50,4 +50,14 @@ public final class LungeMacroScreen extends ThemedScreen {
     protected void onClose() {
         AdhdModuleState.save();
     }
+
+    @Override
+    protected Runnable resetAction() {
+        return () -> {
+            LungeMacroClient.key = org.lwjgl.glfw.GLFW.GLFW_KEY_V;
+            LungeMacroClient.repeat = true;
+            LungeMacroClient.delay = 10;
+            com.adhdclient.core.AdhdModuleState.save();
+        };
+    }
 }

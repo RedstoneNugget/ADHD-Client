@@ -45,4 +45,11 @@ public final class StrongholdScreen extends ThemedScreen {
         status(StrongholdClient.enabled ? StrongholdClient.throwsMade().size() + L.t(" Würfe erfasst", " throws recorded")
                 : L.t("Modul ist aus – im ADHD-Menü einschalten", "Module is off – turn it on in the ADHD menu"));
     }
+
+    @Override
+    protected Runnable resetAction() {
+        return () -> {
+            StrongholdClient.reset();
+        };
+    }
 }

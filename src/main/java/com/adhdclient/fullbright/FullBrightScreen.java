@@ -46,4 +46,12 @@ public final class FullBrightScreen extends ThemedScreen {
     protected void onClose() {
         FullBrightClient.save();
     }
+
+    @Override
+    protected Runnable resetAction() {
+        return () -> {
+            com.adhdclient.gui.Defaults.reset(FullBrightClient.config());
+            FullBrightClient.save();
+        };
+    }
 }

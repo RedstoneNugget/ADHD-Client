@@ -12,7 +12,7 @@ Clientseitige Fabric-Mod für **Minecraft 1.21.11**. Statt vieler einzelner Mods
 
 ## Installation
 1. [Fabric Loader](https://fabricmc.net/use/) für 1.21.11 und die [Fabric API](https://modrinth.com/mod/fabric-api) installieren
-2. `adhd-client-1.8.1.jar` in den `mods`-Ordner legen
+2. `adhd-client-1.8.2.jar` in den `mods`-Ordner legen
 
 Auf dem Server ist nichts nötig. Nicht zusammen mit den einzelnen Mods Base Finder oder Head Finder installieren – deren Funktionen stecken schon drin.
 
@@ -21,7 +21,9 @@ Auf dem Server ist nichts nötig. Nicht zusammen mit den einzelnen Mods Base Fin
 
 Hat ein Modul eine eigene Taste, stellst du sie ganz oben im Menü des Moduls ein: auf den Tasten-Knopf klicken, dann die neue Taste oder eine Maustaste drücken (Esc oder Entf = keine Taste, Linksklick bricht ab). Der kleine ↺-Knopf daneben setzt die Taste auf den Standard des Moduls zurück. Modul-Tasten funktionieren nur, solange das Modul im ClickGUI eingeschaltet ist.
 
-Unter **Design** wählst du die Farben aller Menüs (Vorlagen wie Lila, Ozean oder Rot, RGB-Regler oder Hex), die Deckkraft der Fenster und die Sprache: automatisch (wie die Spielsprache), Deutsch oder Englisch.
+Unter Jedes Modul-Fenster hat unten rechts einen **Zurücksetzen**-Knopf (zweimal klicken), der alle Einstellungen des Moduls auf Standard setzt.
+
+**Design** wählst du die Farben aller Menüs (Vorlagen wie Lila, Ozean oder Rot, RGB-Regler oder Hex), die Deckkraft der Fenster und die Sprache: automatisch (wie die Spielsprache), Deutsch oder Englisch.
 
 ## Module
 
@@ -29,7 +31,7 @@ Unter **Design** wählst du die Farben aller Menüs (Vorlagen wie Lila, Ozean od
 |---|---|---|
 | **Stronghold Finder** | Triangulation wie bei Speedrunnern: Ender-Auge werfen, 100–300 Blöcke seitlich gehen, noch eins werfen – oben links stehen die Koordinaten des Strongholds (End-Portal), die Nether-Koordinaten, die Entfernung und wohin du dich drehen musst. Würfe werden automatisch erkannt. | – |
 | **Base Finder** | Scannt geladene Chunks und markiert die besten Funde: auffällige Chunks (künstliches Licht, Spielerblöcke), unnatürliche Spawner, unnatürliche Bienennester, Amethyst-Chunks und hohen Kelp. | H Markierungen, J scannen (änderbar) |
-| **Block ESP** | Markiert beliebige Blöcke, die du aus einer durchsuchbaren Liste aller Blöcke auswählst. Boxen in der Farbe des Blocks; Tracer, Füllung und Reichweite einstellbar. | – |
+| **Block ESP** | Markiert beliebige Blöcke, die du aus einer durchsuchbaren Liste aller Blöcke auswählst. Boxen in der Farbe des Blocks; Tracer, Füllung und Reichweite einstellbar, eigene An/Aus-Taste. | deine Taste |
 | **ESP** | Zeigt ausgewählte Entities (Spieler, Mobs, Items …) durch Wände: Box, leuchtender Umriss, Tracer, Namensschild mit Entfernung und Leben. Farbe nach Entfernung, Team oder fest. | – |
 | **RTPQ Invsee** | Nennt der Chat deinen RTPQ-Gegner, öffnet sich automatisch `/invsee` mit "Kämpfen / Neu anstellen"-Knöpfen und Countdown; Warnung bei Elytra, Mace und vielen Crystals. Du gibst nur normalen Text ein, keine Muster. | – |
 | **Free Cam** | Kamera vom Körper lösen und frei herumfliegen. Dein Körper bleibt stehen und sichtbar, andere Klicks sind gesperrt. Geschwindigkeit, Sprint-Faktor, sanfte Bewegung. Option: weiter dort abbauen, wo dein Körper hinschaut. | F6 (änderbar) |
@@ -43,8 +45,8 @@ Unter **Design** wählst du die Farben aller Menüs (Vorlagen wie Lila, Ozean od
 | **Calculator** | Schnell-Rechner auf Taste (N): Rechnungen mit Minecraft-Einheiten (st = 64, sh = Shulker, dk = Doppelkiste, k = 1000), Items in Shulker und Stacks aufteilen, Overworld ↔ Nether mit „Hier“-Knopf. Ergebnisse erscheinen beim Tippen. | N (änderbar) |
 | **Auto Reconnect** | Nach einer Trennung vom Server zählt der Trennungs-Bildschirm herunter und verbindet dich neu mit demselben Server; ein Knopf bricht ab. Wartezeit und Anzahl Versuche einstellbar. | – |
 | **Macros** | Bis zu 6 Tasten, jede schickt einen Befehl (mit / am Anfang) oder eine Chat-Nachricht; mehrere mit ;; getrennt werden nacheinander geschickt. Tasten wirken nur ohne offenes Menü. | deine Tasten |
-| **Auto Totem** | Fehlt das Totem in der Offhand, läuft die Hotbar-Auswahl sichtbar zum Totem, tauscht es in die Offhand (wie F) und läuft zurück zu deinem Feld. Optional auch aus dem Inventar. | – |
-| **Anti Crystal Death** | Taucht ein End-Kristall in der Nähe auf, öffnet sich das Inventar, ein Totem kommt in Off- und Main Hand, dann schließt sich das Inventar. Reichweite einstellbar. | – |
+| **Auto Totem** | Fehlt das Totem in der Offhand, läuft die Hotbar-Auswahl sichtbar zum Totem, tauscht es in die Offhand (wie F) und läuft zurück zu deinem Feld. Optional auch aus dem Inventar. Eigene An/Aus-Taste. | deine Taste |
+| **Anti Crystal Death** | Taucht ein End-Kristall in der Nähe auf, öffnet sich das Inventar, ein Totem kommt in Off- und Main Hand, dann schließt sich das Inventar. Reichweite einstellbar, eigene An/Aus-Taste. | deine Taste |
 | **Lunge Macro** | V drücken (änderbar): nimmt den Lunge-Speer aus der Hotbar, sticht zu (Lunge-Sprung) und wechselt im selben Tick zurück aufs vorherige Item. Halten wiederholt im einstellbaren Abstand. Auf Servern oft verboten. | V (änderbar) |
 | **Aim Lock** | Taste drücken (G, änderbar) lockt die Entity im Fadenkreuz: Solange das Fadenkreuz irgendwo auf ihrer Hitbox ist, bewegt sich nichts; rutscht es runter, wird es zum nächsten Rand zurückgezogen. Löst sich, wenn das Ziel weiter weg ist als die eingestellten Blöcke. Tempo und „Nur Spieler“ einstellbar. Auf Servern meist verboten. | G (änderbar) |
 | **Ghost Items** | Legt beliebige Items nur bei dir ins Inventar (Client-seitig): aus einer Liste aller Items wählen, Anzahl einstellen, mit einem Knopf wieder entfernen. Extra-Fenster für Fake-Verzauberungen (jede Verzauberung, Stufe 1–255) auf dem Item in der Hand. Der Server weiß nichts davon – benutzen, werfen oder setzen geht nicht, und sie verschwinden, sobald der Server das Feld neu schickt. | – |

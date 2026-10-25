@@ -175,4 +175,12 @@ public final class EspScreen extends ThemedScreen {
     protected void onClose() {
         EspClient.saveNow();
     }
+
+    @Override
+    protected Runnable resetAction() {
+        return () -> {
+            com.adhdclient.gui.Defaults.reset(EspClient.config());
+            EspClient.saveNow();
+        };
+    }
 }

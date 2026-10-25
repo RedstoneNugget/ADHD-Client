@@ -57,4 +57,12 @@ public final class AimLockScreen extends ThemedScreen {
     protected void onClose() {
         AimLockClient.save();
     }
+
+    @Override
+    protected Runnable resetAction() {
+        return () -> {
+            com.adhdclient.gui.Defaults.reset(AimLockClient.config());
+            AimLockClient.save();
+        };
+    }
 }
