@@ -8,13 +8,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/** Free Cam: kein Angreifen, Abbauen, Benutzen oder Block-Picken aus der Kamera heraus. */
+/** Free Cam: kein Benutzen oder Block-Picken aus der Kamera heraus; Abbauen nur am Körper (Option). */
 @Mixin(MinecraftClient.class)
 public abstract class FreeCamInteractMixin {
 
     @Inject(method = "doAttack", at = @At("HEAD"), cancellable = true)
     private void adhd_client$noAttack(CallbackInfoReturnable<Boolean> cir) {
-        if (FreeCamClient.active) cir.setReturnValue(false);
+        if (FreeCamClient.active && !FreeCamClient.config().bodyMining) cir.setReturnValue(false);
     }
 
     @Inject(method = "doItemUse", at = @At("HEAD"), cancellable = true)
@@ -24,7 +24,8 @@ public abstract class FreeCamInteractMixin {
 
     @Inject(method = "handleBlockBreaking", at = @At("HEAD"), cancellable = true)
     private void adhd_client$noBreaking(boolean breaking, CallbackInfo ci) {
-        if (FreeCamClient.active) ci.cancel();
+        // mit „Am Körper abbauen“ zielt der Block-Treffer weiter vom Körper aus, also dort abbauen
+        if (FreeCamClient.active && !FreeCamClient.config().bodyMining) ci.cancel();
     }
 
     @Inject(method = "doItemPick", at = @At("HEAD"), cancellable = true)

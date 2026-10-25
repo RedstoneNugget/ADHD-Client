@@ -54,6 +54,11 @@ public final class AdhdClientClient implements ClientModInitializer {
         new com.adhdclient.butterfly.ButterflyClient().onInitializeClient();
         com.adhdclient.ghost.GhostItemsClient.init();
         com.adhdclient.aimlock.AimLockClient.init();
+        com.adhdclient.reconnect.AutoReconnectClient.init();
+        com.adhdclient.macros.MacrosClient.init();
+        com.adhdclient.stronghold.StrongholdClient.init();
+        com.adhdclient.calc.CalcClient.init();
+        com.adhdclient.lunge.LungeMacroClient.init();
 
         ClientTickEvents.END_CLIENT_TICK.register(mc -> {
             while (menuKey.wasPressed()) {

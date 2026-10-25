@@ -22,7 +22,7 @@ public final class FreeCamScreen extends ThemedScreen {
 
     @Override
     protected void build() {
-        int h = Theme.TITLE_H + 6 + 12 + ROW + 6 + 12 + 3 * ROW + 6 + 12 + 3 * 11 + 6 + ROW + 16;
+        int h = Theme.TITLE_H + 6 + 12 + ROW + 6 + 12 + 4 * ROW + 6 + 12 + 3 * 11 + 6 + ROW + 16;
         int y = centeredPanel(W, h);
         int x = panelX1 + 8;
         int inner = W - 16;
@@ -50,13 +50,16 @@ public final class FreeCamScreen extends ThemedScreen {
         y += ROW;
         toggle(L.t("Sanft bewegen", "Smooth movement"), () -> c.smooth, v -> c.smooth = v, x, y, inner, ROW - 2,
                 L.t("Weich anfahren und abbremsen statt ruckartig", "Accelerate and brake smoothly instead of abruptly"), FreeCamClient::onConfigEdited);
+        y += ROW;
+        toggle(L.t("Am Körper abbauen", "Mine at your body"), () -> c.bodyMining, v -> c.bodyMining = v, x, y, inner, ROW - 2,
+                L.t("Linksklick baut weiter den Block ab, auf den dein Körper schaut – auch wenn die Kamera woanders ist", "Left click keeps mining the block your body looks at – even with the camera somewhere else"), FreeCamClient::onConfigEdited);
         y += ROW + 6;
 
         section(L.t("Steuerung", "Controls"), x, y, inner);
         y += 12;
         line(L.t("Laufen-Tasten – fliegen, Springen/Schleichen – hoch/runter", "Movement keys – fly, Jump/Sneak – up/down"), x, y, Theme.text());
         line(L.t("Sprinten – schneller fliegen", "Sprint – fly faster"), x, y + 11, Theme.textDim());
-        line(L.t("Dein Körper bleibt stehen, Klicks sind gesperrt", "Your body stays in place, clicks are blocked"), x, y + 22, Theme.textDim());
+        line(L.t("Dein Körper bleibt stehen; Abbauen am Körper (Option)", "Your body stays in place; mining at your body (option)"), x, y + 22, Theme.textDim());
         y += 3 * 11 + 6;
 
         addDrawableChild(ButtonWidget.builder(Text.literal(FreeCamClient.active ? L.t("Free Cam beenden", "Stop Free Cam") : L.t("Free Cam starten", "Start Free Cam")), b -> {

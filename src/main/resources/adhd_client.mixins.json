@@ -21,6 +21,7 @@
     "HotKeyMouseMixin",
     "InspectCreativeScreenAccessor",
     "InspectHandledScreenAccessor",
+    "LungeAttackInvoker",
     "WorldRendererMixin"
   ],
   "injectors": {

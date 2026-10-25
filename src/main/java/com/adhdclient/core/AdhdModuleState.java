@@ -39,6 +39,15 @@ public final class AdhdModuleState {
         boolean butterflyEnabled = false;
         boolean ghostItemsEnabled = false;
         boolean aimLockEnabled = false;
+        boolean autoReconnectEnabled = false;
+        boolean macrosEnabled = false;
+        boolean strongholdEnabled = false;
+        boolean calcEnabled = false;
+        int calcKey = org.lwjgl.glfw.GLFW.GLFW_KEY_N;
+        boolean lungeEnabled = false;
+        int lungeKey = org.lwjgl.glfw.GLFW.GLFW_KEY_V;
+        boolean lungeRepeat = true;
+        int lungeDelay = 10;
     }
 
     private AdhdModuleState() {
@@ -73,6 +82,15 @@ public final class AdhdModuleState {
         com.adhdclient.butterfly.ButterflyClient.enabled = d.butterflyEnabled;
         com.adhdclient.ghost.GhostItemsClient.enabled = d.ghostItemsEnabled;
         com.adhdclient.aimlock.AimLockClient.enabled = d.aimLockEnabled;
+        com.adhdclient.reconnect.AutoReconnectClient.enabled = d.autoReconnectEnabled;
+        com.adhdclient.macros.MacrosClient.enabled = d.macrosEnabled;
+        com.adhdclient.stronghold.StrongholdClient.enabled = d.strongholdEnabled;
+        com.adhdclient.calc.CalcClient.enabled = d.calcEnabled;
+        com.adhdclient.calc.CalcClient.key = d.calcKey;
+        com.adhdclient.lunge.LungeMacroClient.enabled = d.lungeEnabled;
+        com.adhdclient.lunge.LungeMacroClient.key = d.lungeKey;
+        com.adhdclient.lunge.LungeMacroClient.repeat = d.lungeRepeat;
+        com.adhdclient.lunge.LungeMacroClient.delay = d.lungeDelay;
     }
 
     public static void save() {
@@ -91,6 +109,15 @@ public final class AdhdModuleState {
         d.butterflyEnabled = com.adhdclient.butterfly.ButterflyClient.enabled;
         d.ghostItemsEnabled = com.adhdclient.ghost.GhostItemsClient.enabled;
         d.aimLockEnabled = com.adhdclient.aimlock.AimLockClient.enabled;
+        d.autoReconnectEnabled = com.adhdclient.reconnect.AutoReconnectClient.enabled;
+        d.macrosEnabled = com.adhdclient.macros.MacrosClient.enabled;
+        d.strongholdEnabled = com.adhdclient.stronghold.StrongholdClient.enabled;
+        d.calcEnabled = com.adhdclient.calc.CalcClient.enabled;
+        d.calcKey = com.adhdclient.calc.CalcClient.key;
+        d.lungeEnabled = com.adhdclient.lunge.LungeMacroClient.enabled;
+        d.lungeKey = com.adhdclient.lunge.LungeMacroClient.key;
+        d.lungeRepeat = com.adhdclient.lunge.LungeMacroClient.repeat;
+        d.lungeDelay = com.adhdclient.lunge.LungeMacroClient.delay;
         try {
             Path f = file();
             Files.createDirectories(f.getParent());

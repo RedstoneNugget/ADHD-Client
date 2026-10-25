@@ -26,6 +26,26 @@ public class AdhdClientGameTest implements FabricClientGameTest {
             FullBrightGameTest.run(context);
             return;
         }
+        if (Boolean.getBoolean("adhd.onlyLunge")) {
+            LungeGameTest.run(context);
+            return;
+        }
+        if (Boolean.getBoolean("adhd.onlyFreeMine")) {
+            FreeCamMiningGameTest.run(context);
+            return;
+        }
+        if (Boolean.getBoolean("adhd.onlyCalc")) {
+            CalcGameTest.run(context);
+            return;
+        }
+        if (Boolean.getBoolean("adhd.onlyStronghold")) {
+            StrongholdGameTest.run(context);
+            return;
+        }
+        if (Boolean.getBoolean("adhd.onlyMacros")) {
+            MacrosGameTest.run(context);
+            return;
+        }
         if (Boolean.getBoolean("adhd.onlyAim")) {
             AimLockGameTest.run(context);
             return;
@@ -62,6 +82,11 @@ public class AdhdClientGameTest implements FabricClientGameTest {
         ButterflyGameTest.run(context);
         GhostItemsGameTest.run(context);
         AimLockGameTest.run(context);
+        MacrosGameTest.run(context);
+        StrongholdGameTest.run(context);
+        CalcGameTest.run(context);
+        FreeCamMiningGameTest.run(context);
+        LungeGameTest.run(context);
         log("ALLE TESTS BESTANDEN");
     }
 

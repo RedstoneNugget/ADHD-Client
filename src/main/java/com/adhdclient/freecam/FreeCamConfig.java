@@ -24,6 +24,8 @@ public final class FreeCamConfig {
     public int key = org.lwjgl.glfw.GLFW.GLFW_KEY_F6;
     /** Sanftes Beschleunigen und Abbremsen. */
     public boolean smooth = true;
+    /** In der Free Cam weiter dort abbauen, wo dein Körper hinschaut. */
+    public boolean bodyMining = true;
     /** Faktor beim Sprinten (Sprint-Taste gedrückt). */
     public double sprintFactor = 3;
 

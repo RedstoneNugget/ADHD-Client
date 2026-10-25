@@ -1,6 +1,14 @@
-**ADHD Client 1.7.6** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
+**ADHD Client 1.8.0** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
 
 One client, many modules – each switched on or off in one menu (**Right Ctrl**). All settings, colors and module keys are set inside the client. Menus in English or German.
+
+### New in 1.8.0
+- **Stronghold Finder** (World) – throw two eyes of ender from different spots, top left shows the stronghold and Nether coordinates, distance and which way to turn
+- **Calculator** (key N) – math with stacks and shulkers, items into shulkers/stacks, overworld ↔ nether
+- **Lunge Macro** (key V) – takes the lunge spear, jabs and switches back in the same tick; hold to repeat
+- **Auto Reconnect** – reconnects after a disconnect with countdown and cancel button
+- **Macros** – keys that send commands or chat messages
+- **Free Cam** – option to keep mining the block your body looks at
 
 ### New in 1.7.6
 - **Aim Lock** (new module, Misc) – press G (changeable) to lock onto the entity in your crosshair. While your crosshair is anywhere on its hitbox nothing moves; when it slips off, it is pulled smoothly back to the nearest height of the hitbox, with a little random deviation. Releases at a set number of blocks. Speed, deviation and players-only settings. Usually not allowed on servers
@@ -74,12 +82,20 @@ Not affiliated with any server. Check the server rules before using it – Blink
 
 ### Installation
 1. Install the [Fabric Loader](https://fabricmc.net/use/) for 1.21.11 and the [Fabric API](https://modrinth.com/mod/fabric-api)
-2. Put `adhd-client-1.7.6.jar` into your `mods` folder (remove older ADHD Client jars and the standalone Base Finder / InspectAll / LuckyCasino jars)
+2. Put `adhd-client-1.8.0.jar` into your `mods` folder (remove older ADHD Client jars and the standalone Base Finder / InspectAll / LuckyCasino jars)
 
 ---
 
 ### Deutsch
 Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg**). Alle Einstellungen, Farben und Modul-Tasten stellst du im Client ein. Menüs auf Deutsch oder Englisch.
+
+**Neu in 1.8.0**
+- **Stronghold Finder** (Welt) – zwei Ender-Augen von verschiedenen Orten werfen, oben links stehen Stronghold- und Nether-Koordinaten, Entfernung und Drehrichtung
+- **Rechner** (Taste N) – Rechnungen mit Stacks und Shulkern, Items in Shulker/Stacks, Overworld ↔ Nether
+- **Lunge Macro** (Taste V) – nimmt den Lunge-Speer, sticht zu und wechselt im selben Tick zurück; Halten wiederholt
+- **Auto Reconnect** – verbindet nach einer Trennung neu, mit Countdown und Abbrechen
+- **Makros** – Tasten, die Befehle oder Chat-Nachrichten schicken
+- **Free Cam** – Option, weiter am Körper abzubauen
 
 **Neu in 1.7.6**
 - **Aim Lock** (neues Modul, Sonstiges) – G (änderbar) lockt die Entity im Fadenkreuz. Solange das Fadenkreuz irgendwo auf der Hitbox ist, bewegt sich nichts; rutscht es runter, wird es weich zur nächsten Höhe der Hitbox zurückgezogen, mit etwas zufälliger Abweichung. Löst sich ab der eingestellten Blockzahl. Tempo, Abweichung und „Nur Spieler“ einstellbar. Auf Servern meist verboten
@@ -133,9 +149,9 @@ Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg*
 - **ESP** – Farben einfacher: drei Modus-Knöpfe und eine Palette zum Anklicken
 - Kurzes Antippen von Tasten geht nicht mehr verloren, die gebaute Jar enthält keine Metadaten
 
-**Alle Module:** Base Finder, Block ESP, ESP, Full Bright, Butterfly, Free Cam, Free Look, Blink, RTPQ Invsee, Inspect All, Packet Tools, Aim Lock, Ghost Items, Lucky Casino
+**Alle Module:** Base Finder, Block ESP, ESP, Full Bright, Butterfly, Free Cam, Free Look, Blink, RTPQ Invsee, Inspect All, Packet Tools, Stronghold Finder, Calculator, Lunge Macro, Auto Reconnect, Macros, Aim Lock, Ghost Items, Lucky Casino
 
 Kein offizielles Projekt eines Servers. Vor der Nutzung die Server-Regeln lesen – Blink, ESP, Packet Tools und ähnliche Module sind oft verboten.
 
 1. [Fabric Loader](https://fabricmc.net/use/) für 1.21.11 und die [Fabric API](https://modrinth.com/mod/fabric-api) installieren
-2. `adhd-client-1.7.6.jar` in den `mods`-Ordner legen (ältere ADHD-Client-Jars und die einzelnen Base-Finder-/InspectAll-/LuckyCasino-Jars entfernen)
+2. `adhd-client-1.8.0.jar` in den `mods`-Ordner legen (ältere ADHD-Client-Jars und die einzelnen Base-Finder-/InspectAll-/LuckyCasino-Jars entfernen)

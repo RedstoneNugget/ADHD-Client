@@ -133,3 +133,28 @@ tasks.matching { it.name == 'runClientGameTest' }.configureEach {
 tasks.matching { it.name == 'runClientGameTest' }.configureEach {
     if (project.hasProperty('onlyAim')) jvmArgs '-Dadhd.onlyAim=true'
 }
+
+// Nur den Makros-Test laufen lassen: gradlew runClientGameTest -PonlyMacros
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('onlyMacros')) jvmArgs '-Dadhd.onlyMacros=true'
+}
+
+// Nur den Stronghold-Test laufen lassen: gradlew runClientGameTest -PonlyStronghold
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('onlyStronghold')) jvmArgs '-Dadhd.onlyStronghold=true'
+}
+
+// Nur den Rechner-Test laufen lassen: gradlew runClientGameTest -PonlyCalc
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('onlyCalc')) jvmArgs '-Dadhd.onlyCalc=true'
+}
+
+// Nur den Free-Cam-Abbau-Test laufen lassen: gradlew runClientGameTest -PonlyFreeMine
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('onlyFreeMine')) jvmArgs '-Dadhd.onlyFreeMine=true'
+}
+
+// Nur den Lunge-Test laufen lassen: gradlew runClientGameTest -PonlyLunge
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('onlyLunge')) jvmArgs '-Dadhd.onlyLunge=true'
+}
