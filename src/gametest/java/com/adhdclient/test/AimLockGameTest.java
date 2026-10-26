@@ -40,6 +40,14 @@ final class AimLockGameTest {
             log("Blick nach Seitwärts-Bewegung: yaw " + yaw);
             check(yaw < -15f, "Blick folgt der Hitbox zur Seite");
             context.takeScreenshot("83_aim_lock");
+            // in Free Cam dreht Aim Lock weiter den Körper, nicht die Kamera
+            context.runOnClient(c -> com.adhdclient.freecam.FreeCamClient.set(true));
+            server.runCommand("tp @e[tag=ziel] -2.5 -60 3.5");
+            context.waitTicks(10);
+            float camYaw = context.computeOnClient(c -> c.player.getYaw());
+            log("Blick in Free Cam: yaw " + camYaw);
+            context.runOnClient(c -> com.adhdclient.freecam.FreeCamClient.set(false));
+            check(camYaw > 15f, "Aim Lock dreht auch in Free Cam den Körper");
             server.runCommand("tp @e[tag=ziel] 0.5 -60 15.5");
             context.waitTicks(5);
             check(context.computeOnClient(c -> AimLockClient.target() == null), "Lock löst sich, wenn das Ziel zu weit weg ist");

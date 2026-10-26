@@ -1,6 +1,9 @@
-**ADHD Client 1.8.6** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
+**ADHD Client 1.8.7** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
 
 One client, many modules – each switched on or off in one menu (**Right Ctrl**). All settings, colors and module keys are set inside the client. Menus in English or German.
+
+### New in 1.8.7
+- **Aim Lock** now also works in Free Cam and Free Look (it turns your body, not the camera)
 
 ### New in 1.8.6
 - **Huge number ranges** – every number setting goes much further (e.g. ESP range up to 8192, Free Cam speed up to 1000, Air Jump up to 1000 jumps). Big sliders are fine at the start and coarse at the end; the mouse wheel changes one step, Shift + wheel ten
@@ -105,12 +108,15 @@ Not affiliated with any server. Check the server rules before using it – Blink
 
 ### Installation
 1. Install the [Fabric Loader](https://fabricmc.net/use/) for 1.21.11 and the [Fabric API](https://modrinth.com/mod/fabric-api)
-2. Put `adhd-client-1.8.6.jar` into your `mods` folder (remove older ADHD Client jars and the standalone Base Finder / InspectAll / LuckyCasino jars)
+2. Put `adhd-client-1.8.7.jar` into your `mods` folder (remove older ADHD Client jars and the standalone Base Finder / InspectAll / LuckyCasino jars)
 
 ---
 
 ### Deutsch
 Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg**). Alle Einstellungen, Farben und Modul-Tasten stellst du im Client ein. Menüs auf Deutsch oder Englisch.
+
+**Neu in 1.8.7**
+- **Aim Lock** geht jetzt auch in Free Cam und Free Look (dreht deinen Körper, nicht die Kamera)
 
 **Neu in 1.8.6**
 - **Riesige Zahlenbereiche** – jede Zahl-Einstellung geht viel weiter (z. B. ESP-Reichweite bis 8192, Free-Cam-Tempo bis 1000, Air Jump bis 1000 Sprünge). Große Regler sind vorne fein und hinten grob; das Mausrad ändert um einen Schritt, Shift + Mausrad um zehn
@@ -199,4 +205,4 @@ Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg*
 Kein offizielles Projekt eines Servers. Vor der Nutzung die Server-Regeln lesen – Blink, ESP, Packet Tools und ähnliche Module sind oft verboten.
 
 1. [Fabric Loader](https://fabricmc.net/use/) für 1.21.11 und die [Fabric API](https://modrinth.com/mod/fabric-api) installieren
-2. `adhd-client-1.8.6.jar` in den `mods`-Ordner legen (ältere ADHD-Client-Jars und die einzelnen Base-Finder-/InspectAll-/LuckyCasino-Jars entfernen)
+2. `adhd-client-1.8.7.jar` in den `mods`-Ordner legen (ältere ADHD-Client-Jars und die einzelnen Base-Finder-/InspectAll-/LuckyCasino-Jars entfernen)

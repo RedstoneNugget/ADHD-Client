@@ -15,7 +15,7 @@ public abstract class FreeCamLookMixin {
 
     @Inject(method = "changeLookDirection", at = @At("HEAD"), cancellable = true)
     private void adhd_client$lookWithCamera(double cursorDeltaX, double cursorDeltaY, CallbackInfo ci) {
-        if ((Object) this != MinecraftClient.getInstance().player) return;
+        if ((Object) this != MinecraftClient.getInstance().player || com.adhdclient.aimlock.AimLockClient.turning) return;
         if (FreeCamClient.active) {
             FreeCamClient.look(cursorDeltaX, cursorDeltaY);
             ci.cancel();

@@ -215,8 +215,17 @@ public final class AimLockClient {
         float dy = MathHelper.wrapDegrees(yaw - p.getYaw());
         float dp = pitch - p.getPitch();
         // wie eine Mausbewegung: dreht Blick und Vorbild-Blick gemeinsam, damit nichts zwischen den Ticks springt
-        p.changeLookDirection(dy * f / 0.15f, dp * f / 0.15f);
+        // an Free Cam / Free Look vorbei: die drehen sonst nur ihre Kamera statt des Körpers
+        turning = true;
+        try {
+            p.changeLookDirection(dy * f / 0.15f, dp * f / 0.15f);
+        } finally {
+            turning = false;
+        }
     }
+
+    /** Während Aim Lock selbst den Körper dreht (Free Cam / Free Look lassen die Drehung dann durch). */
+    public static boolean turning;
 
     private static void release(MinecraftClient mc, String msg) {
         target = null;
