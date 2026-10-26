@@ -173,3 +173,18 @@ tasks.matching { it.name == 'runClientGameTest' }.configureEach {
 tasks.matching { it.name == 'runClientGameTest' }.configureEach {
     if (project.hasProperty('onlyFun')) jvmArgs '-Dadhd.onlyFun=true'
 }
+
+// Nur den Test der kleineren Module laufen lassen: gradlew runClientGameTest -PonlyExtras
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('onlyExtras')) jvmArgs '-Dadhd.onlyExtras=true'
+}
+
+// Testwelten nach dem Gametest löschen – sie werden nicht mehr gebraucht und kosten nur Speicher
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    doLast { delete 'build/run/clientGameTest/saves' }
+}
+
+// Bilder fürs README machen: gradlew runClientGameTest -PonlyShowcase
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('onlyShowcase')) jvmArgs '-Dadhd.onlyShowcase=true'
+}

@@ -1,6 +1,20 @@
-**ADHD Client 1.8.7** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
+**ADHD Client 1.9.0** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
 
 One client, many modules – each switched on or off in one menu (**Right Ctrl**). All settings, colors and module keys are set inside the client. Menus in English or German.
+
+### New in 1.9.0 – 14 new modules
+- **Storage ESP** – chests, shulkers, barrels and ender chests through walls, each type in its own color
+- **Item ESP** – dropped items glow through walls, with name and count
+- **Nametags+** – big name tags with health, distance, armor %, held item and totem
+- **Trajectories** – see where arrows, pearls, tridents, potions and more will land
+- **Player Radar** – nearest players with distance and direction
+- **New Chunks** – marks newly generated and old chunks
+- **Safe Walk** and **No Fall** (Movement)
+- **Auto Tool**, **Auto Eat**, **Auto Fish**
+- **Inventory Sorter** – "Sort" button for inventory and chests, merges stacks
+- **Chest Stealer** – "Take all" / "Put all" buttons, optionally automatic
+- **Durability** – warning before tools or armor break
+- Screenshots on the GitHub page
 
 ### New in 1.8.7
 - **Aim Lock** now also works in Free Cam and Free Look (it turns your body, not the camera)
@@ -102,18 +116,34 @@ One client, many modules – each switched on or off in one menu (**Right Ctrl**
 - **Aim Lock** – stick to a target's hitbox
 - **Ghost Items** – client-side items and fake enchantments
 - **Stack Drop** – throw out all stacks of chosen items at once
+- **Storage ESP, Item ESP, Nametags+, Trajectories, Player Radar, New Chunks** – see more of the world
+- **Safe Walk, No Fall, Auto Tool, Auto Eat, Auto Fish, Inventory Sorter, Chest Stealer, Durability** – comfort and automation
 - **Lucky Casino** – casino with play money
 
-Not affiliated with any server. Check the server rules before using it – Blink, ESP, Packet Tools and similar modules are often not allowed.
+Not affiliated with any server. Check the server rules before using it – Blink, ESP, No Fall, Packet Tools and similar modules are often not allowed.
 
 ### Installation
 1. Install the [Fabric Loader](https://fabricmc.net/use/) for 1.21.11 and the [Fabric API](https://modrinth.com/mod/fabric-api)
-2. Put `adhd-client-1.8.7.jar` into your `mods` folder (remove older ADHD Client jars and the standalone Base Finder / InspectAll / LuckyCasino jars)
+2. Put `adhd-client-1.9.0.jar` into your `mods` folder (remove older ADHD Client jars and the standalone Base Finder / InspectAll / LuckyCasino jars)
 
 ---
 
 ### Deutsch
 Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg**). Alle Einstellungen, Farben und Modul-Tasten stellst du im Client ein. Menüs auf Deutsch oder Englisch.
+
+**Neu in 1.9.0 – 14 neue Module**
+- **Storage ESP** – Kisten, Shulker, Fässer und Ender-Kisten durch Wände, jede Art in eigener Farbe
+- **Item ESP** – gedroppte Items leuchten durch Wände, mit Name und Anzahl
+- **Nametags+** – große Namensschilder mit Leben, Entfernung, Rüstung %, Item in der Hand und Totem
+- **Trajectories** – zeigt, wo Pfeile, Perlen, Tridents, Tränke und mehr landen
+- **Player Radar** – nächste Spieler mit Entfernung und Richtung
+- **New Chunks** – markiert neu erzeugte und alte Chunks
+- **Safe Walk** und **No Fall** (Bewegung)
+- **Auto Tool**, **Auto Eat**, **Auto Fish**
+- **Inventory Sorter** – Knopf „Sortieren“ für Inventar und Kisten, legt Stapel zusammen
+- **Chest Stealer** – Knöpfe „Alles nehmen“ / „Alles rein“, optional automatisch
+- **Durability** – Warnung, bevor Werkzeug oder Rüstung kaputtgeht
+- Bilder auf der GitHub-Seite
 
 **Neu in 1.8.7**
 - **Aim Lock** geht jetzt auch in Free Cam und Free Look (dreht deinen Körper, nicht die Kamera)
@@ -200,9 +230,9 @@ Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg*
 - **ESP** – Farben einfacher: drei Modus-Knöpfe und eine Palette zum Anklicken
 - Kurzes Antippen von Tasten geht nicht mehr verloren, die gebaute Jar enthält keine Metadaten
 
-**Alle Module:** Base Finder, Block ESP, ESP, Full Bright, Butterfly, Free Cam, Free Look, Blink, RTPQ Invsee, Inspect All, Packet Tools, Stronghold Finder, Calculator, Lunge Macro, Air Jump, Auto Totem, Anti Crystal Death, Auto Reconnect, Macros, Aim Lock, Ghost Items, Stack Drop, Lucky Casino
+**Alle Module:** Base Finder, Block ESP, ESP, Full Bright, Butterfly, Free Cam, Free Look, Blink, RTPQ Invsee, Inspect All, Packet Tools, Stronghold Finder, Calculator, Lunge Macro, Air Jump, Auto Totem, Anti Crystal Death, Auto Reconnect, Macros, Aim Lock, Ghost Items, Stack Drop, Storage ESP, Item ESP, Nametags+, Trajectories, Player Radar, New Chunks, Safe Walk, No Fall, Auto Tool, Auto Eat, Auto Fish, Inventory Sorter, Chest Stealer, Durability, Lucky Casino
 
-Kein offizielles Projekt eines Servers. Vor der Nutzung die Server-Regeln lesen – Blink, ESP, Packet Tools und ähnliche Module sind oft verboten.
+Kein offizielles Projekt eines Servers. Vor der Nutzung die Server-Regeln lesen – Blink, ESP, No Fall, Packet Tools und ähnliche Module sind oft verboten.
 
 1. [Fabric Loader](https://fabricmc.net/use/) für 1.21.11 und die [Fabric API](https://modrinth.com/mod/fabric-api) installieren
-2. `adhd-client-1.8.7.jar` in den `mods`-Ordner legen (ältere ADHD-Client-Jars und die einzelnen Base-Finder-/InspectAll-/LuckyCasino-Jars entfernen)
+2. `adhd-client-1.9.0.jar` in den `mods`-Ordner legen (ältere ADHD-Client-Jars und die einzelnen Base-Finder-/InspectAll-/LuckyCasino-Jars entfernen)

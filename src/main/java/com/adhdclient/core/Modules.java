@@ -70,6 +70,18 @@ public final class Modules {
                     () -> L.t("Waffen in der Hand werden zum Butterfly-Messer – mit Flips, Inspect und Animationen (nur bei dir)", "Weapons in your hand become a butterfly knife – with flips, inspect and animations (only for you)"),
                     () -> com.adhdclient.butterfly.ButterflyClient.enabled, v -> com.adhdclient.butterfly.ButterflyClient.enabled = v,
                     com.adhdclient.butterfly.ButterflyScreen::new, com.adhdclient.butterfly.ButterflyClient::keyName),
+            extra("Storage ESP", Category.RENDER, "Kisten, Shulker, Fässer und Ender-Kisten durch Wände", "Chests, shulkers, barrels and ender chests through walls",
+                    () -> com.adhdclient.extras.Extras.get().storageEsp, com.adhdclient.storageesp.StorageEspClient::screen),
+            extra("Item ESP", Category.RENDER, "Gedroppte Items leuchten durch Wände, mit Name und Anzahl", "Dropped items glow through walls, with name and count",
+                    () -> com.adhdclient.extras.Extras.get().itemEsp, com.adhdclient.itemesp.ItemEspClient::screen),
+            extra("Nametags+", Category.RENDER, "Große Namensschilder mit Leben, Rüstung und Item in der Hand", "Big name tags with health, armor and held item",
+                    () -> com.adhdclient.extras.Extras.get().nametags, com.adhdclient.nametags.NametagsClient::screen),
+            extra("Trajectories", Category.RENDER, "Zeigt die Flugbahn von Pfeilen, Perlen, Tridents und Tränken", "Shows the flight path of arrows, pearls, tridents and potions",
+                    () -> com.adhdclient.extras.Extras.get().trajectories, com.adhdclient.trajectories.TrajectoriesClient::screen),
+            extra("Player Radar", Category.RENDER, "Fenster mit Spielern in der Nähe, Entfernung und Richtung", "Window with nearby players, distance and direction",
+                    () -> com.adhdclient.extras.Extras.get().radar, com.adhdclient.radar.RadarClient::screen),
+            extra("New Chunks", Category.WORLD, "Markiert neu erzeugte und alte Chunks", "Marks newly generated and old chunks",
+                    () -> com.adhdclient.extras.Extras.get().newChunks, com.adhdclient.newchunks.NewChunksClient::screen),
             new Module("Stronghold Finder", Category.WORLD,
                     () -> L.t("Zwei Ender-Augen von verschiedenen Orten werfen – zeigt, wo das End-Portal ist", "Throw two eyes of ender from different spots – shows where the end portal is"),
                     () -> com.adhdclient.stronghold.StrongholdClient.enabled, v -> com.adhdclient.stronghold.StrongholdClient.enabled = v,
@@ -135,6 +147,10 @@ public final class Modules {
                     () -> L.t("Taste drücken: der Blick bleibt an der Hitbox des Ziels, bis es zu weit weg ist (auf Servern meist verboten)", "Press the key: your view sticks to the target's hitbox until it is too far away (usually not allowed on servers)"),
                     () -> com.adhdclient.aimlock.AimLockClient.enabled, v -> com.adhdclient.aimlock.AimLockClient.enabled = v,
                     com.adhdclient.aimlock.AimLockScreen::new, com.adhdclient.aimlock.AimLockClient::keyName),
+            extra("Safe Walk", Category.MOVEMENT, "Nicht von Kanten fallen, wie beim Schleichen", "Do not walk off edges, like sneaking",
+                    () -> com.adhdclient.extras.Extras.get().safeWalk, com.adhdclient.safewalk.SafeWalkClient::screen),
+            extra("No Fall", Category.MOVEMENT, "Kein Fallschaden (auf Servern meist verboten)", "No fall damage (usually not allowed on servers)",
+                    () -> com.adhdclient.extras.Extras.get().noFall, com.adhdclient.nofall.NoFallClient::screen),
             new Module("Air Jump", Category.MOVEMENT,
                     () -> L.t("In der Luft nochmal springen (auf Servern meist erkannt)", "Jump again in mid-air (usually detected on servers)"),
                     () -> com.adhdclient.airjump.AirJumpClient.enabled, v -> com.adhdclient.airjump.AirJumpClient.enabled = v,
@@ -167,6 +183,18 @@ public final class Modules {
                     () -> L.t("Ausgewählte Items/Blöcke per Taste oder Knopf komplett aus dem Inventar werfen", "Throw all selected items/blocks out of your inventory via key or button"),
                     () -> com.adhdclient.stackdrop.StackDropClient.enabled, v -> com.adhdclient.stackdrop.StackDropClient.enabled = v,
                     com.adhdclient.stackdrop.StackDropScreen::new, com.adhdclient.stackdrop.StackDropClient::keyName),
+            extra("Auto Tool", Category.MISC, "Nimmt beim Abbauen das beste Werkzeug aus der Hotbar", "Takes the best hotbar tool when mining",
+                    () -> com.adhdclient.extras.Extras.get().autoTool, com.adhdclient.autotool.AutoToolClient::screen),
+            extra("Auto Eat", Category.MISC, "Isst automatisch bei wenig Hunger", "Eats automatically when hungry",
+                    () -> com.adhdclient.extras.Extras.get().autoEat, com.adhdclient.autoeat.AutoEatClient::screen),
+            extra("Auto Fish", Category.MISC, "Holt die Angel ein, wenn ein Fisch anbeißt, und wirft neu aus", "Reels in when a fish bites and casts again",
+                    () -> com.adhdclient.extras.Extras.get().autoFish, com.adhdclient.autofish.AutoFishClient::screen),
+            extra("Inventory Sorter", Category.MISC, "Knopf oder Taste sortiert Inventar oder Kiste", "Button or key sorts your inventory or a container",
+                    () -> com.adhdclient.extras.Extras.get().sorter, com.adhdclient.sorter.InventorySorter::screen),
+            extra("Chest Stealer", Category.MISC, "„Alles nehmen“ und „Alles rein“ bei Kisten, auf Wunsch automatisch", "\"Take all\" and \"Put all\" for containers, optionally automatic",
+                    () -> com.adhdclient.extras.Extras.get().chestSteal, com.adhdclient.cheststeal.ChestStealClient::screen),
+            extra("Durability", Category.MISC, "Warnt, bevor Werkzeug oder Rüstung kaputtgeht", "Warns before a tool or armor breaks",
+                    () -> com.adhdclient.extras.Extras.get().durability, com.adhdclient.durability.DurabilityClient::screen),
             new Module("Lucky Casino", Category.MISC,
                     () -> com.adhdclient.casino.client.LuckyCasinoClient.STANDALONE_INSTALLED ? com.adhdclient.casino.client.LuckyCasinoClient.doubleInstalledHint()
                             : L.t("Casino mit Spielgeld: Slots, Roulette, Blackjack, Crash, Plinko, Minen und mehr", "Casino with play money: slots, roulette, blackjack, crash, Plinko, mines and more"),
@@ -177,6 +205,12 @@ public final class Modules {
                     com.adhdclient.casino.CasinoModuleScreen::new,
                     () -> com.adhdclient.gui.HotKey.name(com.adhdclient.casino.client.LuckyCasinoClient.config().adhdOpenKey))
     );
+
+    /** Modul aus {@link com.adhdclient.extras.Extras} – an/aus steht in dessen Unterobjekt. */
+    private static Module extra(String name, Category cat, String de, String en, Supplier<com.adhdclient.extras.Extras.Settings> s,
+                                Function<Screen, Screen> screen) {
+        return new Module(name, cat, () -> L.t(de, en), () -> s.get().enabled, v -> s.get().enabled = v, screen, () -> null);
+    }
 
     private Modules() {
     }

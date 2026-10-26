@@ -10,9 +10,20 @@ Client-side Fabric mod for **Minecraft 1.21.11**. Instead of installing many sep
 
 > **Note:** This is a fan project and is not affiliated with any server. Many servers don't allow mods like this. Check the server rules first; use at your own risk.
 
+## Screenshots
+
+| | |
+|---|---|
+| ![Menu](docs/images/menu.png) | ![ESP, Storage ESP, Item ESP and Nametags+](docs/images/esp.png) |
+| *ClickGUI with all modules* | *ESP, Storage ESP, Item ESP, Nametags+ and Player Radar* |
+| ![Trajectories](docs/images/trajectories.png) | ![Butterfly](docs/images/butterfly.png) |
+| *Trajectories: where your ender pearl lands* | *Butterfly knife in CS2 style* |
+| ![Chest Stealer and Sorter](docs/images/chest.png) | |
+| *Chest Stealer and Inventory Sorter buttons* | |
+
 ## Installation
 1. Install the [Fabric Loader](https://fabricmc.net/use/) for 1.21.11 and the [Fabric API](https://modrinth.com/mod/fabric-api)
-2. Put `adhd-client-1.8.3.jar` into your `mods` folder
+2. Put `adhd-client-1.9.0.jar` into your `mods` folder
 
 Nothing is needed on the server. Don't install it together with the standalone Base Finder or Head Finder mods – that functionality is already included.
 
@@ -54,6 +65,20 @@ Every module window has a **Reset** button at the bottom right (click twice) tha
 | **Aim Lock** | Press the key (G, changeable) to lock onto the entity in your crosshair: as long as your crosshair is anywhere on its hitbox nothing moves; when it slips off, it is pulled back to the nearest edge. Releases when the target is farther than the set number of blocks. Speed and players-only option. Usually not allowed on servers. | G (changeable) |
 | **Stack Drop** | Pick items and blocks; one button or key throws out every matching stack from hotbar and inventory (like Ctrl+Q on each slot). | – (settable) |
 | **Ghost Items** | Puts any item into your inventory only on your side (client-side): pick it from a list of every item, choose the count, remove them again with one button. Extra window for fake enchantments (any enchantment, level 1–255) on the item in your hand. The server knows nothing – you cannot use, drop or place them, and they vanish as soon as the server updates the slot. | – |
+| **Storage ESP** | Chests, trapped chests, shulkers, barrels and ender chests through walls, each type in its own color; optional hoppers and furnaces, fill, tracers and range. | – |
+| **Item ESP** | Dropped items glow through walls, optionally with name and count and tracers. | – |
+| **Nametags+** | Big name tags through walls with health, distance, armor durability, the item in hand and whether a totem is held. Size adjustable. | – |
+| **Trajectories** | Shows where arrows, crossbow bolts, tridents, ender pearls, snowballs, eggs, potions, XP bottles and wind charges will fly and land, before you shoot or throw. | – |
+| **Player Radar** | Small window with the nearest players, their distance and an arrow pointing to them (optional coordinates). | – |
+| **New Chunks** | Marks chunks that were just generated (flowing water/lava when they load) and optionally old chunks where someone has been before. | – |
+| **Safe Walk** | You stop at edges like when sneaking, without sneaking; optionally only while holding blocks. | – |
+| **No Fall** | No fall damage: tells the server you are on the ground while falling. Usually not allowed on servers. | – |
+| **Auto Tool** | Takes the fastest tool from your hotbar when you start mining and switches back afterwards. | – |
+| **Auto Eat** | Eats the best food from your hotbar when your hunger (or health) is low and switches back. Skips bad food. | – |
+| **Auto Fish** | Reels in as soon as a fish bites and casts again after a short pause. | – |
+| **Inventory Sorter** | "Sort" button above your inventory and chests (or a key): sorts by item type and merges stacks. | – (settable) |
+| **Chest Stealer** | "Take all" and "Put all" buttons above chests and shulkers; optionally takes everything as soon as a chest opens. | – |
+| **Durability** | Warns with text and sound before a tool or armor piece breaks; optionally switches away from a tool at 2 durability. | – |
 | **Lucky Casino** | A full casino with play money: slot machine, roulette, coin flip, blackjack, crash, scratch cards, Plinko, mines, daily wheel, loot boxes, missions and achievements. Chips are virtual and stored locally; your LuckyCasino progress carries over. Also `/casino open`. | O opens the casino (changeable) |
 
 All modules only use data your client already has. Nothing extra is sent to the server.

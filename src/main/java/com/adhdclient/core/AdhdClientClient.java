@@ -63,6 +63,19 @@ public final class AdhdClientClient implements ClientModInitializer {
         com.adhdclient.autototem.AutoTotemClient.init();
         com.adhdclient.anticrystal.AntiCrystalClient.init();
         com.adhdclient.stackdrop.StackDropClient.init();
+        com.adhdclient.storageesp.StorageEspClient.init();
+        com.adhdclient.itemesp.ItemEspClient.init();
+        com.adhdclient.nametags.NametagsClient.init();
+        com.adhdclient.trajectories.TrajectoriesClient.init();
+        com.adhdclient.radar.RadarClient.init();
+        com.adhdclient.newchunks.NewChunksClient.init();
+        com.adhdclient.autotool.AutoToolClient.init();
+        com.adhdclient.autoeat.AutoEatClient.init();
+        com.adhdclient.autofish.AutoFishClient.init();
+        com.adhdclient.sorter.InventorySorter.init();
+        com.adhdclient.cheststeal.ChestStealClient.init();
+        com.adhdclient.durability.DurabilityClient.init();
+        com.adhdclient.nofall.NoFallClient.init();
 
         ClientTickEvents.END_CLIENT_TICK.register(mc -> {
             while (menuKey.wasPressed()) {

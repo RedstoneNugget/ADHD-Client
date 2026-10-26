@@ -28,6 +28,11 @@
     "TotemViewMixin",
     "TotemPopMixin",
     "IntroTitleMixin",
+    "NewChunksMixin",
+    "AutoToolMixin",
+    "HandledScreenBoundsAccessor",
+    "FishingBobberAccessor",
+    "SafeWalkMixin",
     "WorldRendererMixin"
   ],
   "injectors": {

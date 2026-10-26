@@ -130,6 +130,7 @@ public final class AdhdModuleState {
     }
 
     public static void save() {
+        com.adhdclient.extras.Extras.save();
         Data d = new Data();
         d.baseFinderEnabled = BaseFinderClient.enabled;
         d.blockEspEnabled = BlockESPClient.enabled;

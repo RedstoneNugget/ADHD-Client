@@ -10,9 +10,20 @@ Clientseitige Fabric-Mod für **Minecraft 1.21.11**. Statt vieler einzelner Mods
 
 > **Hinweis:** Dies ist ein Fan-Projekt und kein offizielles Projekt eines Servers. Viele Server erlauben solche Mods nicht. Vorher die Serverregeln prüfen; Nutzung auf eigenes Risiko.
 
+## Bilder
+
+| | |
+|---|---|
+| ![Menü](docs/images/menu.png) | ![ESP, Storage ESP, Item ESP und Nametags+](docs/images/esp.png) |
+| *ClickGUI mit allen Modulen* | *ESP, Storage ESP, Item ESP, Nametags+ und Spieler-Radar* |
+| ![Trajectories](docs/images/trajectories.png) | ![Butterfly](docs/images/butterfly.png) |
+| *Trajectories: wo deine Enderperle landet* | *Butterfly-Messer im CS2-Stil* |
+| ![Chest Stealer und Sortieren](docs/images/chest.png) | |
+| *Knöpfe von Chest Stealer und Inventory Sorter* | |
+
 ## Installation
 1. [Fabric Loader](https://fabricmc.net/use/) für 1.21.11 und die [Fabric API](https://modrinth.com/mod/fabric-api) installieren
-2. `adhd-client-1.8.3.jar` in den `mods`-Ordner legen
+2. `adhd-client-1.9.0.jar` in den `mods`-Ordner legen
 
 Auf dem Server ist nichts nötig. Nicht zusammen mit den einzelnen Mods Base Finder oder Head Finder installieren – deren Funktionen stecken schon drin.
 
@@ -54,6 +65,20 @@ Unter Jedes Modul-Fenster hat unten rechts einen **Zurücksetzen**-Knopf (zweima
 | **Aim Lock** | Taste drücken (G, änderbar) lockt die Entity im Fadenkreuz: Solange das Fadenkreuz irgendwo auf ihrer Hitbox ist, bewegt sich nichts; rutscht es runter, wird es zum nächsten Rand zurückgezogen. Löst sich, wenn das Ziel weiter weg ist als die eingestellten Blöcke. Tempo und „Nur Spieler“ einstellbar. Auf Servern meist verboten. | G (änderbar) |
 | **Stack Drop** | Items und Blöcke auswählen; ein Knopf oder eine Taste wirft alle passenden Stacks aus Hotbar und Inventar (wie Strg+Q auf jedem Feld). | – (einstellbar) |
 | **Ghost Items** | Legt beliebige Items nur bei dir ins Inventar (Client-seitig): aus einer Liste aller Items wählen, Anzahl einstellen, mit einem Knopf wieder entfernen. Extra-Fenster für Fake-Verzauberungen (jede Verzauberung, Stufe 1–255) auf dem Item in der Hand. Der Server weiß nichts davon – benutzen, werfen oder setzen geht nicht, und sie verschwinden, sobald der Server das Feld neu schickt. | – |
+| **Storage ESP** | Kisten, Fallen-Kisten, Shulker, Fässer und Ender-Kisten durch Wände, jede Art in eigener Farbe; optional Trichter und Öfen, Füllung, Tracer und Reichweite. | – |
+| **Item ESP** | Gedroppte Items leuchten durch Wände, auf Wunsch mit Name, Anzahl und Tracern. | – |
+| **Nametags+** | Große Namensschilder durch Wände mit Leben, Entfernung, Rüstungs-Haltbarkeit, Item in der Hand und ob ein Totem gehalten wird. Größe einstellbar. | – |
+| **Trajectories** | Zeigt, wohin Pfeile, Armbrust-Bolzen, Tridents, Enderperlen, Schneebälle, Eier, Tränke, Erfahrungsflaschen und Windkugeln fliegen und wo sie landen – bevor du schießt oder wirfst. | – |
+| **Player Radar** | Kleines Fenster mit den nächsten Spielern, Entfernung und einem Pfeil in ihre Richtung (optional Koordinaten). | – |
+| **New Chunks** | Markiert gerade erzeugte Chunks (fließendes Wasser/Lava beim Laden) und optional alte Chunks, in denen schon jemand war. | – |
+| **Safe Walk** | Du bleibst an Kanten stehen wie beim Schleichen, ohne zu schleichen; optional nur mit Blöcken in der Hand. | – |
+| **No Fall** | Kein Fallschaden: meldet dem Server beim Fallen „am Boden“. Auf Servern meist verboten. | – |
+| **Auto Tool** | Nimmt beim Abbauen das schnellste Werkzeug aus der Hotbar und wechselt danach zurück. | – |
+| **Auto Eat** | Isst bei wenig Hunger (oder Leben) das beste Essen aus der Hotbar und wechselt zurück. Schlechtes Essen wird gemieden. | – |
+| **Auto Fish** | Holt die Angel ein, sobald ein Fisch anbeißt, und wirft nach kurzer Pause neu aus. | – |
+| **Inventory Sorter** | Knopf „Sortieren“ über Inventar und Kisten (oder eine Taste): sortiert nach Item-Art und legt Stapel zusammen. | – (einstellbar) |
+| **Chest Stealer** | Knöpfe „Alles nehmen“ und „Alles rein“ über Kisten und Shulkern; optional nimmt es beim Öffnen sofort alles. | – |
+| **Durability** | Warnt mit Text und Ton, bevor Werkzeug oder Rüstung kaputtgeht; optional wechselt es bei 2 Haltbarkeit vom Werkzeug weg. | – |
 | **Lucky Casino** | Ein komplettes Casino mit Spielgeld: Slot-Maschine, Roulette, Münzwurf, Blackjack, Crash, Rubbellose, Plinko, Minenfeld, tägliches Glücksrad, Lootboxen, Missionen und Erfolge. Chips sind virtuell und lokal gespeichert; dein LuckyCasino-Spielstand wird übernommen. Auch `/casino open`. | O öffnet das Casino (änderbar) |
 
 Alle Module arbeiten nur mit Daten, die der Client ohnehin hat. Es wird nichts zusätzlich an den Server geschickt.
