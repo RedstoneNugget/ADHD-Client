@@ -621,13 +621,13 @@ public class ConfigScreen extends ThemedScreen {
                 "Scannt dauerhaft im Hintergrund, sobald du in einer Welt bist.");
         toggle("Markierungen sichtbar", () -> g.markersVisible, v -> g.markersVisible = v,
                 "Alle Markierungen ein-/ausblenden. Das Scannen läuft weiter.");
-        slider("Scan-Radius", 1, 32, 1, () -> g.scanRadius, v -> g.scanRadius = (int) Math.round(v),
+        slider("Scan-Radius", 1, 128, 1, () -> g.scanRadius, v -> g.scanRadius = (int) Math.round(v),
                 v -> intFmt(v) + Lang.t(" Chunks", " chunks"), "Höchstens bis zur eingestellten Render-Distanz.");
-        slider("Scan-Budget", 0.2, 10, 0.1, () -> g.scanBudgetMs, v -> g.scanBudgetMs = v,
+        slider("Scan-Budget", 0.1, 100, 0.1, () -> g.scanBudgetMs, v -> g.scanBudgetMs = v,
                 v -> String.format(Locale.ROOT, Lang.t("%.1f ms/Tick", "%.1f ms/tick"), v), "Maximale Scan-Arbeit pro Tick. Kleiner = flüssiger, aber langsamer.");
-        slider("Hintergrund-Durchlauf", 0, 300, 5, () -> g.backgroundIntervalSec, v -> g.backgroundIntervalSec = (int) Math.round(v),
+        slider("Hintergrund-Durchlauf", 0, 3600, 5, () -> g.backgroundIntervalSec, v -> g.backgroundIntervalSec = (int) Math.round(v),
                 v -> v < 1 ? Lang.t("aus", "off") : Lang.t("alle ", "every ") + intFmt(v) + " s", "Prüft alle gecachten Chunks regelmäßig neu, falls Updates verpasst wurden.");
-        slider("Verzögerung nach Änderung", 200, 5000, 100, () -> g.dirtyDelayMs, v -> g.dirtyDelayMs = (int) Math.round(v),
+        slider("Verzögerung nach Änderung", 100, 60000, 100, () -> g.dirtyDelayMs, v -> g.dirtyDelayMs = (int) Math.round(v),
                 v -> String.format(Locale.ROOT, "%.1f s", v / 1000), "Geänderte Chunks werden gebündelt nach dieser Zeit neu gescannt.");
 
         header("Suchmodi");
@@ -640,7 +640,7 @@ public class ConfigScreen extends ThemedScreen {
 
         header("Anzeige & Meldungen");
         toggle("Benachrichtigungs-Ton", () -> g.notificationSound, v -> g.notificationSound = v, "Kurzer Ton bei neuen Funden.");
-        slider("Label-Größe", 0.25, 4, 0.05, () -> g.labelScale, v -> g.labelScale = v,
+        slider("Label-Größe", 0.1, 20, 0.05, () -> g.labelScale, v -> g.labelScale = v,
                 v -> String.format(Locale.ROOT, "%.2fx", v), null);
         modeDisplay("Amethyst", () -> c.amethyst.notify, v -> c.amethyst.notify = v,
                 () -> c.amethyst.color, v -> c.amethyst.color = v);
@@ -678,8 +678,8 @@ public class ConfigScreen extends ThemedScreen {
         toggle("Knospender Amethyst", () -> a.countBudding, v -> a.countBudding = v, "minecraft:budding_amethyst");
         newline();
         header("Anzeige");
-        slider("Mindestanzahl", 1, 200, 1, () -> a.minCount, v -> a.minCount = (int) Math.round(v), ConfigScreen::intFmt, "Ein Chunk wird erst ab so vielen gezählten Blöcken markiert.");
-        slider("Anzahl Markierungen (N)", 1, 10, 1, () -> a.topN, v -> a.topN = (int) Math.round(v), ConfigScreen::intFmt, "Nur die N besten Chunks werden angezeigt.");
+        slider("Mindestanzahl", 1, 4096, 1, () -> a.minCount, v -> a.minCount = (int) Math.round(v), ConfigScreen::intFmt, "Ein Chunk wird erst ab so vielen gezählten Blöcken markiert.");
+        slider("Anzahl Markierungen (N)", 1, 100, 1, () -> a.topN, v -> a.topN = (int) Math.round(v), ConfigScreen::intFmt, "Nur die N besten Chunks werden angezeigt.");
         note("Markiert wird der ganze Chunk (Rahmen vom tiefsten bis zum höchsten Fund). Der beste Chunk ist dicker/heller und heißt \"Bester Chunk\".");
     }
 
@@ -701,9 +701,9 @@ public class ConfigScreen extends ThemedScreen {
                 "Nester mit bekannt 0 Bienen ignorieren. Auf Servern ist die Anzahl meist unbekannt (?), solche Nester bleiben sichtbar.");
         newline();
         header("Anzeige & Feineinstellung");
-        slider("Anzahl Markierungen (N)", 1, 10, 1, () -> b.topN, v -> b.topN = (int) Math.round(v), ConfigScreen::intFmt, null);
-        slider("Baum-Suchradius", 1, 6, 1, () -> b.treeRadius, v -> b.treeRadius = (int) Math.round(v), v -> intFmt(v) + Lang.t(" Blöcke", " blocks"), null);
-        slider("Mind. Baumblöcke", 1, 30, 1, () -> b.minTreeBlocks, v -> b.minTreeBlocks = (int) Math.round(v), ConfigScreen::intFmt,
+        slider("Anzahl Markierungen (N)", 1, 100, 1, () -> b.topN, v -> b.topN = (int) Math.round(v), ConfigScreen::intFmt, null);
+        slider("Baum-Suchradius", 1, 32, 1, () -> b.treeRadius, v -> b.treeRadius = (int) Math.round(v), v -> intFmt(v) + Lang.t(" Blöcke", " blocks"), null);
+        slider("Mind. Baumblöcke", 1, 100, 1, () -> b.minTreeBlocks, v -> b.minTreeBlocks = (int) Math.round(v), ConfigScreen::intFmt,
                 "So viele Stamm-/Laubblöcke (davon min. 1 Stamm) müssen im Radius sein.");
         newline();
         field("Natürliche Biome", 100, String.join(", ", b.naturalBiomes), 4000, s -> {
@@ -734,7 +734,7 @@ public class ConfigScreen extends ThemedScreen {
                 "Leerer Spawner (z. B. im Kreativmodus gesetzt).");
         newline();
         header("Anzeige");
-        slider("Anzahl Markierungen (N)", 1, 30, 1, () -> s.topN, v -> s.topN = (int) Math.round(v), ConfigScreen::intFmt, null);
+        slider("Anzahl Markierungen (N)", 1, 100, 1, () -> s.topN, v -> s.topN = (int) Math.round(v), ConfigScreen::intFmt, null);
         newline();
         StringBuilder mobs = new StringBuilder();
         for (Map.Entry<String, String> e : s.naturalMobs.entrySet()) {
@@ -758,9 +758,9 @@ public class ConfigScreen extends ThemedScreen {
         header("Übergroßer Kelp");
         toggle("Modus aktiv", () -> k.enabled, v -> k.enabled = v, null);
         newline();
-        slider("Mindesthöhe", 2, 64, 1, () -> k.minHeight, v -> k.minHeight = (int) Math.round(v), v -> intFmt(v) + Lang.t(" Blöcke", " blocks"),
+        slider("Mindesthöhe", 2, 400, 1, () -> k.minHeight, v -> k.minHeight = (int) Math.round(v), v -> intFmt(v) + Lang.t(" Blöcke", " blocks"),
                 "Zusammenhängende Kelp-Säulen ab dieser Höhe werden berücksichtigt.");
-        slider("Anzahl Markierungen (N)", 1, 10, 1, () -> k.topN, v -> k.topN = (int) Math.round(v), ConfigScreen::intFmt, null);
+        slider("Anzahl Markierungen (N)", 1, 100, 1, () -> k.topN, v -> k.topN = (int) Math.round(v), ConfigScreen::intFmt, null);
         note("Markiert wird jeweils die Spitze der Säule, mit der Höhe im Label.");
     }
 
@@ -780,14 +780,14 @@ public class ConfigScreen extends ThemedScreen {
                 "Mehrere Lichtquellen-Sorten UND mehrere andere künstliche Blöcke zusammen.");
         newline();
         header("Schwellen");
-        slider("Mindestscore", 1, 200, 1, () -> a.minScore, v -> a.minScore = (int) Math.round(v), ConfigScreen::intFmt, null);
-        slider("Anzahl Markierungen (N)", 1, 10, 1, () -> a.topN, v -> a.topN = (int) Math.round(v), ConfigScreen::intFmt, null);
-        slider("Struktur-Toleranz", 1, 20, 0.5, () -> a.structureToleranceFactor, v -> a.structureToleranceFactor = v,
+        slider("Mindestscore", 1, 100000, 1, () -> a.minScore, v -> a.minScore = (int) Math.round(v), ConfigScreen::intFmt, null);
+        slider("Anzahl Markierungen (N)", 1, 100, 1, () -> a.topN, v -> a.topN = (int) Math.round(v), ConfigScreen::intFmt, null);
+        slider("Struktur-Toleranz", 1, 100, 0.5, () -> a.structureToleranceFactor, v -> a.structureToleranceFactor = v,
                 v -> String.format(Locale.ROOT, Lang.t("%.1fx typisch", "%.1fx typical"), v), "Strukturchunks werden nur gemeldet, wenn ihr Score so viel höher als typisch ist.");
-        slider("Licht-Check Punkte/10 Blöcke", 0, 10, 0.1, () -> a.lightCheckWeightPer10, v -> a.lightCheckWeightPer10 = v,
+        slider("Licht-Check Punkte/10 Blöcke", 0, 100, 0.1, () -> a.lightCheckWeightPer10, v -> a.lightCheckWeightPer10 = v,
                 v -> String.format(Locale.ROOT, "%.1f", v), null);
-        slider("Licht-Check Maximum", 0, 100, 1, () -> a.lightCheckMax, v -> a.lightCheckMax = v, ConfigScreen::intFmt, null);
-        slider("Unbekannte Lichtquelle", 0, 10, 0.1, () -> a.unknownLightWeight, v -> a.unknownLightWeight = v,
+        slider("Licht-Check Maximum", 0, 10000, 1, () -> a.lightCheckMax, v -> a.lightCheckMax = v, ConfigScreen::intFmt, null);
+        slider("Unbekannte Lichtquelle", 0, 100, 0.1, () -> a.unknownLightWeight, v -> a.unknownLightWeight = v,
                 v -> String.format(Locale.ROOT, Lang.t("%.1f Pkt.", "%.1f pts"), v), "Leuchtende Blöcke, die weder natürlich noch in einer Liste sind (z. B. Lichtblock).");
         note("Gewichte der einzelnen Blocksorten, eigene Blöcke und die Listen natürlicher Lichtquellen stehen im Tab \"Gewichte\".");
     }

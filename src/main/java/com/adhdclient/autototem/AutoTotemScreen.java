@@ -32,8 +32,10 @@ public final class AutoTotemScreen extends ThemedScreen {
         toggle(L.t("Auch im Inventar suchen", "Also search inventory"), () -> AutoTotemClient.wholeInventory, v -> AutoTotemClient.wholeInventory = v,
                 x, y, inner, ROW - 2, L.t("Aus = nur Hotbar; an = auch die 27 Inventar-Felder", "Off = hotbar only; on = also the 27 inventory slots"), null);
         y += ROW;
-        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Tempo", "Speed"), 0, 10, 1, AutoTotemClient.delay,
-                v -> v < 0.5 ? L.t("sofort", "instant") : (int) Math.round(v) + L.t(" Ticks pro Feld", " ticks per slot"), v -> AutoTotemClient.delay = (int) Math.round(v)));
+        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Tempo", "Speed"), 0, 200, 0.5, AutoTotemClient.delay,
+                v -> v < 0.01 ? L.t("sofort", "instant") : v < 0.6 ? L.t("halber Tick pro Feld", "half a tick per slot")
+                        : (int) Math.round(v) + L.t(" Ticks pro Feld", " ticks per slot"),
+                v -> AutoTotemClient.delay = Math.round(v * 2) / 2.0));
         y += ROW + 6;
         addDrawableChild(ButtonWidget.builder(Text.literal(L.t("Fertig", "Done")), b -> close()).dimensions(x, y, inner, ROW - 2).build());
         status(AutoTotemClient.enabled ? L.t("Fehlt das Totem in der Offhand, kommt eins nach", "If the offhand totem is missing, another one is moved in")
@@ -49,7 +51,7 @@ public final class AutoTotemScreen extends ThemedScreen {
     protected Runnable resetAction() {
         return () -> {
             AutoTotemClient.wholeInventory = false;
-            AutoTotemClient.delay = 2;
+            AutoTotemClient.delay = 0.5;
             AutoTotemClient.toggleKey = com.adhdclient.gui.HotKey.NONE;
             com.adhdclient.core.AdhdModuleState.save();
         };

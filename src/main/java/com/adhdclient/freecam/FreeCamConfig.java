@@ -64,7 +64,7 @@ public final class FreeCamConfig {
     }
 
     public void sanitize() {
-        speed = Math.max(1, Math.min(100, speed));
-        sprintFactor = Math.max(1, Math.min(10, sprintFactor));
+        speed = Math.max(1, Math.min(1000, speed));
+        sprintFactor = Math.max(1, Math.min(100, sprintFactor));
     }
 }

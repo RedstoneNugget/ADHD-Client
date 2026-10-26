@@ -57,7 +57,7 @@ public final class ButterflyScreen extends ThemedScreen {
         toggle(L.t("Spielen", "Fidget"), () -> c.idleFidget, v -> c.idleFidget = v, x + 2 * (third + 4), y, inner - 2 * (third + 4), ROW - 2,
                 L.t("Im Stand spielt die Hand ab und zu mit dem Messer", "Standing still, your hand plays with the knife now and then"), ButterflyClient::onConfigEdited);
         y += ROW;
-        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Tempo", "Speed"), 0.5, 2.0, 0.1, c.speed,
+        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Tempo", "Speed"), 0.1, 10, 0.1, c.speed,
                 v -> String.format(Locale.ROOT, "×%.1f", v), v -> {
             c.speed = v;
             ButterflyClient.onConfigEdited();

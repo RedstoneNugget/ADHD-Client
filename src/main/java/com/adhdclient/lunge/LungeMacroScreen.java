@@ -37,8 +37,8 @@ public final class LungeMacroScreen extends ThemedScreen {
         toggle(L.t("Halten = wiederholen", "Hold = repeat"), () -> LungeMacroClient.repeat, v -> LungeMacroClient.repeat = v, x, y, inner, ROW - 2,
                 L.t("Solange die Taste gedrückt ist, wird immer wieder gelunged", "While the key is held, it keeps lunging"), AdhdModuleState::save);
         y += ROW;
-        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Abstand", "Interval"), 1, 40, 1, LungeMacroClient.delay,
-                v -> (int) Math.round(v) + L.t(" Ticks", " ticks"), v -> LungeMacroClient.delay = (int) Math.round(v)));
+        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Abstand", "Interval"), 0, 1200, 1, LungeMacroClient.delay,
+                v -> v < 0.5 ? L.t("sofort", "instant") : (int) Math.round(v) + L.t(" Ticks", " ticks"), v -> LungeMacroClient.delay = (int) Math.round(v)));
         y += ROW + 6;
 
         addDrawableChild(ButtonWidget.builder(Text.literal(L.t("Fertig", "Done")), b -> close()).dimensions(x, y, inner, ROW - 2).build());

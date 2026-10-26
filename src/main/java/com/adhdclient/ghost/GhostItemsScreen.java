@@ -40,7 +40,7 @@ public final class GhostItemsScreen extends PickerScreen {
     @Override
     protected int buildExtras(int x, int y, int w) {
         int half = (w - 4) / 2;
-        addDrawableChild(new ValueSlider(x, y, half, ROW - 2, L.t("Anzahl", "Count"), 1, 64, 1, GhostItemsClient.count,
+        addDrawableChild(new ValueSlider(x, y, half, ROW - 2, L.t("Anzahl", "Count"), 1, 999, 1, GhostItemsClient.count,
                 v -> String.valueOf((int) Math.round(v)), v -> GhostItemsClient.count = (int) Math.round(v)));
         ButtonWidget clear = ButtonWidget.builder(Text.literal(L.t("Ghost-Items entfernen", "Remove ghost items")), b -> {
             int n = GhostItemsClient.clear();

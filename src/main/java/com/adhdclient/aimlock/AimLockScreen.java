@@ -35,10 +35,10 @@ public final class AimLockScreen extends ThemedScreen {
 
         section(L.t("Lock", "Lock"), x, y, inner);
         y += 12;
-        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Lösen ab", "Release at"), 2, 64, 0.5, c.range,
+        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Lösen ab", "Release at"), 1, 512, 0.5, c.range,
                 v -> String.format(Locale.ROOT, L.t("%.1f Blöcke", "%.1f blocks"), v), v -> c.range = v));
         y += ROW;
-        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Tempo", "Speed"), 10, 100, 5, c.speed,
+        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Tempo", "Speed"), 1, 1000, 1, c.speed,
                 v -> (int) Math.round(v) + " %", v -> c.speed = (int) Math.round(v)));
         y += ROW;
         addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Abweichung", "Deviation"), 0, 100, 5, c.deviation,

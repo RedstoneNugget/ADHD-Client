@@ -61,7 +61,7 @@ public final class LungeMacroClient {
         boolean attacked = ((LungeAttackInvoker) mc).adhd$doAttack();
         inv.setSelectedSlot(previous);
         if (attacked) count++;
-        cooldown = Math.max(1, delay);
+        cooldown = Math.max(0, delay);
     }
 
     /** Hotbar-Feld mit dem stärksten Lunge-Speer, oder −1. */

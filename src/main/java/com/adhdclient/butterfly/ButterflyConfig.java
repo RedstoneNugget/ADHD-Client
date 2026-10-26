@@ -78,7 +78,7 @@ public final class ButterflyConfig {
     public void sanitize() {
         if (looks == null) looks = defaultLooks();
         for (ButterflyLook look : ButterflyLook.values()) looks.computeIfAbsent(look.id, k -> new ArrayList<>());
-        speed = Math.max(0.5, Math.min(2.0, speed));
+        speed = Math.max(0.1, Math.min(10.0, speed));
         if (model == null) model = "";
     }
 

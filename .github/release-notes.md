@@ -1,6 +1,12 @@
-**ADHD Client 1.8.3** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
+**ADHD Client 1.8.6** for Minecraft 1.21.11 (Fabric, client only) · [Deutsch weiter unten](#deutsch)
 
 One client, many modules – each switched on or off in one menu (**Right Ctrl**). All settings, colors and module keys are set inside the client. Menus in English or German.
+
+### New in 1.8.6
+- **Huge number ranges** – every number setting goes much further (e.g. ESP range up to 8192, Free Cam speed up to 1000, Air Jump up to 1000 jumps). Big sliders are fine at the start and coarse at the end; the mouse wheel changes one step, Shift + wheel ten
+- **Stack Drop** (new module, Misc) – pick items and blocks, one button or key throws out every matching stack from hotbar and inventory
+- **Auto Totem** switches the hotbar like a real mouse wheel scroll; speed in half-tick steps (default half a tick per slot)
+- **Lunge Macro** and **Auto Reconnect** can also be set to "instant"
 
 ### New in 1.8.3
 - **Chat Emojis** – :skull:, :heart:, :star:, :shrug: and more become symbols in chat (only for you, optionally also when sending)
@@ -92,18 +98,25 @@ One client, many modules – each switched on or off in one menu (**Right Ctrl**
 - **Packet Tools** – tools for container menus and their packets
 - **Aim Lock** – stick to a target's hitbox
 - **Ghost Items** – client-side items and fake enchantments
+- **Stack Drop** – throw out all stacks of chosen items at once
 - **Lucky Casino** – casino with play money
 
 Not affiliated with any server. Check the server rules before using it – Blink, ESP, Packet Tools and similar modules are often not allowed.
 
 ### Installation
 1. Install the [Fabric Loader](https://fabricmc.net/use/) for 1.21.11 and the [Fabric API](https://modrinth.com/mod/fabric-api)
-2. Put `adhd-client-1.8.3.jar` into your `mods` folder (remove older ADHD Client jars and the standalone Base Finder / InspectAll / LuckyCasino jars)
+2. Put `adhd-client-1.8.6.jar` into your `mods` folder (remove older ADHD Client jars and the standalone Base Finder / InspectAll / LuckyCasino jars)
 
 ---
 
 ### Deutsch
 Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg**). Alle Einstellungen, Farben und Modul-Tasten stellst du im Client ein. Menüs auf Deutsch oder Englisch.
+
+**Neu in 1.8.6**
+- **Riesige Zahlenbereiche** – jede Zahl-Einstellung geht viel weiter (z. B. ESP-Reichweite bis 8192, Free-Cam-Tempo bis 1000, Air Jump bis 1000 Sprünge). Große Regler sind vorne fein und hinten grob; das Mausrad ändert um einen Schritt, Shift + Mausrad um zehn
+- **Stack Drop** (neues Modul, Sonstiges) – Items und Blöcke auswählen, ein Knopf oder eine Taste wirft alle passenden Stacks aus Hotbar und Inventar
+- **Auto Totem** wechselt die Hotbar wie echtes Mausrad-Scrollen; Tempo in halben Ticks (Standard: ein halber Tick pro Feld)
+- **Lunge Macro** und **Auto Reconnect** lassen sich auch auf „sofort“ stellen
 
 **Neu in 1.8.3**
 - **Chat-Emojis** – :skull:, :heart:, :star:, :shrug: und mehr werden im Chat zu Symbolen (nur bei dir, optional auch beim Senden)
@@ -181,9 +194,9 @@ Ein Client, viele Module – jedes einzeln an/aus in einem Menü (**Rechte Strg*
 - **ESP** – Farben einfacher: drei Modus-Knöpfe und eine Palette zum Anklicken
 - Kurzes Antippen von Tasten geht nicht mehr verloren, die gebaute Jar enthält keine Metadaten
 
-**Alle Module:** Base Finder, Block ESP, ESP, Full Bright, Butterfly, Free Cam, Free Look, Blink, RTPQ Invsee, Inspect All, Packet Tools, Stronghold Finder, Calculator, Lunge Macro, Air Jump, Auto Totem, Anti Crystal Death, Auto Reconnect, Macros, Aim Lock, Ghost Items, Lucky Casino
+**Alle Module:** Base Finder, Block ESP, ESP, Full Bright, Butterfly, Free Cam, Free Look, Blink, RTPQ Invsee, Inspect All, Packet Tools, Stronghold Finder, Calculator, Lunge Macro, Air Jump, Auto Totem, Anti Crystal Death, Auto Reconnect, Macros, Aim Lock, Ghost Items, Stack Drop, Lucky Casino
 
 Kein offizielles Projekt eines Servers. Vor der Nutzung die Server-Regeln lesen – Blink, ESP, Packet Tools und ähnliche Module sind oft verboten.
 
 1. [Fabric Loader](https://fabricmc.net/use/) für 1.21.11 und die [Fabric API](https://modrinth.com/mod/fabric-api) installieren
-2. `adhd-client-1.8.3.jar` in den `mods`-Ordner legen (ältere ADHD-Client-Jars und die einzelnen Base-Finder-/InspectAll-/LuckyCasino-Jars entfernen)
+2. `adhd-client-1.8.6.jar` in den `mods`-Ordner legen (ältere ADHD-Client-Jars und die einzelnen Base-Finder-/InspectAll-/LuckyCasino-Jars entfernen)

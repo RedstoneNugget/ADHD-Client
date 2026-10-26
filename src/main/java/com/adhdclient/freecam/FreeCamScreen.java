@@ -36,13 +36,13 @@ public final class FreeCamScreen extends ThemedScreen {
 
         section(L.t("Flug", "Flight"), x, y, inner);
         y += 12;
-        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Geschwindigkeit", "Speed"), 1, 60, 1, c.speed,
+        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Geschwindigkeit", "Speed"), 1, 1000, 1, c.speed,
                 v -> (int) Math.round(v) + L.t(" Blöcke/s", " blocks/s"), v -> {
             c.speed = Math.round(v);
             FreeCamClient.onConfigEdited();
         }));
         y += ROW;
-        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Sprint-Faktor", "Sprint factor"), 1, 10, 0.5, c.sprintFactor,
+        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Sprint-Faktor", "Sprint factor"), 1, 100, 0.5, c.sprintFactor,
                 v -> String.format(Locale.ROOT, "×%.1f", v), v -> {
             c.sprintFactor = v;
             FreeCamClient.onConfigEdited();

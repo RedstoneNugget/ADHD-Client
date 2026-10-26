@@ -64,7 +64,7 @@ public final class BlockESPConfig {
     }
 
     public void sanitize() {
-        range = Math.max(16, Math.min(512, range));
+        range = Math.max(16, Math.min(4096, range));
         List<String> cleaned = new ArrayList<>();
         if (selectedBlocks != null) {
             for (String id : selectedBlocks) {

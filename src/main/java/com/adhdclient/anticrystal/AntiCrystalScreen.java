@@ -31,10 +31,10 @@ public final class AntiCrystalScreen extends ThemedScreen {
         y += ROW + 6;
         section(L.t("Kristall in der Nähe", "Crystal nearby"), x, y, inner);
         y += 12;
-        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Reichweite", "Range"), 2, 16, 0.5, AntiCrystalClient.radius,
+        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Reichweite", "Range"), 1, 128, 0.5, AntiCrystalClient.radius,
                 v -> String.format(Locale.ROOT, L.t("%.1f Blöcke", "%.1f blocks"), v), v -> AntiCrystalClient.radius = v));
         y += ROW;
-        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Tempo", "Speed"), 0, 5, 1, AntiCrystalClient.delay,
+        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Tempo", "Speed"), 0, 200, 1, AntiCrystalClient.delay,
                 v -> v < 0.5 ? L.t("sofort", "instant") : (int) Math.round(v) + L.t(" Ticks pro Schritt", " ticks per step"), v -> AntiCrystalClient.delay = (int) Math.round(v)));
         y += ROW + 6;
         addDrawableChild(ButtonWidget.builder(Text.literal(L.t("Fertig", "Done")), b -> close()).dimensions(x, y, inner, ROW - 2).build());

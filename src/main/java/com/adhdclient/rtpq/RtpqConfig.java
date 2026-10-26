@@ -74,9 +74,9 @@ public final class RtpqConfig {
         if (endText == null) endText = "";
         opponentText = opponentText.trim();
         endText = endText.trim();
-        countdownSeconds = Math.max(1, Math.min(30, countdownSeconds));
-        rtpqueueDelayTicks = Math.max(1, Math.min(200, rtpqueueDelayTicks));
-        crystalThreshold = Math.max(1, Math.min(64, crystalThreshold));
+        countdownSeconds = Math.max(1, Math.min(600, countdownSeconds));
+        rtpqueueDelayTicks = Math.max(1, Math.min(2000, rtpqueueDelayTicks));
+        crystalThreshold = Math.max(1, Math.min(2304, crystalThreshold));
     }
 
 }

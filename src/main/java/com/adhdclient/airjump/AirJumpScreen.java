@@ -29,10 +29,10 @@ public final class AirJumpScreen extends ThemedScreen {
         int inner = W - 16;
         section(L.t("Sprünge", "Jumps"), x, y, inner);
         y += 12;
-        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Luftsprünge", "Air jumps"), 0, 10, 1, AirJumpClient.maxJumps,
+        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Luftsprünge", "Air jumps"), 0, 1000, 1, AirJumpClient.maxJumps,
                 v -> v < 0.5 ? L.t("unbegrenzt", "unlimited") : String.valueOf((int) Math.round(v)), v -> AirJumpClient.maxJumps = (int) Math.round(v)));
         y += ROW;
-        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Sprungkraft", "Strength"), 0.2, 1.0, 0.02, AirJumpClient.strength,
+        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Sprungkraft", "Strength"), 0.02, 10, 0.02, AirJumpClient.strength,
                 v -> String.format(Locale.ROOT, "%.2f", v), v -> AirJumpClient.strength = v));
         y += ROW + 6;
         addDrawableChild(ButtonWidget.builder(Text.literal(L.t("Fertig", "Done")), b -> close()).dimensions(x, y, inner, ROW - 2).build());

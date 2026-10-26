@@ -42,7 +42,7 @@ public final class BlinkScreen extends ThemedScreen {
         toggle(L.t("Info-Anzeige", "Info display"), () -> c.showInfo, v -> c.showInfo = v, x + half + 4, y, inner - half - 4, ROW - 2,
                 L.t("Sekunden und Paketanzahl über der Hotbar", "Seconds and packet count above the hotbar"), BlinkClient::onConfigEdited);
         y += ROW;
-        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Automatisch senden", "Auto send"), 0, 30, 1, c.autoSendSeconds,
+        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Automatisch senden", "Auto send"), 0, 3600, 1, c.autoSendSeconds,
                 v -> v < 0.5 ? L.t("nie", "never") : L.t("nach ", "after ") + (int) Math.round(v) + " s", v -> {
             c.autoSendSeconds = (int) Math.round(v);
             BlinkClient.onConfigEdited();

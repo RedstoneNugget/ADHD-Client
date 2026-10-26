@@ -149,7 +149,7 @@ public final class AimLockClient {
         Vec3d look = p.getRotationVec(tickDelta);
         Box box = shrink(target.getBoundingBox().offset(target.getLerpedPos(tickDelta).subtract(target.getEntityPos())));
         if (box.raycast(eye, eye.add(look.multiply(config().range + 4))).isPresent() || box.contains(eye)) return;
-        float k = 2f + MathHelper.clamp(config().speed, 10, 100) * 0.28f;   // 10 % ≈ 5/s, 100 % ≈ 30/s
+        float k = 2f + MathHelper.clamp(config().speed, 1, 1000) * 0.28f;   // 10 % ≈ 5/s, 100 % ≈ 30/s
         turnTowards(p, eye, deviate(box, nearestToRay(box, eye, look), dt), 1f - (float) Math.exp(-k * dt));
     }
 

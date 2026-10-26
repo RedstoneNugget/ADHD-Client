@@ -110,7 +110,7 @@ public final class EspConfig {
             }
         }
         entities = cleaned;
-        range = Math.max(16, Math.min(1024, range));
+        range = Math.max(16, Math.min(8192, range));
         if (!isValidColor(fixedColor)) fixedColor = "#FF3B3B";
         fixedColor = (fixedColor.trim().startsWith("#") ? fixedColor.trim() : "#" + fixedColor.trim()).toUpperCase(Locale.ROOT);
     }

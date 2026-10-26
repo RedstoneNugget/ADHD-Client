@@ -163,6 +163,10 @@ public final class Modules {
                     () -> L.t("Legt Items nur bei dir ins Inventar (Client-seitig) – der Server weiß davon nichts", "Puts items into your inventory only on your side (client-side) – the server knows nothing"),
                     () -> com.adhdclient.ghost.GhostItemsClient.enabled, v -> com.adhdclient.ghost.GhostItemsClient.enabled = v,
                     com.adhdclient.ghost.GhostItemsScreen::new, () -> null),
+            new Module("Stack Drop", Category.MISC,
+                    () -> L.t("Ausgewählte Items/Blöcke per Taste oder Knopf komplett aus dem Inventar werfen", "Throw all selected items/blocks out of your inventory via key or button"),
+                    () -> com.adhdclient.stackdrop.StackDropClient.enabled, v -> com.adhdclient.stackdrop.StackDropClient.enabled = v,
+                    com.adhdclient.stackdrop.StackDropScreen::new, com.adhdclient.stackdrop.StackDropClient::keyName),
             new Module("Lucky Casino", Category.MISC,
                     () -> com.adhdclient.casino.client.LuckyCasinoClient.STANDALONE_INSTALLED ? com.adhdclient.casino.client.LuckyCasinoClient.doubleInstalledHint()
                             : L.t("Casino mit Spielgeld: Slots, Roulette, Blackjack, Crash, Plinko, Minen und mehr", "Casino with play money: slots, roulette, blackjack, crash, Plinko, mines and more"),

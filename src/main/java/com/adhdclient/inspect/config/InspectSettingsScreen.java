@@ -109,7 +109,7 @@ public final class InspectSettingsScreen extends ThemedScreen {
         addDrawableChild(new ValueSlider(x + half + 4, y, inner - half - 4, ROW - 2, L.t("Breite", "Width"), 30, 100, 1, c.panelWidthPercent,
                 v -> (int) Math.round(v) + " %", v -> c.panelWidthPercent = (int) Math.round(v)));
         y += ROW;
-        addDrawableChild(new ValueSlider(x, y, half, ROW - 2, L.t("Reichweite", "Range"), 4, 256, 1, c.lookRange,
+        addDrawableChild(new ValueSlider(x, y, half, ROW - 2, L.t("Reichweite", "Range"), 4, 1024, 1, c.lookRange,
                 v -> (int) Math.round(v) + L.t(" Blöcke", " blocks"), v -> c.lookRange = (int) Math.round(v)));
         int[] steps = {5000, 20000, 50000, 100000, 250000};
         ButtonWidget lines = ButtonWidget.builder(Text.literal(linesText(c)), b -> {

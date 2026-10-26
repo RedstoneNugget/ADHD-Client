@@ -1,5 +1,6 @@
 package com.adhdclient.autototem;
 
+import com.adhdclient.mixin.MouseScrollInvoker;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -12,15 +13,16 @@ import net.minecraft.util.math.Direction;
 /**
  * Auto Totem: liegt kein Totem in der Offhand, läuft die Hotbar-Auswahl sichtbar Feld für Feld zum Totem, tauscht
  * es mit der Offhand (wie Taste F) und läuft dann zurück zum ursprünglichen Feld. Optional kommt ein Totem aus dem
- * Inventar direkt in die Offhand, wenn in der Hotbar keins ist.
+ * Inventar direkt in die Offhand, wenn in der Hotbar keins ist. Das Umschalten läuft über ein echtes
+ * Mausrad-Scroll-Ereignis (wie beim echten Scrollen), nicht über ein selbst gebautes Paket.
  */
 public final class AutoTotemClient {
 
     public static boolean enabled = false;
     /** Auch im Inventar (nicht nur in der Hotbar) suchen. */
     public static boolean wholeInventory = false;
-    /** Ticks pro Schritt durch die Hotbar. */
-    public static int delay = 2;
+    /** Ticks pro Schritt durch die Hotbar (0,5 = zwei Schritte pro echtem Tick, 0 = alles sofort). */
+    public static double delay = 0.5;
     /** Zahl der Tausche (für Anzeige und Tests). */
     public static int swaps;
 
@@ -61,15 +63,17 @@ public final class AutoTotemClient {
             cooldown--;
             return;
         }
-        // Tempo 0 = alles in diesem einen Tick (Weg hin, Tausch, Weg zurück)
-        int steps = delay <= 0 ? 24 : 1;
+        // Tempo 0 = alles in diesem einen Tick (Weg hin, Tausch, Weg zurück); Tempo < 1 (z. B. 0,5) = mehrere
+        // Schritte in jedem echten Tick (bei 0,5: zwei Schritte pro Tick, also ein halber Tick pro Feld)
+        int steps = delay <= 0 ? 24 : delay < 1 ? Math.max(1, (int) Math.round(1.0 / delay)) : 1;
+        boolean sameTickBatch = steps > 1;
         for (int i = 0; i < steps; i++) {
-            step(mc, p);
+            step(mc, p, sameTickBatch);
             if (phase == Phase.IDLE || cooldown > 0) break;
         }
     }
 
-    private static void step(MinecraftClient mc, ClientPlayerEntity p) {
+    private static void step(MinecraftClient mc, ClientPlayerEntity p, boolean sameTickBatch) {
         var inv = p.getInventory();
         switch (phase) {
             case IDLE -> {
@@ -85,32 +89,52 @@ public final class AutoTotemClient {
                     if (inner >= 0) {
                         mc.interactionManager.clickSlot(p.playerScreenHandler.syncId, inner, 40, SlotActionType.SWAP, p);
                         swaps++;
-                        cooldown = Math.max(0, delay);
+                        cooldown = cooldownTicks();
                     }
                 }
             }
             case TO_TOTEM -> {
                 int cur = inv.getSelectedSlot();
                 if (cur != target) {
-                    inv.setSelectedSlot(cur + Integer.signum(target - cur));   // ein Feld weiter, sichtbar
+                    scrollHotbar(mc, Integer.signum(target - cur));   // ein Feld weiter, per echtem Mausrad-Klick
                 } else {
                     if (inv.getStack(target).isOf(Items.TOTEM_OF_UNDYING)) {
-                        // dem Server sicher das gewählte Feld melden, dann tauschen (auch wenn alles im selben Tick passiert)
-                        mc.getNetworkHandler().sendPacket(new net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket(target));
+                        // Lief das Umschalten über echte, einzelne Ticks – der normale Tick
+                        // (ClientPlayerInteractionManager) hat den gewählten Slot da schon selbst gemeldet, genau wie
+                        // beim echten Scrollen mit dem Mausrad. Liefen aber mehrere Schritte im selben Tick (Tempo 0
+                        // oder < 1), muss hier noch nachgeholfen werden, weil dieser automatische Sync sonst erst
+                        // einen Tick zu spät käme.
+                        if (sameTickBatch) {
+                            mc.getNetworkHandler().sendPacket(new net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket(target));
+                        }
                         mc.getNetworkHandler().sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.SWAP_ITEM_WITH_OFFHAND, BlockPos.ORIGIN, Direction.DOWN));
                         swaps++;
                     }
                     phase = Phase.BACK;
                 }
-                cooldown = Math.max(0, delay);
+                cooldown = cooldownTicks();
             }
             case BACK -> {
                 int cur = inv.getSelectedSlot();
-                if (cur != home) inv.setSelectedSlot(cur + Integer.signum(home - cur));
+                if (cur != home) scrollHotbar(mc, Integer.signum(home - cur));
                 else phase = Phase.IDLE;
-                cooldown = Math.max(0, delay);
+                cooldown = cooldownTicks();
             }
         }
+    }
+
+    /** Wartezeit in echten Ticks bis zum nächsten Schritt; bei Tempo < 1 läuft alles noch im selben Tick (0). */
+    private static int cooldownTicks() {
+        return delay >= 1 ? (int) Math.round(delay) : 0;
+    }
+
+    /**
+     * Ein Feld weiter (dir = +1) oder zurück (dir = −1), über ein echtes Mausrad-Scroll-Ereignis statt eines
+     * eigenen Pakets oder direkt gesetzten Feldes – wie beim tatsächlichen Scrollen mit der Maus.
+     */
+    private static void scrollHotbar(MinecraftClient mc, int dir) {
+        if (mc.currentScreen != null || mc.player == null) return;
+        ((MouseScrollInvoker) mc.mouse).adhd$onMouseScroll(mc.getWindow().getHandle(), 0.0, -dir);
     }
 
     /** Hotbar-Feld mit Totem (das nächste zum gewählten Feld), oder −1. */

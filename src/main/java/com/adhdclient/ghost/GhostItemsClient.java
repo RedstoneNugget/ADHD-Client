@@ -119,7 +119,7 @@ public final class GhostItemsClient {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.player == null) return -1;
         Item item = Registries.ITEM.get(Identifier.of(itemId));
-        ItemStack stack = new ItemStack(item, Math.max(1, Math.min(count, item.getMaxCount())));
+        ItemStack stack = new ItemStack(item, Math.max(1, count));
         PlayerInventory inv = mc.player.getInventory();
         int slot = inv.getSelectedSlot();
         if (!inv.getStack(slot).isEmpty()) slot = inv.getEmptySlot();

@@ -400,25 +400,25 @@ public final class ModConfig {
         if (spawners == null) spawners = new Spawners();
         if (anomaly == null) anomaly = new Anomaly();
 
-        general.scanRadius = clamp(general.scanRadius, 1, 32);
-        general.scanBudgetMs = Math.max(0.2, Math.min(20.0, general.scanBudgetMs));
+        general.scanRadius = clamp(general.scanRadius, 1, 128);
+        general.scanBudgetMs = Math.max(0.1, Math.min(100.0, general.scanBudgetMs));
         general.backgroundIntervalSec = clamp(general.backgroundIntervalSec, 0, 3600);
-        general.dirtyDelayMs = clamp(general.dirtyDelayMs, 100, 10000);
+        general.dirtyDelayMs = clamp(general.dirtyDelayMs, 100, 60000);
         general.loadDelayMs = clamp(general.loadDelayMs, 0, 10000);
-        general.labelScale = Math.max(0.25, Math.min(4.0, general.labelScale));
+        general.labelScale = Math.max(0.1, Math.min(20.0, general.labelScale));
 
         amethyst.minCount = clamp(amethyst.minCount, 1, 4096);
-        amethyst.topN = clamp(amethyst.topN, 1, 10);
+        amethyst.topN = clamp(amethyst.topN, 1, 100);
         amethyst.color = color(amethyst.color, "#B061FF");
 
-        bees.topN = clamp(bees.topN, 1, 10);
-        bees.treeRadius = clamp(bees.treeRadius, 1, 6);
+        bees.topN = clamp(bees.topN, 1, 100);
+        bees.treeRadius = clamp(bees.treeRadius, 1, 32);
         bees.minTreeBlocks = clamp(bees.minTreeBlocks, 1, 100);
         if (bees.naturalBiomes == null) bees.naturalBiomes = new Bees().naturalBiomes;
         bees.color = color(bees.color, "#FFD21F");
 
         kelp.minHeight = clamp(kelp.minHeight, 2, 400);
-        kelp.topN = clamp(kelp.topN, 1, 10);
+        kelp.topN = clamp(kelp.topN, 1, 100);
         kelp.color = color(kelp.color, "#3BD63B");
 
         if (configVersion < 2) {
@@ -426,7 +426,7 @@ public final class ModConfig {
             spawners.topN = Math.max(spawners.topN, 10);
             configVersion = 2;
         }
-        spawners.topN = clamp(spawners.topN, 1, 30);
+        spawners.topN = clamp(spawners.topN, 1, 100);
         if (spawners.naturalMobs == null) spawners.naturalMobs = defaultSpawnerMobs();
         if (spawners.contexts == null) spawners.contexts = defaultSpawnerContexts();
         spawners.contexts.removeIf(c -> c == null);
@@ -441,7 +441,7 @@ public final class ModConfig {
 
         Anomaly a = anomaly;
         a.minScore = clamp(a.minScore, 1, 100000);
-        a.topN = clamp(a.topN, 1, 10);
+        a.topN = clamp(a.topN, 1, 100);
         a.structureToleranceFactor = Math.max(1.0, Math.min(100.0, a.structureToleranceFactor));
         a.lightCheckWeightPer10 = Math.max(0, Math.min(100, a.lightCheckWeightPer10));
         a.lightCheckMax = Math.max(0, Math.min(10000, a.lightCheckMax));

@@ -41,7 +41,7 @@ public final class FreeLookScreen extends ThemedScreen {
 
         section(L.t("Kamera", "Camera"), x, y, inner);
         y += 12;
-        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Abstand", "Distance"), 1, 32, 0.5, c.distance,
+        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Abstand", "Distance"), 1, 256, 0.5, c.distance,
                 v -> String.format(Locale.ROOT, L.t("%.1f Blöcke", "%.1f blocks"), v), v -> {
             c.distance = v;
             FreeLookClient.onConfigEdited();

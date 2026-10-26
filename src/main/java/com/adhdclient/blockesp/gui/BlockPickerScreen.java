@@ -58,7 +58,7 @@ public class BlockPickerScreen extends PickerScreen {
         toggle(L.t("Füllung", "Fill"), () -> cfg().fill, v -> cfg().fill = v, x + third + 4, y, third, 18,
                 L.t("Boxen halbdurchsichtig füllen", "Fill boxes semi-transparently"), () -> BlockESPClient.onConfigEdited(false));
         addDrawableChild(new ValueSlider(x + 2 * (third + 4), y, w - 2 * (third + 4), 18, L.t("Reichweite", "Range"),
-                16, 512, 16, cfg().range, v -> (int) Math.round(v) + " m", v -> {
+                16, 4096, 16, cfg().range, v -> (int) Math.round(v) + " m", v -> {
             cfg().range = (int) Math.round(v);
             BlockESPClient.onConfigEdited(false);
         }));

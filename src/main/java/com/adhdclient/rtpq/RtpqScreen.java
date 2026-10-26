@@ -68,9 +68,9 @@ public final class RtpqScreen extends ThemedScreen {
 
         section(L.t("Zeiten", "Timing"), x, y, inner);
         y += 12;
-        slider(L.t("Crystals ab", "Crystals from"), 1, 64, c.crystalThreshold, v -> String.valueOf((int) Math.round(v)), v -> c.crystalThreshold = (int) Math.round(v));
-        slider("Countdown", 1, 30, c.countdownSeconds, v -> (int) Math.round(v) + " s", v -> c.countdownSeconds = (int) Math.round(v));
-        slider(L.t("/rtpqueue-Abstand", "/rtpqueue delay"), 1, 100, c.rtpqueueDelayTicks, v -> (int) Math.round(v) + " Ticks", v -> c.rtpqueueDelayTicks = (int) Math.round(v));
+        slider(L.t("Crystals ab", "Crystals from"), 1, 2304, c.crystalThreshold, v -> String.valueOf((int) Math.round(v)), v -> c.crystalThreshold = (int) Math.round(v));
+        slider("Countdown", 1, 600, c.countdownSeconds, v -> (int) Math.round(v) + " s", v -> c.countdownSeconds = (int) Math.round(v));
+        slider(L.t("/rtpqueue-Abstand", "/rtpqueue delay"), 1, 2000, c.rtpqueueDelayTicks, v -> (int) Math.round(v) + " Ticks", v -> c.rtpqueueDelayTicks = (int) Math.round(v));
         if (col != 0) {
             col = 0;
             y += ROW;

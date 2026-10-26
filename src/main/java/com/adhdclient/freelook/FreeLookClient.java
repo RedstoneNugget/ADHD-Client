@@ -109,7 +109,7 @@ public final class FreeLookClient {
     /** Mausrad, solange Free Look aktiv ist. Gibt true zurück, wenn verbraucht. */
     public static boolean scroll(double amount) {
         if (!active() || !config().scrollZoom || amount == 0) return false;
-        config().distance = MathHelper.clamp(config().distance - Math.signum(amount), 1, 32);
+        config().distance = MathHelper.clamp(config().distance - Math.signum(amount), 1, 256);
         onConfigEdited();
         return true;
     }

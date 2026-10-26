@@ -105,7 +105,7 @@ public final class EspScreen extends ThemedScreen {
         y += ROW;
 
         int doneW = 70;
-        addDrawableChild(new ValueSlider(x, y, inner - doneW - 4, ROW - 2, L.t("Reichweite", "Range"), 16, 1024, 16, c.range,
+        addDrawableChild(new ValueSlider(x, y, inner - doneW - 4, ROW - 2, L.t("Reichweite", "Range"), 16, 8192, 16, c.range,
                 v -> (int) Math.round(v) + " m", v -> {
             c.range = (int) Math.round(v);
             EspClient.onConfigEdited();

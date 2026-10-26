@@ -53,7 +53,7 @@ public final class AdhdModuleState {
         double airJumpStrength = 0.42;
         boolean autoTotemEnabled = false;
         boolean autoTotemInventory = false;
-        int autoTotemDelay = 2;
+        double autoTotemDelay = 0.5;
         boolean antiCrystalEnabled = false;
         double antiCrystalRadius = 6;
         int autoTotemKey = -1;
@@ -64,6 +64,8 @@ public final class AdhdModuleState {
         boolean totemViewEnabled = false;
         boolean totemViewPops = true;
         boolean introEnabled = true;
+        boolean stackDropEnabled = false;
+        int stackDropKey = com.adhdclient.gui.HotKey.NONE;
     }
 
     private AdhdModuleState() {
@@ -123,6 +125,8 @@ public final class AdhdModuleState {
         com.adhdclient.totemview.TotemViewClient.enabled = d.totemViewEnabled;
         com.adhdclient.totemview.TotemViewClient.showPops = d.totemViewPops;
         com.adhdclient.intro.IntroClient.enabled = d.introEnabled;
+        com.adhdclient.stackdrop.StackDropClient.enabled = d.stackDropEnabled;
+        com.adhdclient.stackdrop.StackDropClient.key = d.stackDropKey;
     }
 
     public static void save() {
@@ -166,6 +170,8 @@ public final class AdhdModuleState {
         d.totemViewEnabled = com.adhdclient.totemview.TotemViewClient.enabled;
         d.totemViewPops = com.adhdclient.totemview.TotemViewClient.showPops;
         d.introEnabled = com.adhdclient.intro.IntroClient.enabled;
+        d.stackDropEnabled = com.adhdclient.stackdrop.StackDropClient.enabled;
+        d.stackDropKey = com.adhdclient.stackdrop.StackDropClient.key;
         try {
             Path f = file();
             Files.createDirectories(f.getParent());

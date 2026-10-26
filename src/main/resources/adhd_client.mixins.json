@@ -22,6 +22,7 @@
     "InspectCreativeScreenAccessor",
     "InspectHandledScreenAccessor",
     "LungeAttackInvoker",
+    "MouseScrollInvoker",
     "ChatEmojiMixin",
     "ChatEmojiSendMixin",
     "TotemViewMixin",

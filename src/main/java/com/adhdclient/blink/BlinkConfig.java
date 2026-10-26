@@ -65,6 +65,6 @@ public final class BlinkConfig {
     }
 
     public void sanitize() {
-        autoSendSeconds = Math.max(0, Math.min(30, autoSendSeconds));
+        autoSendSeconds = Math.max(0, Math.min(3600, autoSendSeconds));
     }
 }

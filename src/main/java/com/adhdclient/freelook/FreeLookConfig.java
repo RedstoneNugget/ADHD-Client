@@ -66,6 +66,6 @@ public final class FreeLookConfig {
     }
 
     public void sanitize() {
-        distance = Math.max(1, Math.min(32, distance));
+        distance = Math.max(1, Math.min(256, distance));
     }
 }

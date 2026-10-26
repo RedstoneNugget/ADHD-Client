@@ -28,10 +28,10 @@ public final class AutoReconnectScreen extends ThemedScreen {
 
         section(L.t("Neu verbinden", "Reconnect"), x, y, inner);
         y += 12;
-        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Warten", "Wait"), 1, 60, 1, c.delay,
-                v -> (int) Math.round(v) + " s", v -> c.delay = (int) Math.round(v)));
+        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Warten", "Wait"), 0, 3600, 1, c.delay,
+                v -> v < 0.5 ? L.t("sofort", "instant") : (int) Math.round(v) + " s", v -> c.delay = (int) Math.round(v)));
         y += ROW;
-        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Versuche", "Attempts"), 0, 20, 1, c.maxAttempts,
+        addDrawableChild(new ValueSlider(x, y, inner, ROW - 2, L.t("Versuche", "Attempts"), 0, 1000, 1, c.maxAttempts,
                 v -> v < 0.5 ? L.t("unbegrenzt", "unlimited") : String.valueOf((int) Math.round(v)), v -> c.maxAttempts = (int) Math.round(v)));
         y += ROW + 6;
 
