@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "id": "adhd_client-gametest",
+  "id": "nugget_client-gametest",
   "version": "1.0.0",
-  "name": "ADHD Client GameTest",
+  "name": "Nugget Client GameTest",
   "environment": "*",
   "entrypoints": {
-    "fabric-client-gametest": ["com.adhdclient.test.AdhdClientGameTest"]
+    "fabric-client-gametest": ["com.nuggetclient.test.NuggetClientGameTest"]
   },
   "depends": {
-    "adhd_client": "*"
+    "nugget_client": "*"
   }
 }

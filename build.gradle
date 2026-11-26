@@ -32,9 +32,22 @@ dependencies {
 }
 
 processResources {
+    // README liegt direkt in der Mod-Jar
+    from(projectDir) {
+        include 'README.md', 'README.de.md'
+    }
     inputs.property 'version', project.version
     filesMatching('fabric.mod.json') {
         expand 'version': project.version
+    }
+    // Cosmetics: Blockbench legt eine Kopie der Textur als Base64 in jedes Modell – der Client nimmt die PNG daneben.
+    // In der Jar weglassen (kleiner, und Scanner melden keine „Base64-Blobs“ mehr); die Quelldateien bleiben unverändert.
+    filesMatching('**/*.bbmodel') {
+        filter { String line -> line.replaceAll('"source":"data:image/[^"]*"', '"source":""') }
+        // Sicherheit: Speicherpfade (enthalten den Windows-Benutzernamen) nie mit in die Jar
+        filter { String line -> line.replaceAll('"(path|relative_path|export_path|save_path|folder)":"[^"]*"', '"$1":""') }
+        // Blockbench-Notiz „gespeichert“ – Metadaten, braucht der Client nicht
+        filter { String line -> line.replaceAll(',"saved":(true|false)', '').replaceAll('"saved":(true|false),', '') }
     }
 }
 
@@ -42,6 +55,8 @@ tasks.withType(JavaCompile).configureEach {
     it.options.release = 21
     it.options.encoding = 'UTF-8'
     it.options.compilerArgs << '-Xlint:deprecation'
+    // ohne Variablen-Namen in den Klassen: Jar kleiner, Zeilennummern für Fehlerberichte bleiben
+    if (it.name == 'compileJava') it.options.compilerArgs << '-g:source,lines'
 }
 
 java {
@@ -50,8 +65,53 @@ java {
 }
 
 jar {
+    // Download-Code der privaten Packs kommt nur in die private Jar
+    if (!project.hasProperty('privatePacks')) exclude 'com/nuggetclient/style/PrivateDownload*'
     from('LICENSE') {
         rename { "${it}_${project.archives_base_name}" }
+    }
+}
+
+// Native DLL (native/, CMake): gradlew buildNative baut native/build/out/nugget_native.dll.
+// Sie wird in die Jar gepackt (natives/windows-x64/). Ohne CMake oder mit -PnoNative wird sie
+// übersprungen, dann läuft der Client wie bisher nur mit Java.
+def findCmake = {
+    def names = System.getProperty('os.name').toLowerCase().contains('win') ? ['cmake.exe'] : ['cmake']
+    def dirs = [file('native/toolchain/cmake/bin').path] + (System.getenv('PATH') ?: '').split(File.pathSeparator).toList() + ['C:/Program Files/CMake/bin']
+    dirs.collectMany { d -> names.collect { new File(d, it) } }.find { it.isFile() }
+}
+def nativeOut = file('native/build/out')
+def buildNative = tasks.register('buildNative') {
+    inputs.dir('native/src')
+    inputs.file('native/CMakeLists.txt')
+    outputs.dir(nativeOut)
+    // Standard: ohne DLL (Virenscanner können Maschinen-Code nicht prüfen). Mit -PwithNative wird sie gebaut und eingepackt.
+    onlyIf { project.hasProperty('withNative') && System.getProperty('os.name').toLowerCase().contains('win') }
+    doLast {
+        def cmake = findCmake()
+        if (cmake == null) {
+            logger.warn('CMake nicht gefunden: nugget_native.dll wird nicht gebaut, Jar nutzt nur Java')
+            return
+        }
+        def bdir = file('native/build/cmake')
+        // Eigene Toolchain in native/toolchain (isoliert, nicht systemweit installiert)
+        def tc = file('native/toolchain')
+        def tcArgs = file("$tc/llvm-mingw/bin/clang++.exe").isFile() ? ['-G', 'Ninja',
+                "-DCMAKE_MAKE_PROGRAM=${file("$tc/ninja/ninja.exe").path}",
+                "-DCMAKE_CXX_COMPILER=${file("$tc/llvm-mingw/bin/clang++.exe").path}"] : []
+        providers.exec { commandLine([cmake.path, '-S', file('native').path, '-B', bdir.path] + tcArgs + ['-DCMAKE_BUILD_TYPE=Release',
+                "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=${nativeOut.path}", "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE=${nativeOut.path}",
+                "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=${nativeOut.path}"]) }.result.get().assertNormalExitValue()
+        providers.exec { commandLine cmake.path, '--build', bdir.path, '--config', 'Release' }.result.get().assertNormalExitValue()
+    }
+}
+processResources {
+    dependsOn buildNative
+    if (project.hasProperty('withNative')) {
+        from(nativeOut) {
+            include 'nugget_native.dll'
+            into 'natives/windows-x64'
+        }
     }
 }
 
@@ -95,7 +155,7 @@ tasks.register('prodClient', net.fabricmc.loom.task.prod.ClientProductionRunTask
 fabricApi {
     configureTests {
         createSourceSet = true
-        modId = 'adhd_client-gametest'
+        modId = 'nugget_client-gametest'
         enableGameTests = false
         enableClientGameTests = true
         eula = true
@@ -116,67 +176,62 @@ tasks.matching { it.name in ["runClientGameTest", "runClient", "prodClient"] }.c
 
 // Nur den Full-Bright-Test laufen lassen: gradlew runClientGameTest -PonlyFullBright
 tasks.matching { it.name == 'runClientGameTest' }.configureEach {
-    if (project.hasProperty('onlyFullBright')) jvmArgs '-Dadhd.onlyFullBright=true'
-}
-
-// Nur den Butterfly-Test laufen lassen: gradlew runClientGameTest -PonlyButterfly
-tasks.matching { it.name == 'runClientGameTest' }.configureEach {
-    if (project.hasProperty('onlyButterfly')) jvmArgs '-Dadhd.onlyButterfly=true'
+    if (project.hasProperty('onlyFullBright')) jvmArgs '-Dnugget.onlyFullBright=true'
 }
 
 // Nur den Ghost-Items-Test laufen lassen: gradlew runClientGameTest -PonlyGhost
 tasks.matching { it.name == 'runClientGameTest' }.configureEach {
-    if (project.hasProperty('onlyGhost')) jvmArgs '-Dadhd.onlyGhost=true'
+    if (project.hasProperty('onlyGhost')) jvmArgs '-Dnugget.onlyGhost=true'
 }
 
 // Nur den Aim-Lock-Test laufen lassen: gradlew runClientGameTest -PonlyAim
 tasks.matching { it.name == 'runClientGameTest' }.configureEach {
-    if (project.hasProperty('onlyAim')) jvmArgs '-Dadhd.onlyAim=true'
+    if (project.hasProperty('onlyAim')) jvmArgs '-Dnugget.onlyAim=true'
 }
 
 // Nur den Makros-Test laufen lassen: gradlew runClientGameTest -PonlyMacros
 tasks.matching { it.name == 'runClientGameTest' }.configureEach {
-    if (project.hasProperty('onlyMacros')) jvmArgs '-Dadhd.onlyMacros=true'
+    if (project.hasProperty('onlyMacros')) jvmArgs '-Dnugget.onlyMacros=true'
 }
 
 // Nur den Stronghold-Test laufen lassen: gradlew runClientGameTest -PonlyStronghold
 tasks.matching { it.name == 'runClientGameTest' }.configureEach {
-    if (project.hasProperty('onlyStronghold')) jvmArgs '-Dadhd.onlyStronghold=true'
+    if (project.hasProperty('onlyStronghold')) jvmArgs '-Dnugget.onlyStronghold=true'
 }
 
 // Nur den Rechner-Test laufen lassen: gradlew runClientGameTest -PonlyCalc
 tasks.matching { it.name == 'runClientGameTest' }.configureEach {
-    if (project.hasProperty('onlyCalc')) jvmArgs '-Dadhd.onlyCalc=true'
+    if (project.hasProperty('onlyCalc')) jvmArgs '-Dnugget.onlyCalc=true'
 }
 
 // Nur den Free-Cam-Abbau-Test laufen lassen: gradlew runClientGameTest -PonlyFreeMine
 tasks.matching { it.name == 'runClientGameTest' }.configureEach {
-    if (project.hasProperty('onlyFreeMine')) jvmArgs '-Dadhd.onlyFreeMine=true'
+    if (project.hasProperty('onlyFreeMine')) jvmArgs '-Dnugget.onlyFreeMine=true'
 }
 
 // Nur den Lunge-Test laufen lassen: gradlew runClientGameTest -PonlyLunge
 tasks.matching { it.name == 'runClientGameTest' }.configureEach {
-    if (project.hasProperty('onlyLunge')) jvmArgs '-Dadhd.onlyLunge=true'
+    if (project.hasProperty('onlyLunge')) jvmArgs '-Dnugget.onlyLunge=true'
 }
 
 // Nur den Totem/Air-Jump-Test laufen lassen: gradlew runClientGameTest -PonlyTotem
 tasks.matching { it.name == 'runClientGameTest' }.configureEach {
-    if (project.hasProperty('onlyTotem')) jvmArgs '-Dadhd.onlyTotem=true'
+    if (project.hasProperty('onlyTotem')) jvmArgs '-Dnugget.onlyTotem=true'
 }
 
 // Nur den Zurücksetzen-Test laufen lassen: gradlew runClientGameTest -PonlyReset
 tasks.matching { it.name == 'runClientGameTest' }.configureEach {
-    if (project.hasProperty('onlyReset')) jvmArgs '-Dadhd.onlyReset=true'
+    if (project.hasProperty('onlyReset')) jvmArgs '-Dnugget.onlyReset=true'
 }
 
 // Nur den Intro/Emoji/Totem-Test laufen lassen: gradlew runClientGameTest -PonlyFun
 tasks.matching { it.name == 'runClientGameTest' }.configureEach {
-    if (project.hasProperty('onlyFun')) jvmArgs '-Dadhd.onlyFun=true'
+    if (project.hasProperty('onlyFun')) jvmArgs '-Dnugget.onlyFun=true'
 }
 
 // Nur den Test der kleineren Module laufen lassen: gradlew runClientGameTest -PonlyExtras
 tasks.matching { it.name == 'runClientGameTest' }.configureEach {
-    if (project.hasProperty('onlyExtras')) jvmArgs '-Dadhd.onlyExtras=true'
+    if (project.hasProperty('onlyExtras')) jvmArgs '-Dnugget.onlyExtras=true'
 }
 
 // Testwelten nach dem Gametest löschen – sie werden nicht mehr gebraucht und kosten nur Speicher
@@ -186,5 +241,111 @@ tasks.matching { it.name == 'runClientGameTest' }.configureEach {
 
 // Bilder fürs README machen: gradlew runClientGameTest -PonlyShowcase
 tasks.matching { it.name == 'runClientGameTest' }.configureEach {
-    if (project.hasProperty('onlyShowcase')) jvmArgs '-Dadhd.onlyShowcase=true'
+    if (project.hasProperty('onlyShowcase')) jvmArgs '-Dnugget.onlyShowcase=true'
+    if (project.hasProperty('onlyAllGui')) jvmArgs '-Dnugget.onlyAllGui=true'
+    if (project.hasProperty('onlyEsp')) jvmArgs '-Dnugget.onlyEsp=true'
+    if (project.hasProperty('onlyNoWeb')) jvmArgs '-Dnugget.onlyNoWeb=true'
+    if (project.hasProperty('onlyHud')) jvmArgs '-Dnugget.onlyHud=true'
+    if (project.hasProperty('onlyScreens')) jvmArgs '-Dnugget.onlyScreens=true'
+    if (project.hasProperty('onlyPacket')) jvmArgs '-Dnugget.onlyPacket=true'
+}
+
+// Nur den PvP-Test laufen lassen: gradlew runClientGameTest -PonlyCombat
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('onlyCombat')) jvmArgs '-Dnugget.onlyCombat=true'
+}
+
+// Bilder der Stile (Menü, Radar, Target HUD): gradlew runClientGameTest -PonlyStyle
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('onlyStyle')) jvmArgs '-Dnugget.onlyStyle=true', '-Dfabric.client.gametest.disableNetworkSynchronizer=true'
+}
+
+// Nur die Module aus v1.13 testen: gradlew runClientGameTest -PonlyNew
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('onlyNew')) jvmArgs '-Dnugget.onlyNew=true'
+}
+
+// Nur Cosmetics (Hüte/Flügel, Screenshots): gradlew runClientGameTest -PonlyCosmetics
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('onlyCosmetics')) jvmArgs '-Dnugget.onlyCosmetics=true'
+}
+
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('realPacks')) jvmArgs "-Dnugget.realPacks=${project.property('realPacks')}"
+    if (project.hasProperty('styleDownload')) jvmArgs '-Dnugget.styleDownload=true'
+}
+
+// Nur Auto Fish im echten Wasser: gradlew runClientGameTest -PonlyFish
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('onlyFish')) jvmArgs '-Dnugget.onlyFish=true'
+}
+
+// Wenig Arbeitsspeicher: gradlew runClientGameTest -PlowRam (Spiel höchstens 2 GB)
+tasks.matching { it.name in ["runClientGameTest", "runClient"] }.configureEach {
+    if (project.hasProperty('lowRam')) jvmArgs '-Xmx2G', '-Xms256m', '-XX:+UseSerialGC'
+}
+
+// Nur Auto Mace und TNT Carts testen: gradlew runClientGameTest -PonlySettings -PonlyMaceCarts
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('onlyMaceCarts')) jvmArgs '-Dnugget.onlyMaceCarts=true'
+}
+
+// Nur die neuen Einstellungen und TNT Carts testen: gradlew runClientGameTest -PonlySettings
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('onlySettings')) jvmArgs '-Dnugget.onlySettings=true'
+}
+
+// Nur die Bots aus v1.14 testen: gradlew runClientGameTest -PonlyBots
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('onlyBots')) jvmArgs '-Dnugget.onlyBots=true'
+}
+
+// Quellcode als ZIP (Open Source, ohne Build-Ordner und Testwelten, feste Zeitstempel): gradlew sourceZip
+tasks.register('sourceZip', Zip) {
+    archiveFileName = "nugget-client-${project.version}-source.zip"
+    destinationDirectory = layout.buildDirectory.dir('libs')
+    into("nugget-client-${project.version}") {
+        from(projectDir) {
+            include 'src/**', 'gradle/**', 'docs/**', '.github/**'
+            include 'build.gradle', 'settings.gradle', 'gradle.properties', 'gradlew', 'gradlew.bat'
+            include 'LICENSE', 'README.md', 'README.de.md', '.gitignore', '.gitattributes'
+            exclude '**/.DS_Store', 'docs/mockup*', '**/nugget_private.txt'
+            // gradlew muss unter Linux/macOS ausführbar sein
+            filesMatching('gradlew') { permissions { unix('rwxr-xr-x') } }
+        }
+    }
+}
+
+// Private Version mit Pack-Liste: gradlew build -x test -PprivatePacks  (die Liste kommt sonst nie ins Jar)
+processResources {
+    if (!project.hasProperty('privatePacks')) exclude 'assets/nugget_client/nugget_private.txt'
+}
+if (project.hasProperty('privatePacks')) {
+    tasks.named('jar') { archiveClassifier = 'private-dev' }
+    tasks.named('remapJar') { archiveClassifier = 'private' }
+}
+
+// Nur die neuen Module (Trainings-Bot, Parcours, Kampf-/SMP-Helfer): gradlew runClientGameTest -PonlyPlus
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('onlyPlus')) jvmArgs '-Dnugget.onlyPlus=true'
+}
+
+// Bilder der neuen Module: gradlew runClientGameTest -PonlyPlus -PplusShots
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('plusShots')) jvmArgs '-Dnugget.plusShots=true'
+}
+
+// Bots in einer echten, normal erzeugten Welt: gradlew runClientGameTest -PonlyRealBots
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('onlyRealBots')) jvmArgs '-Dnugget.onlyRealBots=true', '-Dfabric.client.gametest.disableNetworkSynchronizer=true'
+}
+
+// Einzeltest zum Fehlersuchen: gradlew runClientGameTest -PonlyDebug
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('onlyDebug')) jvmArgs '-Dnugget.onlyDebug=true', '-Dfabric.client.gametest.disableNetworkSynchronizer=true'
+}
+
+// Seed-Knacker mit mehreren Seeds: gradlew runClientGameTest -PonlySeed
+tasks.matching { it.name == 'runClientGameTest' }.configureEach {
+    if (project.hasProperty('onlySeed')) jvmArgs '-Dnugget.onlySeed=true', '-Dfabric.client.gametest.disableNetworkSynchronizer=true'
 }

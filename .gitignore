@@ -4,3 +4,14 @@ run/
 out/
 *.iml
 .idea/
+native/build/
+native/toolchain/
+CLAUDE.md
+docs/mockup_garden.html
+ausgelagert/
+native/
+docs/mockup_nugget.html
+docs/mockup_ideas.html
+docs/mockup_ideas2.html
+tools/styles_out/
+src/main/resources/assets/nugget_client/nugget_private.txt

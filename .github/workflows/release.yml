@@ -25,6 +25,6 @@ jobs:
       - name: GitHub-Release veröffentlichen
         uses: softprops/action-gh-release@v2
         with:
-          name: ADHD Client ${{ github.ref_name }}
+          name: Nugget Client ${{ github.ref_name }}
           body_path: .github/release-notes.md
-          files: build/libs/adhd-client-*.jar
+          files: build/libs/nugget-client-*.jar

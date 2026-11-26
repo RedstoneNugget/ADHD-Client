@@ -9,4 +9,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'adhd-client'
+rootProject.name = 'nugget-client'
