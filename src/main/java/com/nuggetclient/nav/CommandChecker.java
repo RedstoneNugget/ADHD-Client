@@ -96,8 +96,18 @@ public final class CommandChecker {
             + "whitelist worldborder xp ").trim().split(" "));
 
     private static final int PAGE = 80;
+
+    /** Stärkster Vorteil (★★★): fast alles geht damit */
+    private static final java.util.Set<String> VERY_STRONG = java.util.Set.of(("gamemode gm gmc gmsp creative spectator spectate give i item god vanish v op sudo "
+            + "fly summon setblock fill fillbiome clone effect enchant attribute data kill damage").split(" "));
+    /** Deutlicher Vorteil (★★): Teleport, Heilen, Items, Wissen über andere */
+    private static final java.util.Set<String> STRONG = java.util.Set.of(("tp teleport heal feed eat speed repair fix back rtp wild randomtp tpr jump top home homes warp warps pwarp "
+            + "invsee seed near xp experience kit kits sell sellall keepinventory clear loot gamerule ec enderchest echest pv vault playervault backpack bp nightvision nv "
+            + "tpa tpahere tpaccept sethome daily rewards reward claim free crates keys").split(" "));
     /** Nur eine Notbremse, damit ein kaputter Befehlsbaum das Spiel nie einfriert – normale Server liegen weit darunter. */
-    private static final int SAFETY = 100_000;
+    private static final int SAFETY = 100_000, MAX_VISITS = 200_000, MAX_DEPTH = 32;
+    /** besuchte Knoten beim aktuellen Lesen – zählt auch Zweige ohne eigene Zeile */
+    private static int visits;
 
     /** Seite und Suchwort der Liste (bleiben beim Blättern erhalten) */
     private static int page;
@@ -219,21 +229,29 @@ public final class CommandChecker {
     private record Entry(String text, String chat) {
     }
 
-    /** Alle Befehle in einer Liste: erst Plugins, dann Minecraft; je erst die mit Vorteil (★); darunter die Unterbefehle. */
+    /** Wie viel Vorteil? 3 = sehr groß, 2 = deutlich, 1 = klein (steht in einer Gruppe), 0 = keiner bekannt. */
+    private static int level(String name, List<String> others) {
+        String plain = name.substring(name.indexOf(':') + 1);
+        if (VERY_STRONG.contains(plain)) return 3;
+        if (STRONG.contains(plain)) return 2;
+        return others.contains(name) || !WHAT.containsKey(plain) ? 0 : 1;
+    }
+
+    /** Alle Befehle in einer Liste: der größte Vorteil zuerst, bei gleichem Vorteil Plugins vor Minecraft; darunter die Unterbefehle. */
     private static List<Entry> entries(Map<String, CommandNode<?>> have, List<List<String>> found) {
+        List<String> others = found.get(GROUPS.length);
+        List<String> order = new ArrayList<>(have.keySet());
+        // stabil sortiert: innerhalb gleicher Stufe bleibt es alphabetisch
+        order.sort(java.util.Comparator.<String>comparingInt(c -> -level(c, others)).thenComparingInt(c -> PLUGIN.containsKey(c) ? 0 : 1));
         List<Entry> out = new ArrayList<>();
-        for (boolean plugin : new boolean[]{true, false}) {
-            for (int i = 0; i < found.size(); i++) {
-                for (String cmd : found.get(i)) {
-                    if (PLUGIN.containsKey(cmd) != plugin) continue;
-                    String a = args(have.get(cmd));
-                    out.add(new Entry((i < GROUPS.length ? "★ " : "") + "/" + cmd + (plugin ? " [Plugin" + from(cmd) + "]" : "") + " – " + what(cmd)
-                            + (a.isEmpty() ? "" : "  " + a), "/" + cmd + " "));
-                    CommandNode<?> alias = have.get(cmd).getRedirect();
-                    if (alias != null && !alias.getName().isEmpty()) out.add(new Entry("    ↳ " + L.t("wie /", "same as /") + alias.getName(), "/" + cmd + " "));
-                    subs(have.get(cmd), "/" + cmd, "/" + cmd + " ", new java.util.HashSet<>(), out);
-                }
-            }
+        visits = 0;
+        for (String cmd : order) {
+            String a = args(have.get(cmd)), stars = "★".repeat(level(cmd, others));
+            out.add(new Entry((stars.isEmpty() ? "" : stars + " ") + "/" + cmd + (PLUGIN.containsKey(cmd) ? " [Plugin" + from(cmd) + "]" : "") + " – " + what(cmd)
+                    + (a.isEmpty() ? "" : "  " + a), "/" + cmd + " "));
+            CommandNode<?> alias = have.get(cmd).getRedirect();
+            if (alias != null && !alias.getName().isEmpty()) out.add(new Entry("    ↳ " + L.t("wie /", "same as /") + alias.getName(), "/" + cmd + " "));
+            subs(have.get(cmd), "/" + cmd, "/" + cmd + " ", new java.util.HashSet<>(), out);
         }
         return out;
     }
@@ -243,9 +261,10 @@ public final class CommandChecker {
      * den man so tippen kann (bis zum ersten Platzhalter). {@code path} verhindert Endlosschleifen im Befehlsbaum.
      */
     private static void subs(CommandNode<?> node, String shown, String typed, java.util.Set<CommandNode<?>> path, List<Entry> out) {
-        if (!path.add(node)) return;
+        if (path.size() >= MAX_DEPTH || !path.add(node)) return;
         for (CommandNode<?> child : node.getChildren()) {
-            if (out.size() >= SAFETY) break;
+            // jeder besuchte Knoten zählt, nicht nur jede Zeile: sonst könnte ein verschachtelter Baum das Spiel einfrieren
+            if (out.size() >= SAFETY || ++visits > MAX_VISITS) break;
             boolean literal = child instanceof LiteralCommandNode<?>;
             String next = shown + (literal ? " " + child.getName() : " <" + child.getName() + ">");
             // nur weiter tippen, solange noch kein Platzhalter davor stand
@@ -268,7 +287,7 @@ public final class CommandChecker {
         page = Math.max(0, Math.min(page, pages - 1));
         b.info(mc.getNetworkHandler() == null ? L.t("Nicht auf einem Server", "Not on a server")
                 : L.t("Befehle: ", "Commands: ") + have.size() + L.t(" · von Plugins: ", " · from plugins: ") + PLUGIN.size()
-                + L.t(" · Zeilen: ", " · lines: ") + all.size() + L.t(" · ★ = Vorteil", " · ★ = advantage"));
+                + L.t(" · Zeilen: ", " · lines: ") + all.size() + L.t(" · mehr ★ = mehr Vorteil", " · more ★ = bigger advantage"));
         b.action(L.t("Ganze Liste kopieren", "Copy the whole list"), L.t("Für deinen Testbericht (Zwischenablage)", "For your test report (clipboard)"), () -> {
             StringBuilder sb = new StringBuilder("Command Checker\n\n");
             for (Entry e : all) sb.append(e.text()).append('\n');
