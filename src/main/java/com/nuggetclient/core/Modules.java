@@ -401,6 +401,8 @@ public final class Modules {
                     () -> com.nuggetclient.gui.HotKey.name(com.nuggetclient.zoom.ZoomClient.key())),
             extra("Server Info", Category.SERVER, "TPS, Ping, Spieler, Uhrzeit, Neustart-Warnung", "TPS, ping, players, clock, restart warning",
                     () -> X.get().serverInfo, com.nuggetclient.nav.NavTools::serverInfoScreen),
+            extra("Command Checker", Category.SERVER, "Zeigt Befehle auf dem Server, die dir Vorteile geben – an = Meldung beim Beitreten", "Shows server commands that give you an advantage – on = notice when you join",
+                    () -> X.get().commandChecker, com.nuggetclient.nav.CommandChecker::screen),
             extra("Mending Swap", Category.PLAYER, "Beschädigte Mending-Teile beim XP-Sammeln in die Offhand", "Damaged mending items to the offhand while collecting XP",
                     () -> X.get().mendingSwap, com.nuggetclient.nav.NavTools::mendingScreen),
             extra("Elytra Autopilot", Category.MOVEMENT, "Fliegt zu einem Wegpunkt, hält die Höhe und landet", "Flies to a waypoint, keeps altitude and lands",

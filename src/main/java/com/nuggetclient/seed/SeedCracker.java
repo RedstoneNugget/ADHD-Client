@@ -377,6 +377,60 @@ public final class SeedCracker {
         return out;
     }
 
+    // ---------------------------------------------------------------- Versetzte Strukturen
+
+    /** Größter Versatz, der automatisch probiert wird (Chunks = je 16 Blöcke). */
+    public static final int MAX_SHIFT = 4;
+
+    /** Ergebnis der Versatz-Suche: Spielraum in Chunks, alle passenden Struktur-Seeds und die dafür benutzten Funde. */
+    public record Shifted(int chunks, List<Long> seeds, List<Obs> obs) {
+    }
+
+    /**
+     * Passt nichts genau: den Spielraum Chunk für Chunk vergrößern und beim ersten Treffer alle passenden Seeds liefern.
+     * {@code window} gibt die Funde mit diesem Spielraum. Stufen, die zu ungenau zum Rechnen sind, werden ausgelassen –
+     * je größer der Versatz, desto mehr Funde braucht es. {@code null} = nichts gefunden.
+     */
+    public static Shifted crackShifted(java.util.function.IntFunction<List<Obs>> window, int from, Progress progress, AtomicBoolean cancel) {
+        for (int r = from; r <= MAX_SHIFT && !cancel.get(); r++) {
+            List<Obs> obs = window.apply(r);
+            if (usablePrecision(obs) < READY_BITS) break;   // größerer Spielraum wird nur noch ungenauer
+            String head = com.nuggetclient.gui.L.t("Versatz bis ", "Shift up to ") + r * 16 + com.nuggetclient.gui.L.t(" Blöcke: ", " blocks: ");
+            List<Long> found = crack48(obs, (p, txt) -> progress.update(p, head + txt), cancel);
+            if (found != null && !found.isEmpty()) return new Shifted(r, found, obs);
+        }
+        return null;
+    }
+
+    /**
+     * Wie gut passt ein Seed zu den unveränderten Funden? Liefert {wie viele Funde höchstens {@link #MAX_SHIFT} Chunks
+     * daneben liegen, größter Versatz dieser Funde in Blöcken}.
+     */
+    public static int[] shiftOf(long seed, List<Obs> obs) {
+        int hits = 0, worst = 0;
+        for (Obs o : obs) {
+            StructureMath.Spread s = o.spread();
+            int sp = s.spacing(), best = Integer.MAX_VALUE;
+            for (int rx = Math.floorDiv(o.minX() - MAX_SHIFT, sp); rx <= Math.floorDiv(o.maxX() + MAX_SHIFT, sp); rx++) {
+                for (int rz = Math.floorDiv(o.minZ() - MAX_SHIFT, sp); rz <= Math.floorDiv(o.maxZ() + MAX_SHIFT, sp); rz++) {
+                    long off = StructureMath.offsets(seed, rx, rz, s);
+                    int cx = rx * sp + (int) (off >> 32), cz = rz * sp + (int) off;
+                    if (o.only() == null) {
+                        int dx = Math.max(0, Math.max(o.minX() - cx, cx - o.maxX())), dz = Math.max(0, Math.max(o.minZ() - cz, cz - o.maxZ()));
+                        best = Math.min(best, Math.max(dx, dz));
+                    } else {
+                        for (long k : o.only()) best = Math.min(best, Math.max(Math.abs((int) (k >> 32) - cx), Math.abs((int) k - cz)));
+                    }
+                }
+            }
+            if (best <= MAX_SHIFT) {
+                hits++;
+                worst = Math.max(worst, best * 16);
+            }
+        }
+        return new int[]{hits, worst};
+    }
+
     /** Fehlersuche: welcher Fund lehnt diesen Seed ab? */
     public static String explain(long seed, List<Obs> obs) {
         StringBuilder sb = new StringBuilder();

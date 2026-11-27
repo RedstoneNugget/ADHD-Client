@@ -185,15 +185,20 @@ public final class SeedCrackerScreen extends Screen {
         half = (x2 - x1) / 2;
         rows = (colBottom - colTop - 20) / 11;
         card(ctx, x1 + 8, colTop, x1 + half - 4, colBottom, L.t("Gefundene Strukturen", "Found structures"), accent);
-        String legend = "✔ " + L.t("viel", "a lot") + "  ≈ " + L.t("etwas", "some") + "  · " + L.t("nicht", "none");
-        ctx.drawText(tr, legend, x1 + half - 8 - tr.getWidth(legend), colTop + 5, GRAY, false);
+        // jeder erkannte Fund hat einen Haken – die Farbe sagt, wie sehr er beim Rechnen hilft
+        String[] legend = {"✔ " + L.t("viel", "a lot"), "  ✔ " + L.t("etwas", "some"), "  ✔ " + L.t("wenig", "little")};
+        int lx = x1 + half - 8 - tr.getWidth(String.join("", legend));
+        for (int i = 0; i < 3; i++) {
+            ctx.drawText(tr, legend[i], lx, colTop + 5, i == 0 ? GREEN : i == 1 ? WHITE : GRAY, false);
+            lx += tr.getWidth(legend[i]);
+        }
         List<String> found = SeedCrackerClient.foundLines();
         scrollL = Math.min(scrollL, Math.max(0, found.size() - rows));
         if (found.isEmpty()) ctx.drawText(tr, L.t("Noch nichts – fliege herum", "Nothing yet – fly around"), x1 + 14, colTop + 18, GRAY, false);
         for (int i = 0; i < Math.min(rows, found.size() - scrollL); i++) {
             String line = found.get(i + scrollL);
             int col = line.startsWith("✔") ? GREEN : line.startsWith("≈") ? WHITE : GRAY;
-            ctx.drawText(tr, fit(line, half - 22), x1 + 14, colTop + 18 + i * 11, col, false);
+            ctx.drawText(tr, fit("✔ " + line.substring(2), half - 22), x1 + 14, colTop + 18 + i * 11, col, false);
         }
 
         int rx = x1 + half + 10;
@@ -211,9 +216,8 @@ public final class SeedCrackerScreen extends Screen {
                 boolean isPicked = picked != null && picked == cand;
                 if (isPicked) ctx.fill(x1 + half + 6, ry - 1, x2 - 10, ry + 10, 0x504ADE80);
                 else if (hover) ctx.fill(x1 + half + 6, ry - 1, x2 - 10, ry + 10, 0x40FFD84A);
-                Integer hits = SeedCracker.HITS.get(cand & ((1L << 48) - 1));
-                String extra = hits == null ? "" : L.t("  passt zu ", "  fits ") + hits + "/" + SeedCrackerClient.count();
-                ctx.drawText(tr, (i + scrollR + 1) + ".  " + cand + extra + (isPicked ? L.t("  ✔ kopiert", "  ✔ copied") : ""), rx, ry, isPicked ? GREEN : YELLOW, false);
+                String line = (i + scrollR + 1) + ".  " + cand + SeedCrackerClient.fitText(cand) + (isPicked ? " ✔" : "");
+                ctx.drawText(tr, fit(line, x2 - 12 - rx), rx, ry, isPicked ? GREEN : YELLOW, false);
             }
         } else {
             if (!whereMode) {

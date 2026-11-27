@@ -205,14 +205,36 @@ public final class SeedCrackerClient {
 
     /** Mit eigener Kopie der Funde – der Rechen-Thread darf FOUND nicht lesen, während das Spiel neue einträgt. */
     static List<SeedCracker.Obs> adjusted(double f, Map<String, SeedCracker.Obs> found) {
-        int r = (cfg().shift + 15) / 16;
+        return adjusted(f, found, baseShift());
+    }
+
+    /** Eingestellter Versatz in Chunks. */
+    private static int baseShift() {
+        return (cfg().shift + 15) / 16;
+    }
+
+    /** Funde mit {@code r} Chunks Spielraum. */
+    private static List<SeedCracker.Obs> adjusted(double f, Map<String, SeedCracker.Obs> found, int r) {
         List<SeedCracker.Obs> out = new ArrayList<>();
         for (var e : found.entrySet()) {
             if (cfg().off.contains(kindOf(e.getKey()))) continue;   // diese Strukturart ist ausgeschaltet
             SeedCracker.Obs o = e.getValue();
             StructureMath.Spread s = effective(o.spread(), f);
-            out.add(r == 0 ? new SeedCracker.Obs(s, o.minX(), o.minZ(), o.maxX(), o.maxZ(), o.only())
-                    : new SeedCracker.Obs(s, o.minX() - r, o.minZ() - r, o.maxX() + r, o.maxZ() + r, null));
+            if (r == 0 || o.only() == null) {
+                out.add(new SeedCracker.Obs(s, o.minX() - r, o.minZ() - r, o.maxX() + r, o.maxZ() + r, o.only()));
+            } else {
+                // nur um die wirklich möglichen Chunks aufweiten (z. B. Wracks) – sonst geht Genauigkeit verloren
+                Map<Long, long[]> wide = new LinkedHashMap<>();
+                for (long k : o.only()) {
+                    for (int dx = -r; dx <= r; dx++) {
+                        for (int dz = -r; dz <= r; dz++) {
+                            long[] c = {(int) (k >> 32) + dx, (int) k + dz};
+                            wide.put(SeedCracker.Obs.key((int) c[0], (int) c[1]), c);
+                        }
+                    }
+                }
+                out.add(SeedCracker.Obs.of(s, wide.values()));
+            }
         }
         return out;
     }
@@ -279,6 +301,11 @@ public final class SeedCrackerClient {
         }
     }
 
+    private static boolean neighboursLoaded(ClientWorld w, int cx, int cz) {
+        for (int dx = -1; dx <= 1; dx++) for (int dz = -1; dz <= 1; dz++) if (!w.getChunkManager().isChunkLoaded(cx + dx, cz + dz)) return false;
+        return true;
+    }
+
     private static void tick(MinecraftClient mc) {
         if (mc.world == null || mc.player == null) return;
         if (mc.world != lastWorld) {
@@ -299,7 +326,8 @@ public final class SeedCrackerClient {
                     if (Math.max(Math.abs(dx), Math.abs(dz)) != d) continue;
                     int cx = at.x + dx, cz = at.z + dz;
                     long key = ChunkPos.toLong(cx, cz);
-                    if (SCANNED.contains(key) || !mc.world.isChunkLoaded(cx, cz)) continue;
+                    // erst ansehen, wenn auch alle Nachbarn da sind: Strukturen ragen über die Grenze, und angesehen wird nur einmal
+                    if (SCANNED.contains(key) || !neighboursLoaded(mc.world, cx, cz)) continue;
                     // Achtung: für noch nicht angekommene Chunks gibt der Client einen leeren Platzhalter – den nicht abhaken
                     WorldChunk chunk = mc.world.getChunk(cx, cz);
                     if (chunk instanceof net.minecraft.world.chunk.EmptyChunk || chunk.isEmpty()) continue;
@@ -777,7 +805,19 @@ public final class SeedCrackerClient {
                             "Still too vague – desert/jungle temples, swamp huts, outposts, igloos, shipwrecks or ocean ruins help most");
                     return;
                 }
-                // nichts passt genau (falscher Fund, verschobene Strukturen …): die Seeds suchen, die am besten passen (bis 8 Minuten)
+                // nichts passt genau: Strukturen versetzt? Spielraum Chunk für Chunk vergrößern und alle passenden Seeds nehmen
+                if (s48.isEmpty() && !CANCEL.get()) {
+                    SeedCracker.Shifted sh = SeedCracker.crackShifted(r -> adjusted(1, snap, r), baseShift() + 1, (p, txt) -> {
+                        progress = p * 0.6;
+                        status = txt;
+                    }, CANCEL);
+                    if (sh != null) {
+                        s48 = sh.seeds();
+                        obs.clear();
+                        obs.addAll(sh.obs());
+                    }
+                }
+                // immer noch nichts (falscher Fund, weit verschoben …): die Seeds suchen, die am besten passen (bis 8 Minuten)
                 if (s48.isEmpty() && cfg().outliers && !CANCEL.get()) {
                     List<Long> r = SeedCracker.crackRobust(obs, (p, txt) -> {
                         progress = p * 0.6;
@@ -802,14 +842,18 @@ public final class SeedCrackerClient {
                     }
                 }
                 if (s48.isEmpty()) {
-                    status = L.t("Kein Seed passt – entweder sind mehrere Funde falsch (von Spielern gebaut?) oder der Server hat andere Struktur-Abstände",
-                            "No seed fits – several finds are wrong (player-built?) or the server uses different structure spacing");
+                    status = L.t("Kein Seed passt, auch nicht versetzt – mehr Strukturen finden (versetzt braucht viel mehr Funde), falsche Funde oder andere Server-Abstände möglich",
+                            "No seed fits, not even shifted – find more structures (shifted needs many more), or wrong finds / different server spacing");
                     return;
                 }
                 if (s48.size() > 4096) {
-                    status = L.t("Noch zu viele Möglichkeiten – finde mehr Strukturen", "Still too many options – find more structures");
+                    candsFull = false;
+                    CANDS.clear();
+                    CANDS.addAll(bestFirst(s48, adjusted(scale, snap, 0)));
+                    status = L.t("Zu viele Möglichkeiten (nicht alle gezeigt) – finde mehr Strukturen", "Too many options (not all shown) – find more structures");
                     return;
                 }
+                if (s48.size() > 1) s48 = bestFirst(s48, adjusted(scale, snap, 0), s48.size());
                 // Slime-Chunks: nur Kandidaten behalten, die zu den meisten gesehenen Slime-Chunks passen
                 if (!slimes.isEmpty() && s48.size() > 1) {
                     int best = 0;
@@ -871,6 +915,39 @@ public final class SeedCrackerClient {
         t.setPriority(Thread.MIN_PRIORITY);
         t.setPriority(Thread.MIN_PRIORITY);   // das Spiel soll flüssig bleiben
         t.start();
+    }
+
+    /** Die Seeds mit den meisten passenden Funden und dem kleinsten Versatz zuerst. */
+    private static List<Long> bestFirst(List<Long> seeds, List<SeedCracker.Obs> raw) {
+        return bestFirst(seeds, raw, 200);
+    }
+
+    private static List<Long> bestFirst(List<Long> seeds, List<SeedCracker.Obs> raw, int max) {
+        Map<Long, Integer> rank = new java.util.HashMap<>();
+        for (long s : seeds) {
+            int[] sh = SeedCracker.shiftOf(s, raw);
+            rank.put(s, sh[0] * 1000 - sh[1]);
+        }
+        List<Long> out = new ArrayList<>(seeds);
+        out.sort((a, b) -> Integer.compare(rank.get(b), rank.get(a)));
+        return out.size() > max ? new ArrayList<>(out.subList(0, max)) : out;
+    }
+
+    private static final Map<Long, String> FIT_TEXT = new java.util.HashMap<>();
+    private static long fitStamp;
+
+    /** Für die Liste: „passt 9/10 · Versatz bis 16 B.“ (kurz zwischengespeichert, wird nicht pro Bild neu gerechnet). */
+    static String fitText(long seed) {
+        long stamp = FOUND.size() * 100_000L + System.currentTimeMillis() / 2000 % 100_000L + (long) (scale * 4) * 10_000_000_000L;
+        if (stamp != fitStamp) {
+            fitStamp = stamp;
+            FIT_TEXT.clear();
+        }
+        return FIT_TEXT.computeIfAbsent(seed, s -> {
+            List<SeedCracker.Obs> raw = adjusted(scale, FOUND, 0);
+            int[] sh = SeedCracker.shiftOf(s, raw);
+            return "  " + sh[0] + "/" + raw.size() + (sh[1] == 0 ? L.t(" genau", " exact") : L.t(" · Versatz ≤", " · shift ≤") + sh[1]);
+        });
     }
 
     /** Für Tests: warten, bis fertig gerechnet ist. */
@@ -1070,11 +1147,11 @@ public final class SeedCrackerClient {
                 .toggle(L.t("Ähnlichste Seeds suchen", "Search most similar seeds"), L.t("Wenn nicht alle Funde passen (falsch oder verschoben) – bis 8 Minuten", "When not all finds fit (wrong or shifted) – up to 8 minutes"), () -> c.outliers, v -> c.outliers = v)
                 .toggle(L.t("Andere Abstände probieren", "Try other spacings"), L.t("Server mit anderen Struktur-Abständen (×0,5 bis ×3)", "Servers with different structure spacing (×0.5 to ×3)"), () -> c.trySpacing, v -> c.trySpacing = v)
                 .section(L.t("Server", "Server"))
-                .intSlider(L.t("Strukturen versetzt um", "Structures shifted by"), 0, 64, () -> c.shift, v -> c.shift = v, L.t(" Blöcke (0 = normal)", " blocks (0 = normal)"))
+                .intSlider(L.t("Strukturen versetzt um", "Structures shifted by"), 0, 64, () -> c.shift, v -> c.shift = v, L.t(" Blöcke (0 = automatisch)", " blocks (0 = automatic)"))
                 .field(L.t("Eigene Abstände", "Own spacings"), () -> c.custom, v -> c.custom = v, 60, "village 40 10, shipwreck 30 6")
                 .info(L.t("Format: Name Abstand Mindestabstand [Salz] – mehrere mit Komma", "Format: name spacing separation [salt] – several with commas"))
-                .section(L.t("Was ist wo", "What is where"))
-                .intSlider(L.t("Umkreis", "Radius"), 500, 10000, () -> c.whereRadius, v -> c.whereRadius = v, L.t(" Blöcke", " blocks"))
+                .section(L.t("Was ist wo – nur wenn der Seed schon da ist", "What is where – only once you have the seed"))
+                .intSlider(L.t("Umkreis der Liste", "List radius"), 500, 10000, () -> c.whereRadius, v -> c.whereRadius = v, L.t(" Blöcke", " blocks"))
                 .action(L.t("Seed von Hand", "Seed by hand"), L.t("Schon bekannten Seed aus der Zwischenablage nehmen", "Use a known seed from the clipboard"), () -> {
                     try {
                         result = Long.parseLong(MinecraftClient.getInstance().keyboard.getClipboard().trim());

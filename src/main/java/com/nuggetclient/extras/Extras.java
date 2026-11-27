@@ -789,6 +789,10 @@ public final class Extras {
         public boolean restartWarn = true;
     }
 
+    /** an = beim Beitreten melden, wie viele nützliche Befehle es gibt */
+    public static final class CommandChecker extends Settings {
+    }
+
     public static final class MendingSwap extends Settings {
         /** ab wie viel Prozent Schaden ein Teil zum Reparieren in die Offhand kommt */
         public int damaged = 10;
@@ -1401,6 +1405,7 @@ public final class Extras {
     public WhereWasI whereWasI = new WhereWasI();
     public SessionStats sessionStats = new SessionStats();
     public ServerInfo serverInfo = new ServerInfo();
+    public CommandChecker commandChecker = new CommandChecker();
     public MendingSwap mendingSwap = new MendingSwap();
     public ElytraPilot elytraPilot = new ElytraPilot();
     public Performance performance = new Performance();

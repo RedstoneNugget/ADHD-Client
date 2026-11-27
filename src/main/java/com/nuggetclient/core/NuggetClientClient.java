@@ -75,6 +75,7 @@ public final class NuggetClientClient implements ClientModInitializer {
         com.nuggetclient.nametags.PlayerCard.init();
         com.nuggetclient.trajectories.TrajectoriesClient.init();
         com.nuggetclient.radar.RadarClient.init();
+        com.nuggetclient.nav.CommandChecker.init();
         com.nuggetclient.autotool.AutoToolClient.init();
         com.nuggetclient.autoeat.AutoEatClient.init();
         com.nuggetclient.autofish.AutoFishClient.init();

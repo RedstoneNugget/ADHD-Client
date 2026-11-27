@@ -89,6 +89,18 @@ public class NuggetClientGameTest implements FabricClientGameTest {
             HudModulesGameTest.run(context);
             return;
         }
+        if (Boolean.getBoolean("nugget.onlySeedShift")) {
+            SeedShiftGameTest.run(context);
+            return;
+        }
+        if (Boolean.getBoolean("nugget.onlySeedDetect")) {
+            SeedDetectGameTest.run(context);
+            return;
+        }
+        if (Boolean.getBoolean("nugget.onlyCommands")) {
+            CommandCheckGameTest.run(context);
+            return;
+        }
         if (Boolean.getBoolean("nugget.onlyNoWeb")) {
             NoWebGameTest.run(context);
             return;
